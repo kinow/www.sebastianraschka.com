@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html>
+<head>
+		<!--META-->
+		<meta name="description" content="An instruction of how to successfully implement David Allen's GTD system in Simplenote.">
+		<meta name="Author" content="Sebastian Raschka">
+		<title>An Implementation of Getting Things Done in Simplenote.</title>
+
+		<!-- jQuery -->
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+		<script type="text/javascript" src="../jQuery/main_app.js"></script>
+		<script type="text/javascript" src=" ../jQuery/index.js"></script>
+
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="../CSS/main.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="../CSS/content.css" media="screen" />
+</head>
+<body>
+	
+    <div id ='container' >
+
+		<div id ='header_new'>
+		             
+				<a href = "../index.html"><img src="../Images/title_text.png" style="border-style:none"/></a>	
+				<hr>
+				<div align="right" style="padding-right:20px">
+					<a href = "../articles.html" class ="menubar"><font color="#6495ED">blog</font></a> &#8226;
+					<a href = "../webapps.html" class ="menubar">webapps</a> &#8226;
+					<a href = "../software.html" class ="menubar">software</a> &#8226;
+					<a href = "../publications.html" class ="menubar">books</a> &#8226;
+					<a href = "../contact.html" class ="menubar">about+contact</a> 
+					 
+				</div>
+				<hr>
+		</div> <!--close header -->
+	</div><!--close container -->
+
+
+		<div id ='content'>
+
+			
+		
+
+
+			<div id ='main'>
+
+				<h2 class="article_top">Getting Things Done With Simplenote</h2>
+					<p id="article_header"><em>-- written by Sebastian Raschka</em> on September 22, 2013</p>
+
+	<!-- START Twitter API -->
+        		 <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://bit.ly/1aVkVsZ" 
+                counturl="http://groups.google.com/group/ZEsjUY"
+        		 data-count="none" data-via="rasbt"
+        		 data-text="Getting Things Done with Simplenote" data-lang="en">Tweet</a>
+
+        		<script>!function(d,s,id){var
+        		js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	<!-- END Twitter API -->  
+
+	<div style="clear:both;">
+
+
+			<div class="article" style="font-size: 16px;">
+		<div style="padding-right:70px">
+		  <p style="line-height:1.7">
+
+		  <p><strong>Every now and then I try to learn from my previous experiences and try to refine my task and project management implementation. My whole goal is to have a system that allows me to have both my tasks and my references handy in one place. An important prerequisite for the tool of choice is that it must be plain and simple to use, transferable, and available on all different platforms that I am using: iPad, iPhone, Mac, and my Linux computer at work.
+</strong></p></div><br><br>
+	&nbsp;<br>
+
+	<div style="width: 400px; margin-left:40px;">
+	  <hr>
+	  </div>
+	  <div style="width: 400px; margin-left:60px;">
+<h4>OVERVIEW</h4>
+		  
+	  
+<a href="#simplenote_and_gtd" class ="contents_table">Simplenote and GTD</a><br>
+<a href="#qq_approach" class ="contents_table">The "qq" Approach</a><br>
+<a href="#summary" class ="contents_table">Summary of Key Items</a><br>
+<a href="#inbox_items" class ="contents_table">Inbox Items</a><br>
+<a href="#na_items" class ="contents_table">Next Action</a><br>
+<a href="#projects" class ="contents_table">Projects</a><br>		  
+<a href="#ref_material" class ="contents_table">Reference Material</a><br>
+<a href="#waiting_for" class ="contents_table">Waiting For and Maybe Items</a><br>
+<a href="#reminders" class ="contents_table">Reminders, Alerts, and Reoccurring Tasks</a><br>
+<a href="#keep_track" class ="contents_table">Keeping Track Of What I Have Done This Week</a><br>
+<a href="#finished" class ="contents_table">Checking Off Finished Tasks</a><br>		  
+<a href="#img_files" class ="contents_table">What About Image Files and PDFs</a><br>
+<a href="#contexts" class ="contents_table">Contexts: @home and @work</a><br>
+<a href="#weekly" class ="contents_table">Weekly Reviews</a><br>
+<a href="#backups" class ="contents_table">Backup and Transferability</a><br>
+<a href="#conclusions" class ="contents_table">Conclusions</a><br>
+	    </div>
+
+	<div style="width: 400px; margin-left:40px;">
+	  <hr>
+	  </div>		
+	
+
+	&nbsp;<br>		  
+<p>Previously, I was using Apple's Reminders app for managing my
+		  tasks and projects.
+
+It's a great tool to manage simple tasks, but the downside was
+		  that it was that it was quite inconvenient to link
+		  those to the reference material: It likely ended up
+		  scattered over my email client and in text files in
+		  my Dropbox folders.</p>
+		  	&nbsp;<br>
+		  <img src="../Images/reminders_app1.png"
+		  alt="title"/>
+		  	&nbsp;<br>
+		  <p id="simplenote_and_gtd"></p>
+		  	&nbsp;<br>
+
+
+		  
+<h2>Simplenote and GTD</h2>		  
+<p>I am a big fan of <a href="http://www.davidco.com">David Allen's Getting Things Done</a> approach (GTD), which I successfully adopted about 2 years ago - yes, I am still very passionate about it.
+But still, I haven't found the ideal tool for the optimal workflow yet - capturing and managing tasks. Probably I never will, but I feel like that I am getting closer!</p>
+
+<p>Now, after the recent release of iOS accompanied by <a href="http://simplenote.com">Simplenote's</a> UI overhaul, I decided that it was about time to rethink (or rather refine) me GTD implementation again.
+(An additional bonus point for Simplenote is that it is free and costs you nothing!)</p>
+	&nbsp;<br>
+		  <p id="qq_approach"></p>
+		  	&nbsp;<br>
+
+		  <h2>The "qq" Approach</h2>
+
+<p>Inspired by <a href="http://www.kungfugrippe.com/post/453204090/q-trick">Merlin Mann's ingenious "qq"-trick</a> I came up with a very simple system that allows me to manage my tasks with highest efficiency. In the following paragraphs I am going to present the modifications I made to the "qq"-trick that works so well for me.</p>
+	&nbsp;<br>
+
+<p id="summary"></p>
+	&nbsp;<br>
+
+<h2>Summary Table of Key Items</h2>
+
+<p>You can find the nuts and bolts of my "qq" implementation summarized in the table below - a primer of what I want to explain in the rest of the article.
+It is not much for an entire Getting Things Done project management system, isn't it? - It's really that simple!
+After reading the complete article, I suggest to come back to this section and give this table a quickly review; after that you should me more than good to go.</p>
+
+<h3>search keys:</h3>
+
+<ul>
+<li><strong>qqi</strong> - "inbox" item</li>
+<li><strong>qqn</strong> - "next action" item</li>
+<li><strong>qqp</strong> - project list</li>
+<li><strong>qqw</strong> - "waiting for" item</li>
+<li><strong>qqm</strong> - "maybe" item</li>
+</ul>
+
+
+<h3>context tags:</h3>
+<ul>
+<li><strong>@today</strong> - tasks you want to complete today</li>
+<li><strong>@home</strong> - stuff to do at home</li>
+<li><strong>@work</strong> - things to do at work</li>
+<li><strong>@projname</strong> - reference material for a project</li>
+</ul>
+
+	&nbsp;<br>
+
+	&nbsp;<br>
+
+
+
+<p id="inbox_items"></p>
+		  &nbsp;<br>
+
+<h2>Inbox Items</h2>
+
+<p>For every inbox item I create a new note in Simplenote where the title becomes the description of the item, concluded with an "qqi" at the end of the title.
+
+If I have a longer text (e.g., an excerpt from an website article that I want to capture) it goes below the title.
+I use "qq", because it is unique in the English language
+(probably no word that I use would contain a "qq") and
+easy to type. The "i" in "qqi" stands for
+inbox. With Simplenote's powerful and fast search function, I
+can now quickly filter for my inbox items when I am reviewing my
+tasks.</p>
+&nbsp;<br>
+<img src="../Images/simplenote_gtd_qqi.png" alt="title" />
+&nbsp;<br>
+&nbsp;<br>
+	<p id="na_items"></p>
+	&nbsp;<br>
+
+<h2>Next Action Items</h2>
+
+<p>Similarly to inbox items, for simple 1-action items, e.g., "bring letter X to the post office," I would add an "qqa", where the "a" stands for "action."
+When I want to see the hard landscape of the tasks that lie ahead of
+me, I can now simply type "qqa" into Simplenote's
+handy search bar to filter for those items. </p>
+	&nbsp;<br>
+&nbsp;<br>
+<img src="../Images/simplenote_gtd_qqn.png" alt="title" />
+	&nbsp;<br>
+&nbsp;<br>
+<p id="projects"></p>
+&nbsp;<br>
+<h2>Projects</h2>
+
+<p>If the task requires multiple steps, I would make it a project. Therefore, I simply add an "qqp" to the end of the title ("p" for project as you might have already guessed by now). Because each "qqp" item is also a note by nature, I can add the project's individual actions into the note body.
+Nice about this approach is that it will allow me to create
+hierarchies, which was impossible to do in the Reminders App. </p>
+
+&nbsp;<br>
+<img src="../Images/simplenote_gtd_qqp.png" alt="title" />
+&nbsp;<br>
+&nbsp;<br>
+	&nbsp;<br>
+<p id="ref_material"></p>
+	&nbsp;<br>
+
+
+<h2>Reference Material</h2>
+
+<p>This is where Simplenote really shines: the power of tags!
+So let's assume I have created a project, and now I want to link it to the accompanying reference material. I can simply create a new tag for this project and tag all the reference material accordingly.
+Optionally I can add a second and universal @reference tag to all my reference material in case I want to get a complete overview. </p>
+
+	&nbsp;<br>
+<p id="waiting_for"></p>
+	&nbsp;<br>
+
+<h2>Waiting For and Maybe Items</h2>
+
+<p>Those two categories, "waiting for" and "maybe," work also similarly to inbox and next action items. Here, I use "qqw" for "waiting for" items. These are items where I am waiting for someone to get back to me.
+And I use "qqm" as the indicator for "maybe"
+items, which are items that need reconsideration, for example, books I
+maybe want to read if I have time.
+</p>
+	&nbsp;<br>
+<img src="../Images/simplenote_gtd_qqm.png" alt="title" />
+
+	&nbsp;<br>
+&nbsp;<br>
+
+<p id="reminders"></p>&nbsp;<br>
+
+
+<h2>Reminders, Alerts, and Reoccurring Tasks</h2>
+
+<p>I don't keep reminders in Simplenote. Items that require reconsideration become "maybe" items. And for the important tasks that require an action on a given date and/or time, they go directly into my calendar where I can add an alert.
+This approach works best for me, because I can see at one glance at my calendar what awaits me for any given day, week, or month.
+An reoccurring action, e.g., "take out the trash every Monday
+morning", is also something that would go into my calendar. For
+some reoccurring tasks that I manage in my calendar, I would still
+make additional "next action" items in Simplenote. One
+example for such an action could be, "check website X for
+updates every month." This task doesn't require immediate
+action, but I want to be reminded about it every now and then. </p>
+&nbsp;<br>
+<img src="../Images/simplenote_gtd_cal.png" alt="title" />
+&nbsp;<br>
+	&nbsp;<br>
+<p id="keep_track"></p>
+	&nbsp;<br>
+<h2>Keeping Track Of What I Have Done This Week</h2>
+
+<p>A nice feature, and this is why I prefer Simplenote over simple
+plain text files on my computer, is its "History"
+feature. If I want to see what actions I have accomplished in the last
+week, let's say for a weekly report, I can simply go to
+"Trash" and filter for "qqa&#82221;. And if I want to
+see what tasks I checked of from a project list, I just open the
+project's "qqp" file and make use of
+Simplenote's powerful "History" feature, which
+allows me to see and optionally restore previous versions of the note. </p>
+&nbsp;<br>
+<img src="../Images/simplenote_gtd_history.png" alt="title" />
+&nbsp;<br>
+	&nbsp;<br>
+<p id="finished"></p>
+	&nbsp;<br>
+
+<h2>Checking Off Finished Tasks</h2>
+
+<p>You have multiple options here. Usually I would simply trash finished tasks (remember, as long as you don't empty the trash, you can always bring them back if needed). Sometimes, for the more important tasks or projects, and basically for all of the reference material, I would just remove the "qq*" from the title and add a universal @archive tag to them in case I want to search for something later.</p>
+
+
+&nbsp;<br>
+<p id="img_files"></p>
+	&nbsp;<br>
+
+<h2>What About Image Files and PDFs</h2>
+
+<p>For those cases where I have reference material in form of PDF or image files, I keep folders outside of Simplenote in my Dropbox. I would name those folders similar to the project file in Simplenote so that I don't even have to manually look for them in the file browser, but can simply type the name of the project into the file browser's search bar (or Spotlight).
+	&nbsp;<br>
+&nbsp;<br>
+<img src="../Images/simplenote_gtd_website.png" alt="title" /></p>
+
+&nbsp;<br>
+	&nbsp;<br>
+<p id="contexts"></p>
+	&nbsp;<br>
+
+
+<h2>Contexts: @home and @work</h2>
+
+<p>Many people, including myself, want to work on a different set of tasks when they are either at home or at work. No problem with this GTD approach: I just add an @home tag for the tasks that I want to do at home, and an @work tag for those to-dos at work. Now, I can filter for just those "qq"s by clicking on the context tag. What if there is a task that I could do either at home or at work, for example, writing an email to Mr. Y? Also no problem: I just add both tags @home and @work so that the task will show up in both contexts.
+&nbsp;<br>
+	&nbsp;<br>
+<img src="../Images/simplenote_gtd_homework.png" alt="title" />
+
+
+&nbsp;<br>
+	&nbsp;<br>
+<p id="weekly"></p>
+	&nbsp;<br>
+
+<h2>Weekly Reviews</h2>
+
+<p>To be happy and productive with a GTD system, weekly reviews are crucial. Once in a week, often on Saturday mornings, I review my entire GTD system, rearrange project items, define next actions, clear out stale items from my maybe list, etc.
+The nice advantage about the "qq" system is that I can simply type "qq" into the search bar and it will bring up all my items at once so that I can work through them sequentially. </p>
+&nbsp;<br>
+
+<p id="backups"></p>
+	&nbsp;<br>
+
+<h2>Backup and Transferability</h2>
+
+<p>Some of my initial thoughts when I start using any new software include "What happens when they shut down the servers?"
+"What if I decide to use different software at some point"?
+"Can I use my stuff on different operating systems?"
+&#8230;
+The solution here is a small and free tool called <a href="http://notational.net"> Notational Velocity</a>, or
+alternatively <a href="http://notational.net">nvALT</a> by Brett
+Terpstra. There is also a Linux app, <a href="https://github.com/cpbotha/nvpy">nvPY</a>, which works quite similarly. Those tools are very similar to the Simplenote app, but also work offline or open, create, and edit text files from a folder in Dropbox.
+And the icing on the top is that they can also synchronize with your
+Simplenote account, which offers the ideal backup solution.
+&nbsp;<br>
+	&nbsp;<br>
+	&nbsp;<br><img
+src="../Images/simplenote_gtd_website_projects.png"
+alt="title" />
+
+	&nbsp;<br>
+	&nbsp;<br>
+In a nutshell: Notational Velocity &amp; Co will reads notes from Simplenote and saves them to a location on your Computer/Dropbox as plain text files.
+Those plain text files can be used for offline work - they can be synced back to Simplenote via the same tools - and/or they can be archived.
+But the "qq" system can be used even without any special
+tool. All that is required is the simplest functionality of any
+operating system: I can just use my file browser and its search bar.
+
+	&nbsp;<br>
+	&nbsp;<br>
+<img src="../Images/simplenote_gtd_website_search.png"
+alt="title" />
+&nbsp;<br>
+	&nbsp;<br>
+
+This is for the worst case scenario when Simplenote stops working
+immediately - what I doubt it will&#8230;</p>
+<p id="conclusions"></p>
+&nbsp;<br>
+
+
+<h2>Conclusions</h2>
+
+<p>I implemented this system recently and it works very well for me so far. Simplenote's servers work well, and I haven't lost a note so far - at least I think I didn't.
+Also, the synchronization across my different devices and computers works well, smoothly and reliably.
+Also, there are other tools that sync with Simplenote, Brett Terpstra's <a href="http://brettterpstra.com/projects/nvalt/">nvALT</a> is a very popular example, which will allow you to create local back ups of your note files. Those are simple text files that can be opened with your favorite text editor of choice, and which are in a format that I think will be the only one to surely stand the test of time.
+Currently, I am also working on a standalone App that will allow you to export and backup your text notes from Simplenote to your computer without the detour over other note taking apps.</p>
+
+For a quick review of what we have covered, please refer to the <a href="#summary">summary of key items</a>.
+
+
+				  
+	
+		&nbsp;<br>
+     	  &nbsp;<br>   
+        
+					
+	
+
+		</div> 	<!-- close article -->
+
+
+
+			</div><!--close main -->
+		
+	</div><!--close content -->
+	
+
+
+
+
+<!-- START Footer -->
+
+	<div id ='footer'>	
+        <center>
+	<hr>
+        <div style="height:20px;"></div>
+        <p>HTML and JavaScripts were written by Sebastian Raschka <br>
+        Copyright (C) 2013-2014 Sebastian Raschka</p>
+
+
+	<!-- START Twitter API -->
+
+ <a href="https://twitter.com/rasbt" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @rasbt</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	<!-- END Twitter API -->
+
+	
+     
+        
+		 <div style="height:10px;"></div>
+		</center>
+	</div>
+<!-- END Footer -->
+
+<hr>
+
+<!-- Start DISQUS -->
+
+ <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'sebastianraschka'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    
+
+
+
+
+
+
+
+<!-- Start Google Analytics -->
+		<script type="text/javascript">
+
+  		var _gaq = _gaq || [];
+  		_gaq.push(['_setAccount', 'UA-38457794-1']);
+  		_gaq.push(['_trackPageview']);
+
+  		(function() {
+    	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  		})();
+		</script>
+<!-- End  Google Analytics -->
+
+</body>
+</html>

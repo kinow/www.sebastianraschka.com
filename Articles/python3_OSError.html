@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+		<!--META-->
+		<meta name="description" content="A lot has happened after Python 3.0 was released in late 2008, and another major change came with the release of Python 3.3.0 on September 29th, 2012. 
+		The exception hierarchy has been reworked and unfortunately this could make Python 3.3.0 code incompatible to previous versions of Python 3 if you didn’t account for that.">
+		<meta name="Author" content="Sebastian Raschka">
+		<title>Be aware of the streamlined exception hierarchy in Python 3.3.0</title>
+
+		<!-- jQuery -->
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+		<script type="text/javascript" src="../jQuery/main_app.js"></script>
+		<script type="text/javascript" src=" ../jQuery/index.js"></script>
+
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="../CSS/main.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="../CSS/content.css" media="screen" />
+</head>
+<body>
+
+	<div id ='container' >
+
+		<div id ='header_new'>
+		             
+				<a href = "../index.html"><img src="../Images/title_text.png" style="border-style:none"/></a>	
+				<hr>
+				<div align="right" style="padding-right:20px">
+					<a href = "../articles.html" class ="menubar"><font color="#6495ED">blog</font></a> &#8226;
+					<a href = "../webapps.html" class ="menubar">webapps</a> &#8226;
+					<a href = "../software.html" class ="menubar">software</a> &#8226;
+					<a href = "../publications.html" class ="menubar">books</a> &#8226;
+					<a href = "../contact.html" class ="menubar">about+contact</a> 
+					 
+				</div>
+				<hr>
+		</div> <!--close header -->
+	</div><!--close container -->
+
+
+		<div id ='content'>
+
+			
+		
+
+
+			<div id ='main' style="padding-right:70px">
+
+				<div class = "article_top"><h2>Be aware of the streamlined exception hierarchy in Python 3.3.0</h2>
+			<p id="article_header"><em>-- written by Sebastian Raschka</em> on March 3, 2013</p>
+
+	<!-- START Twitter API -->
+        		<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://bit.ly/Zi9cSg" 
+        		counturl="http://groups.google.com/group/Zi9cSg"
+        		data-count="none" data-via="rasbt" data-text="Check out interesting stuff at" data-lang="en">Tweet</a>
+
+        		<script>!function(d,s,id){var
+        		js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	<!-- END Twitter API -->
+
+
+</div>
+
+		<div class="article">
+		<div>
+			<b><p>It is really nice to see the active development of Python. Thanks to the great community, Python has evolved into the favorite and most popular interpreted programming language.<p>
+
+			<p>An important date in the history of Python certainly was December 3rd, 2008 - the release of Python 3.0. 
+			However, Python 3 did not please everyone, the community was literally divided; as until today, many people are still using Python 2.7x. </b></p>
+                        </div> </br></br>
+		     
+
+		  
+			<p><br>Of course, the changes in syntax might be annoying since Python 3x cannot read Python 2.7x scripts without further adjustments - and vice versa. Another issue was that many modules and packages where not available for Python 3.x upfront and had to be rewritten. </p>
+
+			<p>I recently switched to Python 3, and I think the changes (or rather improvements) make sense - they make Python programming even more convenient. 
+			Anyways, I don't want to talk about the differences between Python 2.7x and Python 3.x in this article; you can easily find a lot of documentations online, for example, <a href="http://docs.python.org/3.0/whatsnew/3.0.html" target="_blank">http://docs.python.org/3.0/whatsnew/3.0.html</a>.</p>
+
+			<p>A lot has happened after Python 3.0 was released in late 2008, and another major change came with the release of Python 3.3.0 on September 29th, 2012. 
+			The exception hierarchy has been reworked and unfortunately this could make Python 3.3.0 code incompatible to previous versions of Python 3 if you didn't account for that.</p>
+
+			<p>Before the release of Python 3.3.0, the exception hierarchy seemed to be confusing and arbitrary for many users.<b> Now, in Python 3.3.0 the exceptions <pre>OSError, IOError, EnvironmentError, WindowsError, mmap.error, socket.error or select.error </pre> are now summarized under the category 'OSError'.</b> <br>And <b>'OSError'</b> was given the following subclasses in Python 3.3.0:</p>
+			
+			<ul>
+				<li>BlockingIOError</li>
+				<li>ChildProcessError</li>
+				<li>ConnectionError</li>
+				<li>FileExistsError</li>
+				<li>FileNotFoundError</li>
+				<li>InterruptedError</li>
+				<li>IsADirectoryError</li>
+				<li>NotADirectoryError</li>
+				<li>PermissionError</li>
+				<li>ProcessLookupError</li>
+				<li>TimeoutError</li>
+				</ul>
+			
+				(see <a href="http://docs.python.org/3.3/whatsnew/3.3.html#pep-3151" target="_blank">http://docs.python.org/3.3/whatsnew/3.3.html#pep-3151</a>)
+
+				<p>Usually, programmers do not memorize all the different exceptions that can occur. The best way to implement exception and error handling in your code, you would simply provoke the error, see what you get, and eventually fix your code.</p>
+
+				<p>Consider the following example where a user is prompted to enter the name of a file to be opened.</p>
+
+				<p>If you are using Python 3.3.0, the code below would raise an <b>'FileNotFoundError'</b> if an incorrect file name has been entered.</p>
+
+				<img src="../Images/pythonerror1.png" alt="picture"><br>
+
+				However, in previous versions of Python 3 an <b>'IOError'</b> would be raised.
+
+				<p>As a consequence, the following code would only work with Python 3.3.0, other versions of Python 3 would crash since <b>'FileNotFoundError'</b> is not defined.</p>
+
+				<img src="../Images/pythonerror2.png" alt="picture"><br>
+
+				<p>To make sure that your code will also work with older versions of Python 3, you can use the <b>'IOError'</b> exception, since it became an alias for <b>'OSError'</b> in Python 3.3.0, and the <b>'FileNotFoundError'</b> is a subclass of an <b>'OSError'</b> now.</p>
+
+				<img src="../Images/pythonerror3.png" alt="picture"><br>
+
+				<p>This solution looks simple, but unfortunately it will cast a pretty wide net, because it will capture all subclasses of <b>'OSError</b> now.</p>
+
+				<p>If this is not what you want, here is a longer but more specific way:</p>
+
+				<img src="../Images/pythonerror4.png" alt="picture"><br>
+				
+	</div>
+				
+
+	
+		&nbsp;<br />
+     	  &nbsp;<br />   
+        
+	
+
+		</div> 	<!-- close article -->
+
+
+
+			</div><!--close main -->
+		
+	</div><!--close content -->
+	
+
+
+
+
+        	<!-- START Footer -->
+
+	<div id ='footer'>	
+        <center>
+	<hr>
+        <div style="height:20px;"></div>
+        HTML and JavaScripts were written by Sebastian Raschka <br>
+        Copyright (C) 2013-2014 Sebastian Raschka</p>
+
+
+	<!-- START Twitter API -->
+
+ <a href="https://twitter.com/rasbt" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @rasbt</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	<!-- END Twitter API -->
+
+	
+     
+        
+		 <div style="height:10px;"></div>
+		</center>
+	</div>
+<!-- END Footer -->
+
+
+<!-- Start Google Analytics -->
+		<script type="text/javascript">
+
+  		var _gaq = _gaq || [];
+  		_gaq.push(['_setAccount', 'UA-38457794-1']);
+  		_gaq.push(['_trackPageview']);
+
+  		(function() {
+    	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  		})();
+		</script>
+<!-- End  Google Analytics -->
+
+</body>
+</html>

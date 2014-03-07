@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head>
+		<!--META-->
+		<meta name="description" content="An analysis of different approaches to increase the computational efficiency of Python code.">
+		<meta name="Author" content="Sebastian Raschka">
+		<title>An evaluation of simple Python performance tweaks</title>
+
+		<!-- jQuery -->
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+		<script type="text/javascript" src="../jQuery/main_app.js"></script>
+		<script type="text/javascript" src=" ../jQuery/index.js"></script>
+
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="../CSS/main.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="../CSS/content.css" media="screen" />
+</head>
+<body>
+
+	<div id ='container' >
+
+		<div id ='header_new'>
+		             
+				<a href = "../index.html"><img src="../Images/title_text.png" style="border-style:none"/></a>	
+				<hr>
+				<div align="right" style="padding-right:20px">
+					<a href = "../articles.html" class ="menubar"><font color="#6495ED">blog</font></a> &#8226;
+					<a href = "../webapps.html" class ="menubar">webapps</a> &#8226;
+					<a href = "../software.html" class ="menubar">software</a> &#8226;
+					<a href = "../publications.html" class ="menubar">books</a> &#8226;
+					<a href = "../contact.html" class ="menubar">about+contact</a> 
+					 
+				</div>
+				<hr>
+		</div> <!--close header -->
+	</div><!--close container -->
+
+
+		<div id ='content'>
+			
+		
+
+
+			<div id ='main'>
+
+                <h2 class="article_top">An evaluation of simple Python performance tweaks</h2>
+					<p id="article_header"><em>-- written by Sebastian Raschka</em> on January 18, 2014</p>
+
+	<!-- START Twitter API -->
+        		 <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://bit.ly/1ia31sB" 
+                counturl="http://groups.google.com/group/ZEsjUY"
+        		 data-count="none" data-via="rasbt"
+        		 data-text="An analysis of different approaches to increase the computational efficiency of Python code." data-lang="en">Tweet</a>
+
+        		<script>!function(d,s,id){var
+        		js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	<!-- END Twitter API -->  <br> 
+ 
+
+<style type="text/css">
+code {
+   font-size: 13.5px;
+   color: #000099;
+}
+</style>
+
+				<div class="article" style="font-size: 16px;">
+		<div style="padding-right:70px">
+		  <p style="line-height:1.7">
+		  
+<p><strong>
+When we are solving computational problems, we usually have almost unlimited possibilities 
+to write and organize our code. The number of possible solutions is only limited by our own creativity. 
+However, the goal is often not the most creative solution, but the most efficient one. 
+Especially, when I write code to analyze massive amounts of data, I want to it to do 
+the job as efficiently as possible.<br>
+In order to optimize some of my Python code, 
+I analyzed the efficiency of different approaches 
+to solve similar problems, which I want to share with you in this article.</strong></p>
+
+<br>
+<div style="width: 400px;">
+  <hr>
+</div>
+
+<h4>Overview</h4>
+
+
+<p><a href="#approach">About the measurement approach</a><br>
+<a href="#dictionary">Adding elements to dictionaries</a><br>
+<a href="#list_condition">Filtering lists via conditional statements</a><br>
+<a href="#list_func">Creating lists using function calls</a><br>
+<a href="#string_conc">Concatenating strings</a><br>
+<a href="#string_assembly">Assembling strings</a> </p>
+
+<div style="width: 400px;">
+  <hr>
+</div>
+<br>
+
+
+<p><a name="approach"></a></p>
+<br>
+<h2>About the measurement approach</h2>
+
+<p>Before I move on to use some sophisticated tools for a deeper code performance analyses, e.g., via Python's profiling tools
+<a href="http://docs.python.org/2/library/profile.html"><code>cProfile</code></a> and <a href="http://docs.python.org/2/library/profile.html">
+<code>profile</code></a>,
+I performed a more traditional analysis here.<br>
+For every question I raised, I wrote a scaffold script to calculate the cpu time that is required 
+to perform a certain task over <em>n</em> iterations. Then I swapped in the significant lines of 
+code to be evaluated into the cpu-time measurement scaffold script and ran the test 3 times.<br>
+<img src="../Images/python_perf_1_code.png" alt="image" />
+I collected cpu times for all scripts in a set before I increased the value of <em>n</em> (i.e., the number of iterations) by a factor of 10. Eventually, I ended up with 9 data points for each individual script: 3 repetitions for each of the three values of <em>n</em> iterations.
+Next, I calculated the mean and variance for each series of measurements for each value of <em>n</em>; the results are plotted in the respective line and bar plots in Python using the <a href="http://matplotlib.org/">matplotlib</a> module.
+The line plots are showing the mean cpu times for each script for the 3 different values of <em>n</em> (iterations). And for the bar plots I calculated the fold-differences of the mean cpu times relative to the slowest script in a set. The error bars in the line and bar plots are resembling the <em>variances</em> of the measurements.<br>
+The figure below summarizes how the data would look like for the particular case of the pair of scripts <code>string_conc_1.py</code> and <code>string_conc_2.py</code>.<br><br>
+<img src="../Images/python_perf_1_sheet.png" alt="image" /></p>
+
+<br>
+<p>Eventually, I want to mention the machine I was using for those measurements:</p>
+
+
+<br>
+<div style="width: 400px;">
+  <hr>
+</div>
+
+<p><strong>System Specifications:</strong><br>
+Model Name: Mac mini (Mid 2010)<br>
+Processor Name: Intel Core 2 Duo<br>
+Processor Speed: 2.4 GHz<br>
+Number of Processors: 1<br>
+Total Number of Cores: 2<br>
+L2 Cache: 3 MB<br>
+Memory: 8 GB 1067 MHz DDR3<br>
+Bus Speed: 1.07 GHz </p>
+
+<p>Operating System: Mac OS X 10.9.1<br>
+Python version: 3.3.3<br>
+<div style="width: 400px;">
+ <hr>
+</div> </p>
+<br>
+
+
+<p>I deposited everything, including the test scripts, plotting scripts, images, and data sheets on GitHub. Please feel free to use the code to replicate the analyses on your machine, or to modify the code for further analyses.<br>
+<a href="https://github.com/rasbt/python_efficiency_tweaks">https://github.com/rasbt/python_efficiency_tweaks</a></p>
+
+<p><a name="dictionary"></a></p>
+<br>
+<h2>Adding elements to dictionaries</h2>
+
+<p>It was a question that always interested me: &#8220;What is the most efficient way to add elements to an existing dictionary?&#8221; To get to the bottom of the situation, I used a Python dictionary structure with 1-letter strings as keys. The associated values were integers that were used to count how often those 1-letter strings occurred in a different data structure.<br>
+For a real-world example: Imagine you want to count web site traffic where the dictionary keys resemble the website&#8217;s addresses, and the count (i.e., the associated dictionary value) is incremented by 1 each time a user visits this particular site. </p>
+
+<p>In contrast to other languages (e.g., C++), Python throws an error when you try to access a dictionary element via the <code>[]</code> element-access-operator if the key does not exist, yet. Thus, we have to check if a key already exists in the Python dictionary before we attempt to increment its count. When I wrote the Python code, I could think of at least 2 reasonable approaches: The first script (<code>init_dict_1.py</code>) is using a simple if-statement to check whether a dictionary key already exists; if the if-statement evaluates to <code>False</code>, the key will be added to the dictionary before the count will be incremented by 1. The second script (<code>init_dict_1.py</code>) will brazenly <code>try</code> to increment the key&#8217;s count by 1 whether it exists or not. By exploiting thrown <code>KeyError</code> exceptions via an <code>try-except</code> loop, it adds keys to the dictionaries if they don&#8217;t exist yet.<br>
+
+<br>
+<img src="../Images/python_perf_1_init_dict_code_1.png" alt="image" />
+<br>
+
+
+<p>So, what this code will actually do is initiating a dictionary with the letters a, b, c, d as keys and their count (i.e., the key-associated value) set to 0. The structure (<code>orig_dict</code>) would look like this:<br>
+<code>{'a': 0, 'b': 0, 'c': 0, 'd': 0}</code><br>
+Then, it will loop <em>n</em> times (where n=1,000,000, n=10,000,000, or n=100,000,000) over the characters a,b,c, and d, and increase the respective dictionary value by 1, which represents the count for this character.
+For n=1,000,000, for example, the resulting dictionary would look like this:<br>
+<code>{'a': 25000, 'b': 25000, 'c': 25000, 'd': 25000}</code><br>
+The performance of those two approaches are shown in the plots below.<br>
+
+<br>
+<img src="../Images/python_perf_1_init_dict_plot_1.png" alt="image" />
+<br>
+
+
+So, for this particular case, a <code>try-except</code> loop seems to be ~ 1.2x faster than the <code>if-statement</code> checking for existing elements. This result is quite intuitive, since all dictionary keys, which&#8217;s value we want to increment, already exist.<br>
+The next question is how the <code>try-except</code> loop fares if new elements have to be added to the dictionary? Here, I assume the extreme case of an empty dictionary where all elements to be counted are no dictionary keys, yet. <br>
+
+
+<br>
+<img src="../Images/python_perf_1_init_dict_code_2.png" alt="image" />
+<img src="../Images/python_perf_1_init_dict_plot_2.png" alt="image" />
+<br>
+<br>
+
+
+As you can see it in the plots above, the <code>if-statement</code> check for existing dictionary elements (<code>init_dict_3.py</code>) is suddenly ~ 1.4x faster than the <code>try-except</code> loop.
+Note that these are some extreme cases where all keys are already existing in the dictionary (<code>init_dict_1.py</code> and <code>init_dict_2.py</code>), or where none of the keys exists in the dictionary, yet (<code>init_dict_3.py</code> and <code>init_dict_4.py</code>). In real-world applications we&#8217;d usually have something in between: Some dictionary keys are already present, some have to be added to the data structure before we can start to increment their counts.<br>
+In future tests I want to investigate those intermediate cases in more detail in order to deduce the threshold of existing dictionary keys that would make a <code>try-except</code> loop over an <code>if-statement</code> check for existing dictionary keys pay-off.</p>
+
+<p><a name="list_condition"></a></p>
+<br>
+<h2>Filtering lists via conditional statements</h2>
+
+<p>In this test, I attempted to figure out the fastest way to create a new list of elements that meet a certain criterion. For the sake of simplicity, the criterion was to check if an element is even or odd, and only if the element was even, it should be included in the list. For example, the resulting list for numbers in the range from 1 to 10 would be <br> <code>[2, 4, 6, 8, 10]</code>.<br><br>
+
+Here, I tested three different approaches:<br>
+1) a simple for loop with an <code>if-statement</code> check (<code>list_compr_1.py</code>)<br>
+2) a list comprehension (<code>list_compr_2.py</code>)<br>
+3) the built-in <code>filter()</code> function (<code>list_compr_3.py</code>)<br><br>
+
+Note that the <code>filter()</code> function now returns a generator in Python 3, so I had to wrap it in an additional <code>list()</code> function call. </p>
+
+<br>
+<img src="../Images/python_perf_1_list_compr_code.png" alt="image" />
+<img src="../Images/python_perf_1_list_compr_plot.png" alt="image" />
+<br>
+
+
+<p>We can see in the plots above that the <code>list()</code> function is the slowest of those three approaches. This might be due to the additional generator-to-list conversion via the <code>list()</code> function call, but this is something I have to investigate in future experiments using Python 2.7. The simple <code>for</code> loop with an <code>if-statement</code> check is ~ 1.2x faster than the filter function, and the list comprehension outperforms the <code>list()</code> function even more significantly (~ 1.8x faster).<br>
+However, the bottom line of this experiment is that a list comprehension can not only make your code look more compact for creating simple lists (mathematicians would even claim it will become easier to read), but it also boosts computational performance.</p>
+
+<p><a name="list_func"></a></p>
+<br>
+<h2>Creating lists using function calls</h2>
+
+<p>We have seen in the previous section that list comprehensions are a fast way to create lists by filtering. The question here is also about the optimal way to create lists, but instead of using an <code>if</code>-statement check to filter for values, I was interested in the list creation via function calls. The particular code I was using for this test simply calculates the length of the string &#8220;abc&#8221; <em>n</em>-times and collect the results in a list. A more realistic application, for example, could be the screening through New York Times articles to calculate the average word count per article. <br>
+<br>
+
+Anyway, the three approaches I wanted to compare are:<br>
+1) a simple <code>for-loop</code> with an embedded function call that appends elements to a list (<code>list_func_1.py</code>)<br>
+2) a list comprehension (<code>list_func_2.py</code>)<br>
+3) the in-build <code>map()</code> function (<code>list_func_3.py</code>)<br>
+<br>
+The <code>map()</code> function is related to <code>filter()</code>, which we have seen in previous section. But where <code>filter()</code> expects an function that evaluates to <code>True</code> or <code>False</code> in order to apply filtering to input-elements, <code>map()</code> will simply collect the <code>return</code>s of a function in a list.</p>
+
+<br>
+<img src="../Images/python_perf_1_list_func_code.png" alt="image" />
+<img src="../Images/python_perf_1_list_func_plot.png" alt="image" />
+<br>
+
+
+<p>Consistent with the expectation that we raised based on the previous section, we see that list comprehensions are performing faster than the classic <code>for-loop</code> approach (here: <code>list_func_1.py</code> was ~2.3 x faster than <code>list_func_2.py</code>). However, this time the in-built function call (i.e., <code>map()</code>) was the superior approach. It performed ~ 3.4x faster than the <code>for-loop</code>, and ~ 1.5x faster (results not shown in the plot) than the list comprehension. </p>
+
+<p>So the bottom line of this analysis is that list comprehensions are ideal to create lists using simple evaluations via <code>if-statements</code>, and the in-built <code>map()</code> is the way to go for creating lists via function calls. </p>
+
+<p><a name="string_conc"></a></p>
+<br>
+<h2>Concatenating strings</h2>
+
+<p>Strings in Python are immutable objects. So, each time we append a character to a string, it has to be created &#8220;from scratch&#8221; in memory. Thus, the answer to the question &#8220;What is the most efficient way to concatenate strings?&#8221; is a quite obvious, but the relative numbers of performance gains are nonetheless interesting.<br>
+<br>
+The two approaches that I compared, are<br>
+1) string concatenation via the <code>+</code> operator (<code>string_conc_1.py</code>)<br>
+2) string concatenation via the <code>.join()</code> method (<code>string_conc_2.py</code>) </p>
+
+<br>
+<img src="../Images/python_perf_1_string_conc_code.png" alt="image" />
+<img src="../Images/python_perf_1_string_conc_plot.png" alt="image" />
+<br>
+
+<p>Let the results speak for themselves: The <code>.join()</code> method is ~ 23x faster than the usage of the <code>+</code> operator to concatenate strings!</p>
+
+<p><a name="string_assembly"></a></p>
+<br>
+<h2>Assembling strings</h2>
+
+<p>Next, I wanted to compare different methods string &#8220;assembly.&#8221; This is different from simple string concatenation, which we have seen in the previous section, since we insert values into a string, e.g., from a variable.<br>
+<br>
+The three different approaches are using<br>
+1) the <code>+</code> operator (<code>string_subst_1.py</code>)<br>
+2) the <code>format()</code> method (<code>string_subst_2.py</code>)<br>
+3) the classic <code>%</code> string formatting operator (<code>string_subst_3.py</code>) </p>
+
+<br>
+<img src="../Images/python_perf_1_string_subst_code.png" alt="image" />
+<img src="../Images/python_perf_1_string_subst_plot.png" alt="image" />
+<br>
+<br>
+
+
+<p>The results indicate that the <code>format()</code> function is by far the slowest of those three approaches (here, the two other approaches are ~ 10x faster).
+<br>
+I express my surprise as I expected a similar performance from the <code>.format()</code> method and the <code>%</code> operator; especially surprising, since the <code>%</code> operator was about to be deprecated in earlier versions of Python 3 (<a href = "http://www.python.org/dev/peps/pep-3101/">http://www.python.org/dev/peps/pep-3101/</a>), however, it is fortunately still around.
+Eventually, I went back to the editor, double-checked my scripts, and reproduced the data multiple times; I still can&#8217;t explain this observation. Thus, I encourage you to download the <a href="https://github.com/rasbt/python_efficiency_tweaks/test_code">scripts</a> and try it on your machine using Python 3.3.3 (or different versions of Python). Please let me know what results you get, I am really curious!</p>
+
+<br><p>
+<strong> UPDATE:</strong><br>
+Out of curiosity, I tested the <code>string_subst</code> scripts from this section in Python 2.7.5. The <code>.format()</code> method is still the slowest in performance. However, the <code>%</code>-operator is only twice as fast as the <code>format()</code> call, and the string concatenation via the <code>+</code> operator performed best. In other words, the <code>+</code> concatenation in <code>string_subst_1.py</code> is ~ 2x faster than the <code>%</code>-operator in <code>string_subst_2.py</code> and 4x faster than the <code>format()</code>-method in <code>string_subst_3.py</code> in Python 2.7.5.
+</p>
+
+<br><p>
+<strong> UPDATE 2:</strong><br>
+As a reader pointed out in an email, the string <code>.format()</code> method performes much slower than <code>%</code>, because it
+is doing the formatting for each object itself, where formatting via the binary <code>%</code> is hard-coded for known types.
+
+				  
+	
+		&nbsp;<br>
+     	  &nbsp;<br>   
+        
+					
+	
+
+		</div> 	<!-- close article -->
+
+
+
+			</div><!--close main -->
+		
+	</div><!--close content -->
+	
+
+
+
+
+<!-- START Footer -->
+
+	<div id ='footer'>	
+        <center>
+	<hr>
+        <div style="height:20px;"></div>
+        <p>HTML and JavaScripts were written by Sebastian Raschka <br>
+        Copyright (C) 2013-2014 Sebastian Raschka</p>
+
+
+	<!-- START Twitter API -->
+
+ <a href="https://twitter.com/rasbt" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @rasbt</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	<!-- END Twitter API -->
+<div style="height:20px;"></div>
+
+	<hr>
+
+     
+        
+		 <div style="height:10px;"></div>
+		</center>
+	</div>
+<!-- END Footer -->
+
+
+<!-- Start DISQUS -->
+
+ <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'sebastianraschka'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+<!-- Start Google Analytics -->
+		<script type="text/javascript">
+
+  		var _gaq = _gaq || [];
+  		_gaq.push(['_setAccount', 'UA-38457794-1']);
+  		_gaq.push(['_trackPageview']);
+
+  		(function() {
+    	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  		})();
+		</script>
+<!-- End  Google Analytics -->
+
+</body>
+</html>

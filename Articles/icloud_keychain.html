@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+		<!--META-->
+		<meta name="description" content="Thoughts about iCloud Keychain and how to change the security code.">
+		<meta name="Author" content="Sebastian Raschka">
+		<title>iCloud Keychain - How To Maximize Minimum Security</title>
+
+		<!-- jQuery -->
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+		<script type="text/javascript" src="../jQuery/main_app.js"></script>
+		<script type="text/javascript" src=" ../jQuery/index.js"></script>
+
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="../CSS/main.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="../CSS/content.css" media="screen" />
+</head>
+<body>
+
+	<div id ='container' >
+
+		<div id ='header_new'>
+		             
+				<a href = "../index.html"><img src="../Images/title_text.png" style="border-style:none"/></a>	
+				<hr>
+				<div align="right" style="padding-right:20px">
+					<a href = "../articles.html" class ="menubar"><font color="#6495ED">blog</font></a> &#8226;
+					<a href = "../webapps.html" class ="menubar">webapps</a> &#8226;
+					<a href = "../software.html" class ="menubar">software</a> &#8226;
+					<a href = "../publications.html" class ="menubar">books</a> &#8226;
+					<a href = "../contact.html" class ="menubar">about+contact</a> 
+					 
+				</div>
+				<hr>
+		</div> <!--close header -->
+	</div><!--close container -->
+
+
+		<div id ='content'>
+			
+		
+
+
+			<div id ='main'>
+
+				<h2 class="article_top">iCloud Keychain - How To Maximize Minimum Security</h2>
+					<p id="article_header"><em>-- written by Sebastian Raschka</em> on October 25, 2013</p>
+
+	<!-- START Twitter API -->
+        		 <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://bit.ly/17P6piQ" 
+                counturl="http://groups.google.com/group/ZEsjUY"
+        		 data-count="none" data-via="rasbt"
+        		 data-text="How to make iCloud Keychain somewhat secure" data-lang="en">Tweet</a>
+
+        		<script>!function(d,s,id){var
+        		js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	<!-- END Twitter API -->   <br> 
+
+
+
+
+				<div class="article" style="font-size: 16px;">
+		<div style="padding-right:70px">
+		  <p><strong>Apple just released their latest operating system for Mac, OS X Mavericks, accompanied by an iOS update to  7.1.
+One of the new exciting features was iCloud Keychain, a password management tool that let's the user save their passwords securely encrypted on Apple servers and syncs them across multiple Apple devices.  
+</strong></p></div>
+<img src="../Images/keychain_logo.png" alt="title" />
+	
+<p>One important feature that Apple forgot to implement though, is a convenient option to change the Keychain passcode. Because it uses a 4-digit code, it could easily be compromised and you might want to change it regularly.<br /><br />
+
+
+It is quite obvious that a 4-digit code can be figured out easily. A simple brute force approach would be to try out all different number combinations between 0000 and 9999. So if you chose a passcode for your iCloud Keychain that is different from the passcode to unlock the device, the number of maximum combinations would increase by the power of 2. In the worst case scenario, a thief has to try 10,000 combinations twice now - one time to unlock the iOS device, and a second time to unlock iCloud Keychain.<br />
+This might buy you just enough time to remotely erase your device. However, I wouldn&#8217;t want to rely on that fact and take this risk. Also, hacking the lock screen might already be sufficient to access your email application and send out password resets for your accounts.<br />
+Thus, if you are planning to use iCloud Keychain, you should at least enable the option to delete your device after 10 failed password attempts. By backing up your device regularly to iCloud and/or your Mac, it will not be a big deal if your device should ever be swiped from its data by accident.<br /><br />
+
+<img src="../Images/settings_erase_attempts.png" alt="title" /> </p>
+
+<p>So, once you choose to give iCloud Keychain a try, you might want to know how change the passcode.</p>
+
+<h2>How to change the passcode</h2>
+
+<p>Go to the &#8220;Settings&#8221; and click on &#8220;Passcode Lock&#8221; and you will be prompted to enter your passcode to proceed to the submenu.</p>
+ <img src="../Images/settings_passcodelock1.png" alt="title" />
+<p>Next, click on &#8220;Change Passcode&#8221; and select the passcode that you want to use for Keychain.</p>
+ <img src="../Images/keychain_password2.png" alt="title" />
+<p>You will be asked if you want to use this passcode as &#8220;iCloud Security Code.&#8221;
+By clicking &#8220;Use Same Code&#8221;, you have now successfully changed your iCloud passcode.</p>
+ <img src="../Images/keychain_passcode3.png" alt="title" />
+<p>Lastly, to choose a different password for your lock screen, you have to change your passcode again by clicking on &#8220;Change Passcode&#8221;. Enter a different passcode now, but this time proceed by selecting &#8220;Don&#8217;t Change Security Code.&#8221;</p>
+
+<img src="../Images/keychain_passcode4.png" alt="title" />
+<img src="../Images/keychain_passcode5.png" alt="title" />
+<p>This might sound like a very inconvenient procedure, but it shouldn&#8217;t take more than a minute and currently, it is the only choice we have until Apple decides to add an option to directly change the iCloud security code on iOS.</p>
+
+		  
+
+
+
+
+
+
+
+				  
+	
+		&nbsp;<br>
+     	  &nbsp;<br>   
+        
+					
+	
+
+		</div> 	<!-- close article -->
+
+
+
+			</div><!--close main -->
+		
+	</div><!--close content -->
+	
+
+
+
+
+<!-- START Footer -->
+
+	<div id ='footer'>	
+        <center>
+	<hr>
+        <div style="height:20px;"></div>
+        <p>HTML and JavaScripts were written by Sebastian Raschka <br>
+        Copyright (C) 2013-2014 Sebastian Raschka</p>
+
+
+	<!-- START Twitter API -->
+
+ <a href="https://twitter.com/rasbt" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @rasbt</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	<!-- END Twitter API -->
+
+	
+     
+        
+		 <div style="height:10px;"></div>
+		</center>
+	</div>
+<!-- END Footer -->
+
+
+
+
+
+<!-- Start Google Analytics -->
+		<script type="text/javascript">
+
+  		var _gaq = _gaq || [];
+  		_gaq.push(['_setAccount', 'UA-38457794-1']);
+  		_gaq.push(['_trackPageview']);
+
+  		(function() {
+    	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  		})();
+		</script>
+<!-- End  Google Analytics -->
+
+</body>
+</html>

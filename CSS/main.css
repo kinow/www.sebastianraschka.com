@@ -1,0 +1,130 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto:400italic,300,700);
+
+
+
+body{
+	background: #ffffff; 
+	height: 100%;
+	width: 950px;
+	margin: 0 auto;
+	font: 17px/25px 'Roboto', sans-serif
+
+}
+
+
+pre {
+	font-size: 0.8em;
+    color: #000099;
+    line-height:140%
+}
+
+
+img{
+    clear:both;
+    max-width: 685px;
+}
+
+
+h1, h2, h3, h4, h5, h6 { 
+	font-family: 'Roboto', sans-serif;
+    font-weight: 700; 
+	color: #222;
+    line-height:120%; 
+}
+
+
+/* Wrapper for menubar */
+#header_new {
+		font-size:16px;
+   		font-family:'Roboto', sans-serif;
+		font-weight: 300;
+		height: 150px;
+		width: 950px;
+		background: #ffffff;
+		word-spacing:12px; 
+		display: table-cell;	 	    
+		margin: 0px auto; 
+	}
+	
+
+#content {
+		overflow: auto;
+		min-height: 800px;
+}
+
+	#content .sidebar_left {
+		margin-top:30px;
+		min-height:100px;	
+		width: 250px; float: right;
+		overflow: auto;			
+	}
+
+#sidebaritem {
+			padding-left:10px;
+			padding-top: 10px;
+			padding-bottom: 10px;
+			font-size:11px; 
+			font-weight:bold;
+		}
+	
+.link_sidebar { 
+   	color:#000000; text-decoration:none;
+}
+.link_sidebar:hover {
+    color:#cc0000;
+    text-decoration: none;
+}
+
+
+#main {
+	background: #ffffff;
+	min-height: 510px;
+    padding-top:30px;
+	padding-left: 30px;
+	padding-bottom: 30px;
+	padding-right: 30px;
+	line-height: 160%;
+}
+
+#footer {
+	font-size: 10px;
+	clear:both;
+	position: relative;
+	} 
+
+
+.menubar {
+    color:#000000; 
+    text-decoration:none;
+}
+
+.menubar:hover {
+        color: #6495ED;        
+        text-decoration: none;
+}
+
+.contents_table {
+    color:#5F5F5F; 
+    text-decoration:none;
+}
+
+.contents_table:hover {
+    color: #000000;        
+    text-decoration: none;
+}
+
+#table_black_bottom {
+    border-collapse: collapse;
+}
+
+#td_black_bottom {
+    border-bottom: 1px solid #000;
+}
+
+
+.social {
+    float: left;
+}
+
+
+

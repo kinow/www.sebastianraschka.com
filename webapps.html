@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!--META-->
+		<meta name="description" content="Online web tools to manipulate and prepate DNA and amino acid sequences for BLAST searches, extracting a FASTA sequence from
+		a PDP file, or convert a DNA or RNA sequence into it's reverse-complement.">
+		<meta name="Author" content="Sebastian Raschka">
+		<title>WAB - Web Applications For Bioinformatics</title>
+
+		<!-- jQuery -->
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+		<script type="text/javascript" src="jQuery/main_app.js"></script>
+		<script type="text/javascript" src="jQuery/index.js"></script>
+
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="CSS/main.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="CSS/content.css" media="screen" />
+	</head>
+<body>
+
+	<div id ='container' >
+
+		<div id ='header_new'>
+		             
+				<a href = "index.html"><img src="./Images/title_text.png" style="border-style:none"/></a>	
+				<hr>
+				<div align="right" style="padding-right:20px">
+					<a href = "articles.html" class ="menubar">blog</a> &#8226;
+					<font color="#6495ED">webapps</font> &#8226;
+					<a href = "software.html" class ="menubar">software</a> &#8226;
+					<a href = "publications.html" class ="menubar">books</a> &#8226;
+					<a href = "contact.html" class ="menubar">about+contact</a> 
+					 
+				</div>
+				<hr>
+		</div> <!--close header -->
+	</div><!--close container -->
+
+		<div id ='content'>
+			
+		
+
+			<div id ='main'>
+
+        <br>
+
+		
+		<h3> DNA and Protein Sequence Cleaver</h3>
+					<div id = "LinkcropCleave"; class="menu1" >
+							<a href="Webapps/crop_and_cleave.html"><img src="Images/crop_and_cleave_screen.png"></a>
+						</div>
+							<div id = "text1" size="2em">
+							<em>Splits a sequence into smaller chunks of user-defined length, and can extract sub-sequences given a start and end position.</em> <br>
+							<ul>
+								<li>supports FASTA format</li>
+								<li>removes whitespaces</li>
+								<li>works with all sorts of input sequences</li>
+								<li>variable start position for splitting mode</li>
+							</ul>
+						</div>
+						
+        <div style="height:200px"></div>
+        <hr>
+
+					<p id='item'>
+
+					<h3>COMPLEMENT REVERSE tool for DNA and RNA sequences</h3>
+					<div id = "LinkCompReverse"; class="menu3">
+						<a href="Webapps/complement_reverse.html"><img src="Images/complement_reverse_screen.png"></a>
+					</div>
+					<div id = "text3">
+							<em>Converts DNA or RNA sequence to its complementary, reversed, or complementary-reversed sequence. </em> <br>
+							<ul>
+								<li>removes non-DNA/RNA characters</li>
+								<li>automatically detects RNA sequences</li>
+								<li>supports FASTA headers</li>
+							</ul></div>
+					</p>
+
+
+        					
+        <div style="height:180px"></div>
+        <hr>
+
+
+					<p id='item'>
+					<h3> PDB to FASTA converter </h3>
+					<div id = "LinkpdbToFasta"; class="menu2">
+						<a href="Webapps/pdb_to_fasta.html"><img src="Images/pdb_to_fasta_screen.png"></a>
+					</div>
+					<div id = "text2">
+							<em>Converts the contents of a PDB file into an 1-letter amino acid code. </em> <br>
+							<ul>
+								<li>creates FASTA headers</li>
+								<li>recognizes presence of multiple chains</li>
+								<li>tolerates ANISOU entries and multiple-occupancies</li>
+                                <li>recognizes and converts DNA and RNA sequences</li>
+								<li>converts seleno-cysteine and seleno-methionine</li>
+								<li>also works for "incomplete" PDB files</li>
+							</ul></div>
+					</p>
+
+
+        <div style="height:80px"></div>
+        <hr>
+
+
+					<p id='item'>
+					<h3> PDB Center of Mass Calculator </h3>
+					<div id = "LinkPDBCenterOfMass"; class="menu5">
+						<a href="Webapps/pdb_center_of_mass.html"><img src="Images/center_of_mass_screen.png"></a>
+					</div>
+					<div id = "text5">
+							<em>Calculates the center of mass of protein and/or ligand atoms</em> <br>
+							<ul>
+								<li>center of mass is weighted by atom types</li>
+								<li>supports files in PDB format</li>
+								<li>tolerates ANISOU entries</li>
+   								<li>also works for "incomplete" PDB files</li>
+							</ul></div>
+					</p>
+
+
+        					
+        <div style="height:150px"></div>
+        <hr>
+
+					<p id='item'>
+					<h3> Basic Statistics Calculator </h3>
+					<div id = "LinkpdbToFasta"; class="menu4">
+						<a href="Webapps/basic_statistics.html"><img src="Images/basic_statistics_screen.png"></a>
+					</div>
+					<div id = "text2">
+							<em>Tool that calculates various kinds of statistics. </em> <br>
+							<ul>
+								<li>accepts data in (almost) any format</li>
+								<li>calculates N, sum, mode, mean, median, variance,
+								 standard deviation, standard error, and confidence intervals </li>
+								<li>converts dataset into csv format</li>
+							</ul></div>
+						
+					</p>
+
+		
+
+					<p id='item'>		
+	<div style="height:90px"></div>
+	</p>
+  	
+		</div>
+
+			</div><!--close main -->
+		
+	</div><!--close content -->
+	
+
+
+
+
+
+<!-- START Footer -->
+
+	<div id ='footer'>	
+        <center>
+	  <hr>
+        <div style="height:20px;"></div>
+        HTML and JavaScripts were written by Sebastian Raschka <br>
+        Copyright (C) 2013-2014 Sebastian Raschka</p>
+
+
+	<!-- START Twitter API -->
+        		 <a href="https://twitter.com/rasbt" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @rasbt</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+
+	<!-- END Twitter API -->
+
+	
+	
+     
+        
+		 <div style="height:10px;"></div>
+		</center>
+	</div>
+	<!-- END Footer -->
+
+<!-- Start Google Analytics -->
+		<script type="text/javascript">
+
+  		var _gaq = _gaq || [];
+  		_gaq.push(['_setAccount', 'UA-38457794-1']);
+  		_gaq.push(['_trackPageview']);
+
+  		(function() {
+    	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  		})();
+		</script>
+<!-- End  Google Analytics -->
+
+</body>
+</html>

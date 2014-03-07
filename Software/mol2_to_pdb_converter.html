@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+		<!--META-->
+		<meta name="description" content="The Mol2 to PDB Converter is a command line program that converts a .mol2 protein structure 
+		file into a PDB file, with or without CONECT entries.">
+		<meta name="Author" content="Sebastian Raschka">
+		<title>Mol2 to PDB Converter</title>
+
+		<!-- jQuery -->
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+		<script type="text/javascript" src="../jQuery/main_app.js"></script>
+		<script type="text/javascript" src=" ../jQuery/index.js"></script>
+
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="../CSS/main.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="../CSS/content.css" media="screen" />
+</head>
+<body>
+
+	<div id ='container' >
+
+		<div id ='header_new'>
+		             
+				<a href = "../index.html"><img src="../Images/title_text.png" style="border-style:none"/></a>	
+				<hr>
+				<div align="right" style="padding-right:20px">
+					<a href = "../articles.html" class ="menubar">blog</a> &#8226;
+					<a href = "../webapps.html" class ="menubar">webapps</a> &#8226;
+					<a href = "../software.html" class ="menubar"><font color="#6495ED">software</font></a> &#8226;
+					<a href = "../publications.html" class ="menubar">books</a> &#8226;
+					<a href = "../contact.html" class ="menubar">about+contact</a> 
+					 
+				</div>
+				<hr>
+		</div> <!--close header -->
+	</div><!--close container -->
+
+
+		<div id ='content'>
+			
+
+
+
+			<div id ='main' style="padding-right:70px">
+
+				<div class = "article_top"><h2>Mol2 To PDB Converter</h2>
+            <p id="article_header"><em>-- written by Sebastian Raschka</em> on June 16, 2013</p>
+
+	<!-- START Twitter API -->
+        		<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://bit.ly/12C5CEf" 
+                counturl="http://groups.google.com/group/12C5CEf"
+        		data-count="none" data-via="rasbt" data-text="Check out the awesome Mol2 to PDB converter at" data-lang="en">Tweet</a>
+
+        		<script>!function(d,s,id){var
+        		js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	<!-- END Twitter API --> <br> 
+
+
+
+</div>
+
+   <div class="article">
+
+        <p><strong><code>The Mol2 To PDB converter</code> is a command line program that converts protein structure files from the partial-charge containing Mol2 file format into regular PDB files. The program has an option to write out information about the covalent bonds, i.e., CONECT entries, to the PDB file.</strong></p></br></br>
+
+     
+        
+        <div>
+       The software I was using required the protein structure files to be in the common PDB format. However, I got this collection of hundreds of Mol2 files. Fortunately, we have a license for the openeye software package in our lab, so I used openeye's babel, which was supposed to do exactly what I wanted: Convert my Mol2 files into PDB files. </div>
+
+        <div><br>So why did I end up writing this tool? Sure, it might be useful for people who don't have a rather expensive openeye license.
+        	  But another important reason was that openeye's babel converter made some errors writing the CONECT entries. Also, it didn't assign the ligand's 3-letter code, which can be a problem if you are working with multiple structures. </div>
+
+        <div><br>The screenshots below show the Mol2 input file (A) and the resulting PDB files after running openeye Babel (B) and my Mol2 to PDB converter (C).
+
+
+        	<p><img src="../Images/pop_mol2.png" alt="image"></p>
+        	<strong>Figure A:</strong> Mol2 file of Pyrophosphate (POP).
+        	
+        	<p><img src="../Images/pop_babel.png" alt="image"></p>
+        	<strong>Figure B:</strong> PDB file from openeye Babel conversion.
+
+        	<p><img src="../Images/pop_pdb.png" alt="image"></p>
+        	<strong>Figure C:</strong> PDB file from my Mol2 To PDB conversion tool.
+
+
+
+
+        </div><br>
+        The usage of the Mol2 To PDB Converter is intuitive and simple.<br>
+        Simply Run <code>Mol2 To PDB Converter</code> with the <code>-h</code> flag to see the options that are available:
+
+
+        <p><img src="../Images/mol2_to_pdb_help.png" alt="image"></p>
+
+        <p>Where an example execution could look like this: </p>
+
+        <p><img src="../Images/mol2_to_pdb_convert.png" alt="image"></p>
+
+        <div id="redheading">Download the Mol2 to PDB converter for your operating system:</div>
+        <div style="height:30px"></div>
+        <table border="2", cellspacing="0", cellpadding="10">
+        
+        <tr><td><a href="../downloads/mol2_to_pdb_converter/mol2topdb_macOS_v1.1.zip" class="link" target="_blank">Mac OS X</a></td>
+                <td> v 1.1 </td></tr>
+        <tr><td><a href="../downloads/mol2_to_pdb_converter/mol2_to_pdb_v1.1_linux.zip" class="link" target="_blank">Linux</a>
+            </td><td> v 1.1 </td></tr>
+        <tr><td><a href="../downloads/mol2_to_pdb_converter/main_mol2_to_pdb_v1.1_win.zip" class="link" target="_blank">Windows</a></td><td> v 1.1 </td></tr>
+        </table>
+        &nbsp;<br />
+    
+
+        <p><br/>
+      
+		&nbsp;<br />
+     	  &nbsp;<br />   
+        
+		
+
+
+		</div> 	<!-- close article -->
+
+
+
+			</div><!--close main -->
+		
+	</div><!--close content -->
+	
+
+
+
+
+<!-- START Footer -->
+
+	<div id ='footer'>	
+        <center>
+	<hr>
+        <div style="height:20px;"></div>
+        HTML and JavaScripts were written by Sebastian Raschka <br>
+        Copyright (C) 2013-2014 Sebastian Raschka</p>
+
+
+	<!-- START Twitter API -->
+
+ <a href="https://twitter.com/rasbt" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @rasbt</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	<!-- END Twitter API -->
+
+
+	
+     
+        
+		 <div style="height:10px;"></div>
+		</center>
+	</div>
+<!-- END Footer -->
+
+<!-- Start Google Analytics -->
+		<script type="text/javascript">
+
+  		var _gaq = _gaq || [];
+  		_gaq.push(['_setAccount', 'UA-38457794-1']);
+  		_gaq.push(['_trackPageview']);
+
+  		(function() {
+    	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  		})();
+		</script>
+<!-- End  Google Analytics -->
+
+</body>
+</html>

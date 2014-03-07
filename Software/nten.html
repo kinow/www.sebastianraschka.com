@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+		<!--META-->
+		<meta name="description" content="nTEN is a tool to identify outliers in large data sets with few numbers of observations.">
+		<meta name="Author" content="Sebastian Raschka">
+		<title>nTEN Outlier Identifier</title>
+
+		<!-- jQuery -->
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+		<script type="text/javascript" src="../jQuery/main_app.js"></script>
+		<script type="text/javascript" src=" ../jQuery/index.js"></script>
+
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="../CSS/main.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="../CSS/content.css" media="screen" />
+</head>
+<body>
+
+	<div id ='container' >
+
+		<div id ='header_new'>
+		             
+				<a href = "../index.html"><img src="../Images/title_text.png" style="border-style:none"/></a>	
+				<hr>
+				<div align="right" style="padding-right:20px">
+					<a href = "../articles.html" class ="menubar">blog</a> &#8226;
+					<a href = "../webapps.html" class ="menubar">webapps</a> &#8226;
+					<a href = "../software.html" class ="menubar"><font color="#6495ED">software</font></a> &#8226;
+					<a href = "../publications.html" class ="menubar">books</a> &#8226;
+					<a href = "../contact.html" class ="menubar">about+contact</a> 
+					 
+				</div>
+				<hr>
+		</div> <!--close header -->
+	</div><!--close container -->
+
+
+		<div id ='content'>
+			
+		
+
+
+
+			<div id ='main' style="padding-right:70px">
+
+				<div class = "article_top"><h1>nTEN
+            Outlier Identifier</h1>
+            <p id="article_header"><em>-- written by Sebastian Raschka</em> on September 15, 2013</p>
+
+	<!-- START Twitter API -->
+        	<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://bit.ly/194gBUE" 
+                counturl="http://groups.google.com/group/XRCm8K"
+        	data-count="none" data-via="rasbt"
+        	data-text="Check out the nTEN outlier identifier for small data sets" data-lang="en">Tweet</a>
+
+        		<script>!function(d,s,id){var
+        		js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	<!-- END Twitter API --> <br> 
+
+
+
+</div>
+
+   <div class="article">
+
+        <p><strong>nTEN is a tool to identify outliers in large data sets with few numbers of observations. It&#8217;s algorithm is based on Dixon&#8217;s Q test, a statistical test that works very well for sample sizes smaller than 10.</strong></p>
+
+     
+    
+    &nbsp;<br>
+   
+
+      
+
+
+<p>Dixon&#8217;s Q test for outliers was first described in a paper from 1951. The method was established to delete extraneous data points from data sets with small numbers of observations. The confidence of rejecting the outlier is &gt; 90 %, assuming the population is normally distributed. As Dixon reports in his paper, &#8220;These methods are usually more exact than the statistic of large numbers applied directly to small numbers of observations.&#8221; </p>
+
+     <hr>
+<p>R. B. Dean and W. J. Dixon (1951) "Simplified Statistics for Small
+     Numbers of Observations". Anal. Chem., 1951, 23 (4), 636-638 <br><a href="http://depa.fquim.unam.mx/amyd/archivero/ac1951_23_636_13353.pdf">[PDF]</a></p>
+<hr>
+
+&nbsp;<br>
+     &nbsp;<br>
+     
+<h2>Getting Started with nTEN</h2>
+
+<p>I tried to make nTEN as simple to use a possible, thus you can just
+     launch it directly with a double-click.
+     
+     &nbsp;<br>
+     &nbsp;<br>
+<img src="../Images/nTEN_1.png" alt="title" />
+
+  &nbsp;<br>
+     &nbsp;<br>
+
+     A window will open where you will be prompted to enter the location and name of the data file you want to analyze. nTEN can read from CSV and Excel spreadsheet files - and don&#8217;t worry, the program is able to detect automatically which file type you provided.
+Based on what the input file type, you will be prompted with a
+     different set of questions. But if you are fine with the default
+     options, you can just press ENTER.<br>
+       &nbsp;<br>
+     &nbsp;<br>
+     
+<img src="../Images/nTEN_2.png" alt="title" />
+  &nbsp;<br>
+     &nbsp;<br>
+     One crucial part though, is that you have to provide an appropriate &#8220;Data column header.&#8221;
+  &nbsp;<br>
+     &nbsp;<br>
+<img src="../Images/nTEN_3.png" alt="title" />
+  &nbsp;<br>
+     &nbsp;<br>
+The &#8220;Data column header&#8221; is basically the keyword that all the columns, which contain the numerical data to be analyzed, have in common. In the example file below this would be &#8220;mydata.&#8221;
+  &nbsp;<br>
+     &nbsp;<br>
+<img src="../Images/nTEN_4.png" alt="title" />
+  &nbsp;<br>
+     &nbsp;<br>
+If everything worked out seamlessly, you will see a summary of the results that should look like the screenshot below.
+  &nbsp;<br>
+     &nbsp;<br>
+<img src="../Images/nTEN_5.png" alt="title" />
+  &nbsp;<br>
+     &nbsp;<br>
+Additionally, the detailed results will be automatically saved as .csv files to the location that you were prompted to specify in the beginning.
+  &nbsp;<br>
+     &nbsp;<br>
+<img src="../Images/nTEN_6.png" alt="title" />
+  &nbsp;<br>
+     &nbsp;<br>
+The most interesting of those files is probably &#8220;outliers.csv&#8221; since it contains the outliers that could be identified in the data set.
+The &#8220;outliers.csv&#8221; contains the input data for the samples that contain outliers, and additionally, you will find 3 more columns to the right. &#8220;Extreme value&#8221; contains the value of the identified outlier, the &#8220;Q value&#8221; of this outlier, and the &#8220;Q threshold&#8221; (an extreme value is considered to be an outlier if its calculated Q value exceed the tabulated Q threshold for the given sample size).
+  &nbsp;<br>
+     &nbsp;<br>
+<img src="../Images/nTEN_7.png" alt="title" /></p>
+
+
+	
+	
+        <div id="redheading">Download nTEN for your operating system:</div>
+        <div style="height:30px"></div>
+        <table border="2", cellspacing="0", cellpadding="10">
+        
+        <tr><td><a href="../downloads/nTEN/nten_mac.zip" class="link" target="_blank">Mac OS X</a></td>
+                <td> v 1.2 </td></tr>
+        <tr><td><a href="../downloads/Nten/nten_linux.zip"
+         class="link" target="_blank">Linux</a>
+            </td><td> v 1.2 </td></tr>
+        <tr><td><a href="../downloads/Nten/nten_win.zip"
+             class="link" target="_blank">Windows</td><td> v 1.2 </td></tr>
+        </table>
+        &nbsp;<br />
+    
+
+        <p><br/>
+        <strong>Note:</strong> <br/>
+        If you have a particular LinuxDistro that does not support the current Linux version of PDB to FASTAconverter, please let me know, and I will try to compile the appropriate version for you.</p>
+
+	
+		&nbsp;<br />
+     	  &nbsp;<br />   
+        
+	
+
+
+		</div> 	<!-- close article -->
+
+
+
+			</div><!--close main -->
+		
+	</div><!--close content -->
+	
+
+
+
+
+<!-- START Footer -->
+
+	<div id ='footer'>	
+        <center>
+	<hr>
+        <div style="height:20px;"></div>
+        HTML and JavaScripts were written by Sebastian Raschka <br>
+        Copyright (C) 2013-2014 Sebastian Raschka</p>
+
+
+	<!-- START Twitter API -->
+
+ <a href="https://twitter.com/rasbt" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @rasbt</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	<!-- END Twitter API -->
+
+
+	
+     
+        
+		 <div style="height:10px;"></div>
+		</center>
+	</div>
+<!-- END Footer -->
+
+<!-- Start Google Analytics -->
+		<script type="text/javascript">
+
+  		var _gaq = _gaq || [];
+  		_gaq.push(['_setAccount', 'UA-38457794-1']);
+  		_gaq.push(['_trackPageview']);
+
+  		(function() {
+    	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  		})();
+		</script>
+<!-- End  Google Analytics -->
+
+</body>
+</html>

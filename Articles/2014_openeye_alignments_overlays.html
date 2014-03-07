@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head>
+		<!--META-->
+		<meta name="description" content="A short tutorial showing how to use OpenEye software command line tools for substructure alignments and best-matching low-energy conformer overlays">
+		<meta name="Author" content="Sebastian Raschka">
+		<title>Using OpenEye software for substructure alignments and best-matching low-energy conformer overlays</title>
+
+		<!-- jQuery -->
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+		<script type="text/javascript" src="../jQuery/main_app.js"></script>
+		<script type="text/javascript" src=" ../jQuery/index.js"></script>
+
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="../CSS/main.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="../CSS/content.css" media="screen" />
+</head>
+<body>
+
+	<div id ='container' >
+
+		<div id ='header_new'>
+		             
+				<a href = "../index.html"><img src="../Images/title_text.png" style="border-style:none"/></a>	
+				<hr>
+				<div align="right" style="padding-right:20px">
+					<a href = "../articles.html" class ="menubar"><font color="#6495ED">blog</font></a> &#8226;
+					<a href = "../webapps.html" class ="menubar">webapps</a> &#8226;
+					<a href = "../software.html" class ="menubar">software</a> &#8226;
+					<a href = "../publications.html" class ="menubar">books</a> &#8226;
+					<a href = "../contact.html" class ="menubar">about+contact</a> 
+					 
+				</div>
+				<hr>
+		</div> <!--close header -->
+	</div><!--close container -->
+
+
+		<div id ='content'>
+			
+		
+
+
+			<div id ='main'>
+
+                <h2 class="article_top">Using OpenEye software for substructure alignments and best-matching low-energy conformer overlays</h2>
+					<p id="article_header"><em>-- written by Sebastian Raschka</em> on February 23, 2014</p>
+
+	<!-- START Twitter API -->
+        		 <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://bit.ly/1mBZfed" 
+                counturl="http://groups.google.com/group/ZEsjUY"
+        		 data-count="none" data-via="rasbt"
+        		 data-text="Using OpenEye software for substructure alignments and best-matching low-energy conformer overlays" data-lang="en">Tweet</a>
+
+        		<script>!function(d,s,id){var
+        		js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	<!-- END Twitter API --> <br> 
+ 
+
+<style type="text/css">
+code {
+   font-size: 13.5px;
+   color: #000099;
+}
+</style>
+
+				<div class="article" style="font-size: 16px;">
+		<div style="padding-right:70px">
+		  <p style="line-height:1.7"><strong>
+
+This is a quickguide showing how to use OpenEye software command line tools to align target molecules to a query based on substructure matches and how to retrieve the best molecule overlay from two sets of low-energy conformers.
+
+ </strong></p></div>
+
+<div style="width: 400px;">
+  <hr>
+</div>
+<div style="width: 600px; margin-left:60px;">
+<h4>Sections</h4>
+
+
+<p><a href="#subalign">Substructure Alignment Using OpenEye OEChem RMSD</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; <a href="#pymolextract">1) Extract substructure via PyMOL</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; <a href="#smileconv">2) Convert substructure into a SMILES string</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; <a href="#rmsdtool">3) Running OpenEye's RMSD tool</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; <a href="#scriptsaut1">4) Scripts to automate the workflow<</a><br>
+
+<a href="#lowenergyoverlay">Low-Energy Conformer Generation and Overlay</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; <a href="#genlow">1) Generate low-energy conformers of target and query</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; <a href="#lowover">2) Overlaying low-energy conformers</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; <a href="#overpair">3) Retrieving the best overlay-pair</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp; <a href="#scriptaut2">4) Script to automate the workflow</a><br>
+
+</p>
+</div>
+
+<div style="width: 400px;">
+  <hr>
+</div>		
+<br>
+
+
+
+
+<p><a name="subalign"></a></p>
+<br>
+
+<h1>Substructure Alignment Using OpenEye OEChem RMSD</h1>
+
+<h3>Task:</h3>
+
+<p>We want to align a set of molecules to a reference substructure (in contrast to "regular" whole molecule-to-molecule alignments, where the focus lies on minimizing the atom distances over the whole molecule structures).</p>
+
+<p><strong>Requirements:</strong> <br/>
+- OpenEye OEChem RMSD alignment tool<br/>
+- protein structure visualization tool (e.g., PyMOL)<br/>
+- Python 3.x
+- reference molecule in <code>.mol2</code> or <code>.pdb</code> format
+- target molecule structures as multi- or single-mol2 files.</p>
+
+<p><a name="pymolextract"></a></p>
+<br>
+<h3>1) Extracting a substructure via PyMOL</h3>
+
+<p>Open the <code>.mol2</code> or <code>.pdb</code> file of the reference molecule in PyMOL and extract the substructure which you want to align to the query molecules (save it as PDB file).
+For this example, I randomly picked a steroid-ring containing structure from the ZINC database (<a href="http://zinc.docking.org/substance/80135621">http://zinc.docking.org/substance/80135621</a>), which we want to use here to specifically focus on the alignment of the steroid-ring center itself.</p>
+
+<b>PyMOL-Workflow:</b>
+<ol>
+<li>Top-Panel: Mouse -> Selection Mode -> Atoms</li>
+<li>Click on atoms of interest to mark them as selected</li>
+<li>On the new selection: Action -> copy to object</li>
+<li>Save substructure as PDB file: File -> Save Molecule...</li>
+</ol>
+
+
+<h4>Original reference molecule (ZINC80135621):</h4>
+
+<p><img src="../Images/reference_molecule.png" alt="" /></p>
+
+<p><img src="../Images/pymol_copy_substructure.png" alt="" /></p>
+
+<h4>Resulting reference substructure:</h4>
+
+<p><img src="../Images/reference_substructure.png" alt="" /></p>
+
+<p><a name="smileconv"></a></p>
+<br>
+
+<h3>2) Converting substructure into a SMILES string</h3>
+
+<p>I recommend to use the free online SMILES translator at <a href="http://cactus.nci.nih.gov/translate/">http://cactus.nci.nih.gov/translate/</a> to upload your converted substructure as PDB file in order to obtain the corresponding SMILES string.</p>
+
+<p>Alternatively, you can also draw the substructure via the "Search Structure" molecule editor on the ZINC website (<a href="http://zinc.docking.org/search/structure">http://zinc.docking.org/search/structure</a>) to obtain the SMILE string of the substructure. In this case you would not need to use PyMOL to extract the substructure from the main molecule. For such a simple substructure like this steroid-ring construct, this would probably also be the more convenient approach.</p>
+
+<p><a name="rmsdtool"></a></p>
+<br>
+<h3>3) Running OpenEye's RMSD tool</h3>
+
+<p>Run OpenEye's OEChem RMSD tool to align target molecules to the reference molecule based on the extracted substructure. The aligned pairs will be written to a new file. The command-line syntax for a typical usage of the OEChem RMSD toll could be:</p>
+
+<pre><code>/soft/linux64/openeye/.../oechem-utilities/rmsd\
+-in /home/.../ query.mol2\ 
+-ref ~/Desktop/reference_molecule.mol2\
+-overlay\
+-out /home/.../output.mol2\     
+-automorph false\
+-smarts C1CCC2C(C1)CCC3C4CCCC4CCC23
+</code></pre>
+
+<p><strong>More details</strong> about the different parameters (from <code>.../oechem-utilities/rmsd --help</code>):</p>
+
+<pre><code>rmsd -in &lt;filename&gt; -ref &lt;reference filename&gt;
+
+Options:
+ -automorph (default false): assign best atom association. By setting
+  this option to true, rmsd will ignore atom names and orders present in the
+  file and will use structural and chemical information to make the best
+  matches.  This should fix the problem of abnormally high RMSD values for
+  symmetric molecules/functional groups that have been rotated.
+
+ -heavyonly (default true): ignores hydrogens in rmsd calculation
+
+ -overlay (default true): performs a least squares fit and superimposes
+  the molecules prior to making the RMSD calculation.
+
+ -origconfout : output original conformation too
+
+ -out : output file name
+
+ -refout : output reference mol
+
+ -smarts : rmsd of corresponding matched atoms only
+</code></pre>
+
+
+<p><a name="scriptsaut1"></a></p>
+<br>
+<h3>4) Scripts to automate the workflow</h3>
+<br>
+
+<h4>4 a) Python script to split a multi-mol2 file</h4>
+
+<p>If your target molecules are in a multi-mol2-file, you can use the Python script <a href="https://github.com/rasbt/proteinscience_tutorials/blob/master/substructure_alignment/Scripts/split_multimol2.py">split_multimol2.py</a> to split it into individual mol2 files:</p>
+
+<pre><code>USAGE: python3 multimol2.mol2 output_directory
+</code></pre>
+<br>
+
+<h4>4 b) Python subprocess.call() wrapper</h4>
+
+<p>And to automate the RMSD substructure alignment over the individual mol2 files, you can use the script <a href="https://github.com/rasbt/proteinscience_tutorials/blob/master/substructure_alignment/Scripts/multimol2_rmsd_align.py">multimol2_rmsd_align.py</a> where you just have to modify the path to your OpenEye RMSD executable.</p>
+
+<pre><code>USAGE: python3 mmol2_rmsd_align.py input_dir/ output_dir/ ref.mol2 smiles_string
+</code></pre>
+<br>
+
+<h4>4 c) Concatenating the results</h4>
+
+<p>Finally, you can concatenate the resulting alignments back into one single multi-mol2 file for further analysis and visualization
+ via</p>
+
+<pre><code>&gt; cat mol2_dir/*.mol2 &gt; my_multimol2 file
+</code>
+</pre>
+
+
+
+
+
+<br>
+<br>
+<br>
+<br>
+<p><a name="lowenergyoverlay"></a></p>
+
+<h1>Low-Energy Conformer Generation and Overlay</h1>
+
+<h3>Task:</h3>
+
+<p>We want to retrieve the best overlay between 2 molecules based on geometrical shape and functional chemistry.</p>
+
+<p><strong>Requirements:</strong> <br/>
+- OpenEye OMEGA2 and OpenEye ROCS<br/>
+- protein structure visualization tool (e.g., PyMOL)<br/>
+- Python 3.x<br/>
+- two molecules in <code>.mol2</code> format</p>
+
+<p><a name="genlow"></a></p>
+<br>
+<h3>1) Generate low-energy conformers of target and query</h3>
+
+<p>For this tutorial I will be using 2 randomly chosen molecules that I downloaded from the <a href="http://zinc.docking.org">ZINC</a> database, which is a free database for commercially available compounds.</p>
+
+<h4>ZINC00062008:</h4>
+
+<p><img src="../Images/ZINC00062008.png" alt="../Images/ZINC00062008.png" /></p>
+
+<h4>ZINC00082321:</h4>
+
+<p><img src="../Images/ZINC00082321.png" alt="../Images/ZINC00082321.png" /></p>
+
+<p>To find the best scoring overlay, I recommend to generate low-energy conformers of both target and query molecule via OpenEye's OMEGA2 tool first.</p>
+
+<pre><code>/soft/linux64/openeye/bin/omega2\
+    -in .../ZINC00062008.mol2\
+    -out .../ZINC00062008_confs.mol2\
+    -warts true\
+    -fraglib /soft/linux64/openeye/data/omega2/fraglib.oeb.gz\
+    -commentEnergy true\
+    -prefix om2
+</code></pre>
+
+<p>The details about the algorithms behind OMEGA2 conformer generation can be found in the following paper by Paul C. D. Hawkins, A. Geoffrey Skillman, Gregory L. Warren, Benjamin A. Ellingson, and Matthew T. Stahl:<br/>
+<a href="http://pubs.acs.org/doi/abs/10.1021/ci100031x">Conformer Generation with OMEGA: Algorithm and Validation Using High Quality Structures from the Protein Databank and Cambridge Structural Database</a></p>
+
+<p>If you want to know more about the different parameters for the command line interface, please refer to the <a href="http://www.eyesopen.com/docs/omega/current/html/usage.html#command-line-interface">OpenEye OMEGA2 documentation</a></p>
+
+<p>The figure below shows how the low-conformer set for ZINC_00062008 would look like:</p>
+
+<p><img src="../Images/ZINC_00062008_confs_2.png" alt="" /></p>
+
+
+<p><a name="lowover"></a></p>
+<br>
+
+<h3>2) Overlaying low-energy conformers</h3>
+
+<p>Now, after we generated ~200 low-energy conformers (200 is the max. default value) for both the target and query molecule, we can use OpenEye ROCS to overlay all low-energy conformations with each other (= ~200 x ~200 overlays). Here, we are only interested in the top-scoring overlayed pair:</p>
+
+<pre><code>/soft/.../rocs\
+    -query\
+    -dbase\
+    -randomstarts 20\ 
+    -stats best\
+    -besthits 0\ 
+    -maxhits 0\
+    -maxconfs 1\
+    -rankby TanimotoCombo\
+    -mcquery\
+    -prefix rcs\
+    -reportfile rocs.rpt\ 
+    -oformat mol2\ 
+    -report one\
+</code></pre>
+
+<p>It is worth mentioning that we are ranking by the <code>TanimotoCombo</code> here, which is a combination of <code>ShapeTanimoto</code> (3D shape similarity via volume optimization) and <code>ColorTanimoto</code> (functional group matching). Depending on your priorities, you may want to use a different argument for the <code>rankby</code> parameter.
+More information about the command line interface can be found at: <a href="http://www.eyesopen.com/docs/rocs/current/html/usage.html#command-line-interface">http://www.eyesopen.com/docs/rocs/current/html/usage.html#command-line-interface</a>.</p>
+
+
+<p><a name="overpair"></a></p>
+<br>
+
+<h3>3) Retrieving the best overlay-pair</h3>
+
+<p>Using the OpenEye ROCS command line interface with the parameters listed in the previous section, we will obtain a report file that contains our highest-scored overlay pair, which would be the 20th low-energy conformer of ZINC00082321 and the 168th low-energy conformer of ZINC00062008 in our example:</p>
+
+<p><img src="../Images/rocs_report.png" alt="../Images/rocs_report.png" /></p>
+
+<p>ROCS will also generate a <code>.mol2</code> file that includes all of the sampled overlays. Based on the report file, we know in which particular pair we are interested in, and thus we can just write a simple script to retrieve those 2 <code>.mol2</code> structures from the ROCS multimol2 outputfile, or just use a simple text search to locate the files and save them as individual <code>.mol2</code>s for visualization:</p>
+
+<p><img src="../Images/locating_overlay.png" alt="../Images/locating_overlay.png" /></p>
+
+<p>The figure shows how our top-scoring overlay-pair would look like:
+<img src="../Images/top_overlay.png" alt="" /></p>
+
+<p><a name="scriptaut2"></a></p>
+<br>
+
+<h3>4) Script to automate the workflow</h3>
+
+<p>A simple script that is wrapping up the 2 steps mentioned above can be found here: <a href="https://github.com/rasbt/proteinscience_tutorials/blob/master/low_energy_conformer_overlay/Scripts/lowenergy_conf_overlay.py">lowenergy_conf_overlay.py</a></p>
+
+
+
+
+				  
+	
+		&nbsp;<br>
+     	  &nbsp;<br>   
+        
+					
+	
+
+		</div> 	<!-- close article -->
+
+
+
+			</div><!--close main -->
+		
+	</div><!--close content -->
+	
+
+
+
+
+<!-- START Footer -->
+
+	<div id ='footer'>	
+        <center>
+	<hr>
+        <div style="height:20px;"></div>
+        <p>HTML and JavaScripts were written by Sebastian Raschka <br>
+        Copyright (C) 2013-2014 Sebastian Raschka</p>
+
+
+	<!-- START Twitter API -->
+
+ <a href="https://twitter.com/rasbt" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @rasbt</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	<!-- END Twitter API -->
+<div style="height:20px;"></div>
+
+	<hr>
+
+     
+        
+		 <div style="height:10px;"></div>
+		</center>
+	</div>
+<!-- END Footer -->
+
+
+<!-- Start DISQUS -->
+
+ <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'sebastianraschka'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+<!-- Start Google Analytics -->
+		<script type="text/javascript">
+
+  		var _gaq = _gaq || [];
+  		_gaq.push(['_setAccount', 'UA-38457794-1']);
+  		_gaq.push(['_trackPageview']);
+
+  		(function() {
+    	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  		})();
+		</script>
+<!-- End  Google Analytics -->
+
+</body>
+</html>

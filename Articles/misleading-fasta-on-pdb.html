@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+		<!--META-->
+		<meta name="description" content="If you downloaded a PDB structure and you are planning to use its amino acid sequence for further analyses, you have to be aware that the FASTA sequence on the Protein Data Bank server (PDB) is not necessarily identical to the corresponding sequence in the PDB file that you have downloaded.">
+		<meta name="Author" content="Sebastian Raschka">
+		<title>Misleading FASTA sequences in the Protein Data Bank</title>
+
+		<!-- jQuery -->
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+		<script type="text/javascript" src="../jQuery/main_app.js"></script>
+		<script type="text/javascript" src=" ../jQuery/index.js"></script>
+
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="../CSS/main.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="../CSS/content.css" media="screen" />
+</head>
+<body>
+
+	<div id ='container' >
+
+		<div id ='header_new'>
+		             
+				<a href = "../index.html"><img src="../Images/title_text.png" style="border-style:none"/></a>	
+				<hr>
+				<div align="right" style="padding-right:20px">
+					<a href = "../articles.html" class ="menubar"><font color="#6495ED">blog</font></a> &#8226;
+					<a href = "../webapps.html" class ="menubar">webapps</a> &#8226;
+					<a href = "../software.html" class ="menubar">software</a> &#8226;
+					<a href = "../publications.html" class ="menubar">books</a> &#8226;
+					<a href = "../contact.html" class ="menubar">about+contact</a> 
+					 
+				</div>
+				<hr>
+		</div> <!--close header -->
+	</div><!--close container -->
+
+
+		<div id ='content'>
+
+		 
+
+
+			<div id ='main' style="padding-right:70px">
+
+				<h2 class="article_top">Misleading FASTA sequences in the Protein Data Bank</h2>
+					<p id="article_header"><em>-- written by Sebastian Raschka</em> on February 23, 2013</p>
+
+	<!-- START Twitter API -->
+        		<a href="https://twitter.com/share"
+        		class="twitter-share-button" data-via="rasbt" data-url="http://bit.ly/ZEsjUY" 
+                counturl="http://groups.google.com/group/ZEsjUY" data-count="none" data-text="Read this interesting article about misleading FASTA sequences on the PDB server at" data-lang="en">Tweet</a>
+
+        		<script>!function(d,s,id){var
+        		js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	<!-- END Twitter API --> <br> 
+
+
+
+
+				<div class="article">
+				  <div>
+				  <p><strong> The Protein Data Bank (<a href="http://www.rcsb.org/pdb/home/home.do">rcsb.org</a>) deposited amino acid sequences in FASTA format for each PDB structure file.
+					 However, those FASTA sequences are not necessarily identical to the amino acid sequences in the corresponding PDB files. Oftentimes, the amino acid sequences from the PDB files are missing a few residues at the n-terminus; sometimes deletions can also be found somewhere within the protein. Using the wrong sequence could lead to inaccurate results in BLAST searches and erroneous protein structure models.</strong></p></div></br></br>
+
+				<p>Take the crystal structure of inorganic pyrophosphatase <a href="http://www.rcsb.org/pdb/explore/explore.do?structureId=3eiy">3EIY</a> for example. The 1-letter amino acid 	sequence in FASTA format, which is deposited on rcsb.org, looks like this:</p>
+				
+				<div class="sequence_code">>3EIY:A|PDBID|CHAIN|SEQUENCE<br>MAHHHHHHMGTLEAQTQGPGSMSFSNVPAGKDLPQDFNVIIEIPAQSEPVKYEADKALG<br>LLVVDRFIGTGMRYPVNYGFIPQTLSGDGDPVDVLVITPFPLLAGSVVRARALGMLKMT<br>DESGVDAKLVAVPHDKVCPMTANLKSIDDVPAYLKDQIKHFFEQYKALEKGKWVKVEGW<br>DGIDAAHKEITDGVANFKK</div>
+				<span style="font-size:70%">(<a href="http://www.rcsb.org/pdb/files/fasta.txt?structureIdList=3EIY">http://www.rcsb.org/pdb/files/fasta.txt?structureIdList=3EIY)</a></span>
+
+				<p>Now, compare it to the amino acid sequence that is actually contained in the PDB structure that corresponds to the same PDB ID:</p>
+			
+				<div class="sequence_code">> HYDROLASE 17-SEP-08 3EIY<br>SFSNVPAGKDLPQDFNVIIEIPAQSEPVKYEADKALGLLVVDRFIGTGMRYPVNYGFIP<br>QTLSGDGDPVDVLVITPFPLLAGSVVRARALGMLKMTDESGVDAKLVAVPHDKVCPMTA<br>NLKSIDDVPAYLKDQIKHFFEQYKALEKGKWVKVEGWDGIDAAHKEITDGVANFKK</div>
+				<span style="font-size:70%">(conversion via "PDB to FASTA" tool, <a href="http://sebastianraschka.com/Webapps/pdb_to_fasta.html")>http://sebastianraschka.com/Webapps/pdb_to_fasta.html</a>)</span>
+
+				<p> You may notice some significant differences between the two sequences as they are shown in the figure below:</p>
+
+				<img src="../Images/3EIY_diff.png" alt="image"> <br>
+
+				<span style="font-size:70%"></a>(EMBL-EBI ClustalW2 <a href="http://www.ebi.ac.uk/Tools/msa/clustalw2/">http://www.ebi.ac.uk/Tools/msa/clustalw2/</a>)</span>
+				
+				<p>Obviously, the first 22 amino acid sequences are missing in the PDB file. However, this is not unusual and may be due to the procedure of X-ray crystallography and structure assignment. But it is one of the details that you have to have in mind when you are planning to work with the amino acid sequence.</p>
+		
+				<p>Unfortunately, differences can also occur right in the middle of the amino acid sequence and could go easily unnoticed. Take a look at the following example (formate dehydrogenase, <a href="http://www.rcsb.org/pdb/explore/explore.do?structureId=1aa6">PDB ID: 1AA6</a>).</p>
+
+				<img src="../Images/1AA6_diff.png" alt="image">
+
+				<p>At residue 140 the FASTA code on rcsb.org has a C (cysteine), however, in the crystal structure it is an U (seleno-cysteine). And yet another dissimilarity is much more severe: At position 668 there is an entire stretch of 18 amino acid residues missing in the crystal structure!
+				<strong>When you open the PDB structure in a molecular visualization tool, e.g., PyMOL, you can see a sudden skip in the numbering, which can be easily overlooked!</strong></p>
+
+				<img
+				src="../Images/pymol_1AA6_diff.png"
+				alt="image" width="100%">
+
+				<p>Such a insertion/deletion of residues can cause a significant bias to further sequence analyses (e.g., BLAST searches) or modeling approaches. Thus, you should make sure to always compare the 1-letter amino acid sequences of the FASTA file and the corresponding protein structure file. </p>
+
+				<p>The PDB structure file can be converted into FASTA format using the tool PDB to FASTA (<a href ="http://sebastianraschka.com/Webapps/pdb_to_fasta.html">http://sebastianraschka.com/Webapps/pdb_to_fasta.html</a>), and for the comparison you can use your favorite sequence alignment tool, e.g., ClustalW2 (<a href="http://www.ebi.ac.uk/Tools/msa/clustalw2/">http://www.ebi.ac.uk/Tools/msa/clustalw2/ </a>).</p>
+				
+
+	
+		&nbsp;<br />
+     	  &nbsp;<br />   
+        
+					
+	
+		</div> 	<!-- close article -->
+
+
+
+			</div><!--close main -->
+		
+	</div><!--close content -->
+	
+
+
+
+
+<!-- START Footer -->
+
+	<div id ='footer'>	
+        <center>
+	<hr>
+        <div style="height:20px;"></div>
+        HTML and JavaScripts were written by Sebastian Raschka <br>
+        Copyright (C) 2013-2014 Sebastian Raschka</p>
+
+
+	<!-- START Twitter API -->
+
+ <a href="https://twitter.com/rasbt" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @rasbt</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	<!-- END Twitter API -->
+	
+     
+        
+		 <div style="height:10px;"></div>
+		</center>
+	</div>
+<!-- END Footer -->
+
+<!-- Start Google Analytics -->
+		<script type="text/javascript">
+
+  		var _gaq = _gaq || [];
+  		_gaq.push(['_setAccount', 'UA-38457794-1']);
+  		_gaq.push(['_trackPageview']);
+
+  		(function() {
+    	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  		})();
+		</script>
+<!-- End  Google Analytics -->
+
+</body>
+</html>

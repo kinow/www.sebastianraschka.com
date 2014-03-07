@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+		<!--META-->
+		<meta name="description" content="A simple solution to clean up your desktop by automatically moving files into specified folder categories.">
+		<meta name="Author" content="Sebastian Raschka">
+		<title>Desktop Spring Cleaning</title>
+
+		<!-- jQuery -->
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+		<script type="text/javascript" src="../jQuery/main_app.js"></script>
+		<script type="text/javascript" src=" ../jQuery/index.js"></script>
+
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="../CSS/main.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="../CSS/content.css" media="screen" />
+</head>
+<body>
+
+	<div id ='container' >
+
+		<div id ='header_new'>
+		             
+				<a href = "../index.html"><img src="../Images/title_text.png" style="border-style:none"/></a>	
+				<hr>
+				<div align="right" style="padding-right:20px">
+					<a href = "../articles.html" class ="menubar"><font color="#6495ED">blog</font></a> &#8226;
+					<a href = "../webapps.html" class ="menubar">webapps</a> &#8226;
+					<a href = "../software.html" class ="menubar">software</a> &#8226;
+					<a href = "../publications.html" class ="menubar">books</a> &#8226;
+					<a href = "../contact.html" class ="menubar">about+contact</a> 
+					 
+				</div>
+				<hr>
+		</div> <!--close header -->
+	</div><!--close container -->
+
+
+		<div id ='content'>
+
+		 
+		
+
+			<div id ='main' style="padding-right:70px">
+
+				<div class = "article_top"><h2>Automated Desktop Spring Cleaning</h2>
+			<p id="article_header"><em>-- written by Sebastian Raschka</em> on April 6, 2013</p>
+
+	<!-- START Twitter API -->
+        		 <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://bit.ly/14JUXJa" 
+                counturl="http://groups.google.com/group/14JUXJa"
+        		 data-count="none" data-via="rasbt" data-text="Read this interesting article about Desktop Spring Cleaning at" data-lang="en">Tweet</a>
+
+        		<script>!function(d,s,id){var
+        		js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	<!-- END Twitter API -->  <br> 
+
+
+</div>
+
+		<div class="article">
+
+				<p><strong> When you desktop became so cluttered that you can barely see the wallpaper behind the bulk of different files, it is about time for a little bit of spring cleaning.</strong></p>
+				<div style="clear:both"><br><img src="../Images/cleaning_before.png" alt="picture"><br><div>
+
+				<p>I find it very convenient to have a script on my desktop - just one double-click away - that does this job for me. If executed, it will first create 3 folders on the Desktop: <code><b>PDF Documents</code></b>, <code><b>Pictures</code></b>, and <code><b>Word Documents</code></b> (if not already available). Then, it will move all picture files into <code><b>Pictures</code></b>, all Word documents into <code><b>Word Documents</code></b>, and all PDFs into <code><b>PDF Documents</code></b>, respectively. Simple and easy, but very efficient!</p>
+				<img src="../Images/cleaning_after.png" alt="picture"><br>
+
+				<p>You can download the script from <a href="../downloads/cleanDesktop.command.zip" target="_blank">HERE</a>, or you can create it yourself: <br>
+
+				Simply copy the following lines into you favorite text editor and save it as <code><b>cleanDesktop.command</b></code> </p>
+
+				<code>
+
+				<br><br>cd ~/Desktop <br>
+				mkdir Pictures <br>
+				mkdir PDF\ Documents <br>
+				mkdir Word\ Documents <br> <br>
+
+				mv *.png *.bmb *.jpeg *.jpg *.tiff *.tiff Pictures <br>
+				mv *.pdf PDF\ Documents <br>
+				mv *.doc *.docx Word\ Documents <br>
+				exit 0 <br><br>
+				</code>
+
+				<p>
+				Then open a bash shell (terminal) and make the script executable: <br>
+				<b> <code>chmod ugo+x /location/to/the/file/cleanDesktop.command</code></b> <br><br>
+				- The script works on MacOS X and Linux operating systems.
+				</p>
+		</div>
+
+			&nbsp;<br />
+	   
+	       
+			
+		
+		</div> 	<!-- close article -->
+
+
+
+			</div><!--close main -->
+		
+	</div><!--close content -->
+	
+
+
+
+<!-- START Footer -->
+
+	<div id ='footer'>	
+        <center>
+	<hr>
+        <div style="height:20px;"></div>
+        HTML and JavaScripts were written by Sebastian Raschka <br>
+        Copyright (C) 2013-2014 Sebastian Raschka</p>
+
+
+	<!-- START Twitter API -->
+
+ <a href="https://twitter.com/rasbt" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @rasbt</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	<!-- END Twitter API -->
+
+	
+     
+        
+		 <div style="height:10px;"></div>
+		</center>
+	</div>
+<!-- END Footer -->
+
+<!-- Start Google Analytics -->
+		<script type="text/javascript">
+
+  		var _gaq = _gaq || [];
+  		_gaq.push(['_setAccount', 'UA-38457794-1']);
+  		_gaq.push(['_trackPageview']);
+
+  		(function() {
+    	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  		})();
+		</script>
+<!-- End  Google Analytics -->
+
+</body>
+</html>

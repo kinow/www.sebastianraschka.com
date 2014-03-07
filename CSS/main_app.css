@@ -1,0 +1,44 @@
+ .menu1 {
+ 	padding: 5px; opacity:0.5;
+ }
+
+ .menu2 {
+ 	padding: 5px; opacity:0.5;
+ }
+
+ .menu3 {
+ 	padding: 5px; opacity:0.5;
+ }
+
+ .menu4 {
+ 	padding: 5px; opacity:0.5;
+ }
+
+ .menu5 {
+ 	padding: 5px; opacity:0.5;
+ }
+
+
+
+/* CROP_AND_CLEAVE.HTML */
+ #mode1 {background-color: #BAB6B1;}
+ #mode2 {background-color: #F0A651;}
+
+ /* PDB_TO_FASTA.html */
+ #menPdbToFasta {background-color: #2a9c3b; width:590px;}
+
+/* PDB_CENTER_OF_MASS.html */
+ #menPdbCenterOfMass {background-color: #176AC2;width:590px;}
+
+
+
+ /* COMPLEMENT_REVERSE.html */
+ #compreverse1 {background-color: #2858F7;}
+ #compreverse2 {background-color: #1F07F5;}
+ #compreverse3 {background-color: #110769;}
+
+ /* basic_statistics.html */
+ #basicStatistics {background-color: #000000; 
+ 	
+ 	color: #ffffff;
+ 	line-height:200%;}

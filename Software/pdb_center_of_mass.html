@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+		<!--META-->
+		<meta name="description" content="Application that let's you calculate the center of mass of a PDB file - Protein or Ligand.">
+		<meta name="Author" content="Sebastian Raschka">
+		<title>PDB To FASTA Converter</title>
+
+		<!-- jQuery -->
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+		<script type="text/javascript" src="../jQuery/main_app.js"></script>
+		<script type="text/javascript" src=" ../jQuery/index.js"></script>
+
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="../CSS/main.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="../CSS/content.css" media="screen" />
+</head>
+<body>
+
+	<div id ='container' >
+
+		<div id ='header_new'>
+		             
+				<a href = "../index.html"><img src="../Images/title_text.png" style="border-style:none"/></a>	
+				<hr>
+				<div align="right" style="padding-right:20px">
+					<a href = "../articles.html" class ="menubar">blog</a> &#8226;
+					<a href = "../webapps.html" class ="menubar">webapps</a> &#8226;
+					<a href = "../software.html" class ="menubar"><font color="#6495ED">software</font></a> &#8226;
+					<a href = "../publications.html" class ="menubar">books</a> &#8226;
+					<a href = "../contact.html" class ="menubar">about+contact</a> 
+					 
+				</div>
+				<hr>
+		</div> <!--close header -->
+	</div><!--close container -->
+
+
+		<div id ='content'>
+			
+		
+
+
+			<div id ='main' style="padding-right:70px">
+
+				<div class = "article_top"><h2>PDB Center of Mass Calculator</h2>
+            <p id="article_header"><em>-- written by Sebastian Raschka</em> on September 08, 2013</p>
+
+
+	<!-- START Twitter API -->
+        	<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://bit.ly/1dRQfME" 
+                counturl="http://groups.google.com/group/XRCm8K"
+        	data-count="none" data-via="rasbt" data-text="Check out the Center of Mass calculator at" data-lang="en">Tweet</a>
+
+        		<script>!function(d,s,id){var
+        		js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	<!-- END Twitter API --> <br> 
+
+
+
+</div>
+
+   <div class="article">
+
+        <p><strong>PDB Center of Mass Calculator </a> let's you calculate the
+        XYZ coordinates of the center of mass of any PDB file - for
+        the whole structure, or the Protein and Ligand separately.
+
+        This stand alone command-line tool for Mac OS, Linux,
+        and Windows operating systems is really simple to use. All you
+        need is to have a PDB file and you are good to go!</strong></p>
+
+     
+    
+    &nbsp;<br />
+    &nbsp;<br />
+
+        <div id="redheading">Here is how it works:</div>
+
+        <p>Open a new terminal window,  and type </br>
+        <code>folder_that_where_you_saved_the_program/center_of_mass
+        -h</code></br> to see what options are available:</p>
+
+
+        <p><img src="../Images/center_of_mass_help.png" alt="image"</p>
+
+        <p>From the available options you can see that you can choose
+        between calculating the center of mass of the ligand (<code>-l</code>) or the
+        protein <code>(-p)</code>.</br>Note that if you use neither of
+        the flags <code>-l</code> or <code>-p</code>, the center of
+        mass of all atoms in the input PDB file will be
+        calculated.</br></p>
+
+	<p>Let's have a look at the ligand's center of mass (don't
+	forget to remove all water molecules from the input PDB file
+	if you don't want to include them in the calculation).
+
+
+        <p><img src="../Images/center_of_mass_lig1.png" alt="image"</p>
+
+        &nbsp;<br />
+        &nbsp;<br />
+
+	<p>As you can see in the figure above, the output consists of
+	the XYZ coordinates of the ligand's center of mass, and
+	additionally a handy command to visualize the center of mass
+	in pymol: </br><code>pseudoatom pse, pos=[10.652, 26.701,
+	17.664]</code>
+
+
+	<p><img src="../Images/center_of_mass_lig2.png" alt="image"</p>
+
+	<p>Now, let's have a look where the center of mass of the
+	protein is located:</p>
+
+	<p><img src="../Images/center_of_mass_prot1.png"
+	alt="image"</p>
+	<p><img src="../Images/center_of_mass_prot2.png" alt="image"</p>
+
+
+	
+	
+        <div id="redheading">Download PDB To FASTA Converter for your operating system:</div>
+        <div style="height:30px"></div>
+        <table border="2", cellspacing="0", cellpadding="10">
+        
+        <tr><td><a href="../downloads/pdb_center_of_mass/center_of_mass_mac.zip" class="link" target="_blank">Mac OS X</a></td>
+                <td> v 1.0 </td></tr>
+        <tr><td><a href="../downloads/pdb_center_of_mass/center_of_mass_linux.zip"
+         class="link" target="_blank">Linux</a>
+            </td><td> v 1.0 </td></tr>
+        <tr><td><a href="../downloads/pdb_to_fasta/center_of_mass_win.zip"
+             class="link" target="_blank">Windows</td><td> v 1.0 </td></tr>
+        </table>
+        &nbsp;<br />
+    
+
+        <p><br/>
+        <strong>Note:</strong> <br/>
+        If you have a particular LinuxDistro that does not support the current Linux version of PDB to FASTAconverter, please let me know, and I will try to compile the appropriate version for you.</p>
+
+	
+		&nbsp;<br />
+     	  &nbsp;<br />   
+        
+	
+
+
+		</div> 	<!-- close article -->
+
+
+
+			</div><!--close main -->
+		
+	</div><!--close content -->
+	
+
+
+
+
+<!-- START Footer -->
+
+	<div id ='footer'>	
+        <center>
+	<hr>
+        <div style="height:20px;"></div>
+        HTML and JavaScripts were written by Sebastian Raschka <br>
+        Copyright (C) 2013-2014 Sebastian Raschka</p>
+
+
+		<!-- START Twitter API -->
+
+ <a href="https://twitter.com/rasbt" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @rasbt</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	<!-- END Twitter API -->
+
+	
+     
+        
+		 <div style="height:10px;"></div>
+		</center>
+	</div>
+<!-- END Footer -->
+
+<!-- Start Google Analytics -->
+		<script type="text/javascript">
+
+  		var _gaq = _gaq || [];
+  		_gaq.push(['_setAccount', 'UA-38457794-1']);
+  		_gaq.push(['_trackPageview']);
+
+  		(function() {
+    	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  		})();
+		</script>
+<!-- End  Google Analytics -->
+
+</body>
+</html>

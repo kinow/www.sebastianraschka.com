@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+		<!--META-->
+		<meta name="description" content="If you downloaded a PDB structure and you are planning to use its amino acid sequence for further analyses, you have to be aware that the FASTA sequence on the Protein Data Bank server (PDB) is not necessarily identical to the corresponding sequence in the PDB file that you have downloaded.">
+		<meta name="Author" content="Sebastian Raschka">
+		<title>PDB To FASTA Converter</title>
+
+		<!-- jQuery -->
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+		<script type="text/javascript" src="../jQuery/main_app.js"></script>
+		<script type="text/javascript" src=" ../jQuery/index.js"></script>
+
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="../CSS/main.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="../CSS/content.css" media="screen" />
+</head>
+<body>
+
+	<div id ='container' >
+
+		<div id ='header_new'>
+		             
+				<a href = "../index.html"><img src="../Images/title_text.png" style="border-style:none"/></a>	
+				<hr>
+				<div align="right" style="padding-right:20px">
+					<a href = "../articles.html" class ="menubar">blog</a> &#8226;
+					<a href = "../webapps.html" class ="menubar">webapps</a> &#8226;
+					<a href = "../software.html" class ="menubar"><font color="#6495ED">software</font></a> &#8226;
+					<a href = "../publications.html" class ="menubar">books</a> &#8226;
+					<a href = "../contact.html" class ="menubar">about+contact</a> 
+					 
+				</div>
+				<hr>
+		</div> <!--close header -->
+	</div><!--close container -->
+
+
+		<div id ='content'>
+			
+		
+
+
+
+			<div id ='main' style="padding-right:70px">
+
+				<div class = "article_top"><h2>PDB To FASTA Converter</h2>
+            <p id="article_header"><em>-- written by Sebastian Raschka</em> on April 21, 2013</p>
+
+	<!-- START Twitter API -->
+        	<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://bit.ly/XRCm8K" 
+                counturl="http://groups.google.com/group/XRCm8K"
+        	data-count="none" data-via="rasbt" data-text="Check out the PDB to FASTA converter at" data-lang="en">Tweet</a>
+
+        		<script>!function(d,s,id){var
+        		js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	<!-- END Twitter API --> <br> 
+
+
+
+</div>
+
+   <div class="article">
+
+        <p><strong>The <a href="../Webapps/pdb_to_fasta.html" class="link"> PDB To FASTA web converter </a> is very handy if you want to convert one or a <br/>small number of PDB files. However, it might be very inconvenient to convert each <br/> file individually, especially if you have a whole lot of PDB files.</strong></p>
+
+        <p style="clear:both">For this case, I have written a desktop program that extracts the 1-letter aminoacid FASTA sequences from all your PDB files at once!</p>
+
+        <p><strong>Note:</strong> It also supports nucleic acid PDB
+        files.</p>
+
+
+     	&nbsp;<br />
+
+     &nbsp;<br />
+<hr>
+<p>
+
+<h4>Applications in Scientific Research:</h4>
+Naveen Chakicherla (2013). <a href
+="../PDFs/Computational_Crystallography_ Newsletter_July_2013.pdf" target="_blank">Structural Classification of Allergen IgE
+Epitopes by Hierarchical Clustering.</a> <em>Computational Crystallography
+Newsletter (2013). <strong>4</strong>, 36-42</em>
+<hr>
+
+</p>
+
+
+
+    &nbsp;<br />
+    &nbsp;<br />
+
+        <div id="redheading">Here is how it works:</div>
+
+        <p>Basically, there is not much to explain:</p>
+
+        <p><strong>1) Click on the program to start it <br/>
+        2) Enter the target folder of your PDB files <br/>
+        3) Enjoy all your FASTA sequences bundled in a single FASTA file</strong></p>
+
+        <p><img src="../Images/pdb_to_fasta_desktop_screenshot.png" alt="image"</p>
+
+        <p>As you can see in the screenshot of the FASTA output file, the program will also <br/>generate chain IDs if there are multiple sequences in a PDB file.</p>
+
+        <p><p><img src="../Images/FASTA_file_out.png" alt="image"</p></p>
+
+        &nbsp;<br />
+        &nbsp;<br />
+
+        <div id="redheading">Download PDB To FASTA Converter for your operating system:</div>
+        <div style="height:30px"></div>
+        <table border="2", cellspacing="0", cellpadding="10">
+        
+        <tr><td><a href="../downloads/pdb_to_fasta/pdb_to_fasta_mac_v1.1.zip" class="link" target="_blank">Mac OS X</a></td>
+                <td> v 1.1 </td></tr>
+        <tr><td><a href="../downloads/pdb_to_fasta/pdb_to_fasta_ubuntu.zip"
+         class="link" target="_blank">Linux (Ubuntu)</a>
+            </td><td> v 1.0 </td></tr>
+        <tr><td><a href="../downloads/pdb_to_fasta/pdb_to_fasta_centOS.zip"
+         class="link" target="_blank">Linux (CentOS)</a>
+            </td><td> v 1.0 </td></tr>
+        <tr><td><a href="../downloads/pdb_to_fasta/pdb_to_fasta_redhat_v1.1.zip"
+         class="link" target="_blank">Linux (RedHat)</a>
+            </td><td> v 1.1 </td></tr>
+        <tr><td><a href="../downloads/pdb_to_fasta/pdb_to_fasta_windows.zip"
+             class="link" target="_blank">Windows</td><td> v 1.0 </td></tr>
+        </table>
+        &nbsp;<br />
+    
+
+        <p><br/>
+        <strong>Note:</strong> <br/>
+        If you have a particular LinuxDistro that does not support the current Linux version of PDB to FASTAconverter, please let me know, and I will try to compile the appropriate version for you.</p>
+
+	
+		&nbsp;<br />
+     	  &nbsp;<br />   
+        
+	
+
+
+		</div> 	<!-- close article -->
+
+
+
+			</div><!--close main -->
+		
+	</div><!--close content -->
+	
+
+
+
+
+<!-- START Footer -->
+
+	<div id ='footer'>	
+        <center>
+	<hr>
+        <div style="height:20px;"></div>
+        HTML and JavaScripts were written by Sebastian Raschka <br>
+        Copyright (C) 2013-2014 Sebastian Raschka</p>
+
+
+	<!-- START Twitter API -->
+
+ <a href="https://twitter.com/rasbt" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @rasbt</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	<!-- END Twitter API -->
+
+
+	
+     
+        
+		 <div style="height:10px;"></div>
+		</center>
+	</div>
+<!-- END Footer -->
+
+<!-- Start Google Analytics -->
+		<script type="text/javascript">
+
+  		var _gaq = _gaq || [];
+  		_gaq.push(['_setAccount', 'UA-38457794-1']);
+  		_gaq.push(['_trackPageview']);
+
+  		(function() {
+    	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  		})();
+		</script>
+<!-- End  Google Analytics -->
+
+</body>
+</html>

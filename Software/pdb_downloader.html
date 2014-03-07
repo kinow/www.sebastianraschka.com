@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+		<!--META-->
+		<meta name="description" content="A useful tool that lets you download multiple PDB files from the PDB server at once.">
+		<meta name="Author" content="Sebastian Raschka">
+		<title>PDB Downloader</title>
+
+		<!-- jQuery -->
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+		<script type="text/javascript" src="../jQuery/main_app.js"></script>
+		<script type="text/javascript" src=" ../jQuery/index.js"></script>
+
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="../CSS/main.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="../CSS/content.css" media="screen" />
+</head>
+<body>
+
+	<div id ='container' >
+
+		<div id ='header_new'>
+		             
+				<a href = "../index.html"><img src="../Images/title_text.png" style="border-style:none"/></a>	
+				<hr>
+				<div align="right" style="padding-right:20px">
+					<a href = "../articles.html" class ="menubar">blog</a> &#8226;
+					<a href = "../webapps.html" class ="menubar">webapps</a> &#8226;
+					<a href = "../software.html" class ="menubar"><font color="#6495ED">software</font></a> &#8226;
+					<a href = "../publications.html" class ="menubar">books</a> &#8226;
+					<a href = "../contact.html" class ="menubar">about+contact</a> 
+					 
+				</div>
+				<hr>
+		</div> <!--close header -->
+	</div><!--close container -->
+
+
+		<div id ='content'>
+
+			
+		
+
+
+			<div id ='main' style="padding-right:70px">
+
+				<div class = "article_top"><h2>PDB Downloader</h2>
+            <p id="article_header"><em>-- written by Sebastian Raschka</em> on May 21, 2013</p>
+
+
+	<!-- START Twitter API -->
+        		 <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://bit.ly/18gKMd0" 
+                counturl="http://groups.google.com/group/XRCm8K"
+        		 data-count="none" data-via="rasbt" data-text="Check out the PDB Downloader at" data-lang="en">Tweet</a>
+
+        		<script>!function(d,s,id){var
+        		js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	<!-- END Twitter API --> <br> 
+
+
+
+</div>
+
+   <div class="article">
+
+        <p><strong>The PDB Downloader lets you download multiple PDB files at once.</strong></p>
+
+        <div id="redheading">Here is how it works:</div>
+
+
+        <p><strong>
+        1) Prepare a list with the 4-letter PDB codes for the target protein structure files that you want to download. <br> The formatting does not matter as long as the file is saved as a plain text file. <br/>
+        
+        <p><img src="../Images/pdb_downloader_list.png" alt="image"></p>
+
+        2) Start the program and enter the location of your list file.<br/><br/>
+        
+        3) Choose whether you want to download the whole PDB file, only the protein (ATOM entries), or only the ligands (HETATM entries)</strong></p>
+
+        <p><img src="../Images/pdb_downloader.png" alt="image"></p>
+
+        <p>You will see a progress bar appearing at the bottom of your terminal that will give you some idea how long the download process might take. 
+        	After all PDB files were downloaded, you will be notified where they were saved - the program creates a subfolder in you current working directory. Also, the program will notify you if some files could not been downloaded. </p>
+
+        
+
+        <div id="redheading">Download PDB Downloader for your operating system:</div>
+        <div style="height:30px"></div>
+        <table border="2", cellspacing="0", cellpadding="10">
+        
+        <tr><td><a href="../downloads/pdb_downloader/PDB_downloader_v1.2_mac.zip" class="link" target="_blank">Mac OS X</a></td>
+                <td> v 1.2 </td></tr>
+        <tr><td><a href="../downloads/pdb_downloader/PDB_downloader_v1.2_linux.zip"
+         class="link" target="_blank">Linux</a>
+            </td><td> v 1.2 </td></tr>
+        <tr><td><a href="../downloads/pdb_downloader/PDB_downloader_v1.2_win.zip"
+         class="link" target="_blank">Windows</a></td><td> v 1.2 </td></tr>
+        </table>
+        &nbsp;<br />
+    
+
+        <p><br/>
+      
+		&nbsp;<br />
+     	  &nbsp;<br />   
+        
+		 
+
+		</div> 	<!-- close article -->
+
+
+
+			</div><!--close main -->
+		
+	</div><!--close content -->
+	
+
+
+
+
+<!-- START Footer -->
+
+	<div id ='footer'>	
+        <center>
+	<hr>
+        <div style="height:20px;"></div>
+        HTML and JavaScripts were written by Sebastian Raschka <br>
+        Copyright (C) 2013-2014 Sebastian Raschka</p>
+
+
+	<!-- START Twitter API -->
+
+ <a href="https://twitter.com/rasbt" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @rasbt</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	<!-- END Twitter API -->
+
+	
+     
+        
+		 <div style="height:10px;"></div>
+		</center>
+	</div>
+<!-- END Footer -->
+
+<!-- Start Google Analytics -->
+		<script type="text/javascript">
+
+  		var _gaq = _gaq || [];
+  		_gaq.push(['_setAccount', 'UA-38457794-1']);
+  		_gaq.push(['_trackPageview']);
+
+  		(function() {
+    	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  		})();
+		</script>
+<!-- End  Google Analytics -->
+
+</body>
+</html>

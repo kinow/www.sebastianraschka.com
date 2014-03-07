@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+		<!--META-->
+		<meta name="description" content="BondPack - A collection of plugins to visualize molecular bonds in PyMOL">
+		<meta name="Author" content="Sebastian Raschka">
+		<title>BondPack - A collection of plugins to visualize molecular bonds in PyMOL</title>
+
+		<!-- jQuery -->
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+		<script type="text/javascript" src="../jQuery/main_app.js"></script>
+		<script type="text/javascript" src=" ../jQuery/index.js"></script>
+
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="../CSS/main.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="../CSS/content.css" media="screen" />
+</head>
+<body>
+
+	<div id ='container' >
+
+		<div id ='header_new'>
+		             
+				<a href = "../index.html"><img src="../Images/title_text.png" style="border-style:none"/></a>	
+				<hr>
+				<div align="right" style="padding-right:20px">
+					<a href = "../articles.html" class ="menubar">blog</a> &#8226;
+					<a href = "../webapps.html" class ="menubar">webapps</a> &#8226;
+					<a href = "../software.html" class ="menubar"><font color="#6495ED">software</font></a> &#8226;
+					<a href = "../publications.html" class ="menubar">books</a> &#8226;
+					<a href = "../contact.html" class ="menubar">about+contact</a> 
+					 
+				</div>
+				<hr>
+		</div> <!--close header -->
+	</div><!--close container -->
+
+
+		<div id ='content'>
+
+			
+		
+
+
+			<div id ='main'>
+
+                <h2 class="article_top">BondPack - A collection of plugins to visualize molecular bonds in PyMOL</h2>
+					<p id="article_header"><em>-- written by Sebastian Raschka</em> on November 17, 2013</p>
+
+	<!-- START Twitter API -->
+        		 <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://bit.ly/17BNp7F" 
+                counturl="http://groups.google.com/group/ZEsjUY"
+        		 data-count="none" data-via="rasbt"
+        		 data-text="BondPack - A collection of plugins to visualize molecular bonds in PyMOL" data-lang="en">Tweet</a>
+
+        		<script>!function(d,s,id){var
+        		js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	<!-- END Twitter API -->   <br> 
+
+
+
+
+				<div class="article" style="font-size: 16px;">
+		<div style="padding-right:70px">
+		  <p style="line-height:1.7"><strong>
+
+PyMOL is without any doubt a great tool to visualize protein and ligand molecules. However, drawing interactions between atoms can be often quite cumbersome when done manually. For the sake of convenience, I developed three plugins for PyMOL that will make our life as protein biologists a little bit easier.<br />
+All three PyMOL plugins can be installed and used separately; they don't depend on each other, but rather complement each other.
+At the end of this article, you will find brief instructions on how to install plugins in PyMOL - a very quick and simple process.
+
+</strong></p></div>
+
+
+
+&nbsp;<br>
+&nbsp;<br>
+
+
+
+<div style="width: 400px;">
+  <hr>
+</div>
+
+
+<div style="width: 400px; margin-left:60px;">
+
+<h4>OVERVIEW</h4>		  
+	  
+<a href="#hydrobond" class ="contents_table">HydoBond</a><br>
+<a href="#bondvis" class ="contents_table">BondVis</a><br>
+<a href="#bondlab" class ="contents_table">BondLab</a><br>
+<a href="#enable_plugins" class ="contents_table">Enabling Plugins in MacPyMOL</a><br>
+<a href="#install_plugins" class ="contents_table">Installing PyMOL Plugins</a><br>
+<a href="#download" class ="contents_table">Download BondPack</a><br>
+
+</div>
+
+<div style="width: 400px;">
+  <hr>
+</div>		
+<br>
+<br>
+<br>
+
+
+
+
+<p id="hydrobond"></p>
+
+<h1>HydroBond</h1>
+
+<p>HydroBond visualizes all potential polar contacts between protein and ligand molecules within a user-specified distance.<br />
+The underlying function is based on the different atom types, such as hydrogen bond acceptor and donor atoms, and thus it is required to have hydrogen atoms present in the structure. If your structure file doesn't contain hydrogen atoms already, you can add them directly in PyMOL as shown in the image below.<br />
+
+&nbsp;<br>
+&nbsp;<br>
+<img src="../Images/add_hydrogens.png" alt="title" />
+&nbsp;<br>
+&nbsp;<br>
+
+HydroBond is related to PyMOLs "[A]-&gt;find-&gt;polar contacts" command, however, it doesn't consider geometry criteria and angle thresholds, but is rather based on atom types.<br />
+When you select HydroBond from the "Plugin" menu, you will be prompted to enter the name of the protein object, the ligand object, and a distance cutoff as shown in the figure below. If HydroBond was able to detect hydrogen bond and acceptor atoms within the specified distance, potential interactions will be visualized as yellow dashed lines.</p>
+
+&nbsp;<br>
+&nbsp;<br>
+<img src="../Images/hydrobond_action.png" alt="image" />
+&nbsp;<br>
+&nbsp;<br>
+
+
+
+
+<p id="bondvis"></p>
+<h1>BondVis</h1>
+
+<p>The BondVis plugin lets you visualize interactions between any pair of atoms you specified.<br />
+Often I find it helpful for my understanding (and for verification) to visualize the bonds between certain atoms that were assigned in docking or any other prediction software. Most software will provide you with information about the atoms that were "connected" to perform the analysis.
+If you run BondVis from the "Plugin" menu, it will ask you to select a "bond info file."
+
+&nbsp;<br>
+&nbsp;<br>
+<img src="../Images/bondinfo.png" alt="image" />
+&nbsp;<br>
+&nbsp;<br>
+
+This is just a simple text file that contains the atom numbers of connected atoms in pairs. Those can be separated by spaces, tabs, or commas. An example file with bond information could look like this:<br />
+<code><pre>1174 1357
+1175 1358
+1176 1359
+</pre></code>
+When you selected a "bond info" file, BondVis will connect all atom pairs by yellow dashed lines and print out the connected atoms in the command field.</p>
+&nbsp;<br>
+&nbsp;<br>
+
+<img src="../Images/bondvis.png" alt="image" />
+&nbsp;<br>
+&nbsp;<br>
+
+
+
+<p id="bondlab"></p>
+<h1>BondLab</h1>
+
+<p>If you are not happy with the looks of the lines that were drawn to visualize connections between atoms, you will like to use BondLab. This plugin offers a simple interface that allows you to change the diameter, gap width, and color of the lines.
+
+&nbsp;<br>
+&nbsp;<br>
+<img src="../Images/bondlab.png" alt="image" />
+&nbsp;<br>
+&nbsp;<br>
+
+The following video demonstrates the different features of BondLab:</p>
+
+<iframe width="420" height="315" src="//www.youtube.com/embed/14UZctxtK3w" frameborder="0" allowfullscreen></iframe>
+&nbsp;<br>
+&nbsp;<br>
+
+
+
+
+
+<p id="enable_plugins"></p>
+<h1>Enabling Plugins in MacPyMOL</h1>
+
+<p>If you are a Mac user, you may have noticed that the UI looks a little bit different from PyMOL on Linux and Windows. I have to admit that it looks prettier on MacOS, but unfortunately, the "Plugin" tab is missing.
+But there is a simple remedy. You just have to rename the "MacPyMOL.app" in the Applications folder to "PyMOLX11Hybrid.app" and you are good to go (you might have to install X11 to support the Tkinter UI if you haven't done so yet).</p>
+
+
+&nbsp;<br>
+&nbsp;<br>
+<img src="../Images/macpymol_rename.png" alt="image" />&nbsp;<br>
+&nbsp;<br>
+
+
+
+
+
+
+<p id="install_plugins"></p>
+<h1>Installing PyMOL Plugins</h1>
+
+<p>Installing new plugins is pretty straight forward in PyMOL. All you need to do is to click on the "Plugin" button in the menu bar, select "Manage Plugins," click on "Install&#8230;," and select the plugin file from the file browser window that pops up. After you restarted PyMOL, the new plugin will appear in the menu under "Plugin" and will be ready to use.</p>
+
+
+&nbsp;<br>
+&nbsp;<br>
+<img src="../Images/install_plugins.png" alt="image" />&nbsp;<br>
+&nbsp;<br> 
+&nbsp;<br>
+
+
+
+
+
+
+
+<p id="download"></p>
+<h1>Download BondPack</h1>
+
+You can download the BondPack collection
+<a href="../downloads/bondpack/BondPack.zip"
+         class="link" target="_blank">here</a>.<br>
+
+<p>If you are interested, you can follow the BondPack Github repository  &nbsp;<br>
+(<a href="https://github.com/rasbt/BondPack">https://github.com/rasbt/BondPack</a>) for updates.
+
+     	    </p>
+        
+					
+	
+
+		</div> 	<!-- close article -->
+
+
+
+			</div><!--close main -->
+		
+	</div><!--close content -->
+	
+
+
+
+
+<!-- START Footer -->
+
+	<div id ='footer'>	
+        <center>
+	<hr>
+        <div style="height:20px;"></div>
+        <p>HTML and JavaScripts were written by Sebastian Raschka <br>
+        Copyright (C) 2013-2014 Sebastian Raschka</p>
+
+
+	<!-- START Twitter API -->
+
+ <a href="https://twitter.com/rasbt" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @rasbt</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	<!-- END Twitter API -->
+<div style="height:20px;"></div>
+
+	<hr>
+
+     
+        
+		 <div style="height:10px;"></div>
+		</center>
+	</div>
+<!-- END Footer -->
+
+
+<!-- Start DISQUS -->
+
+ <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'sebastianraschka'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+<!-- Start Google Analytics -->
+		<script type="text/javascript">
+
+  		var _gaq = _gaq || [];
+  		_gaq.push(['_setAccount', 'UA-38457794-1']);
+  		_gaq.push(['_trackPageview']);
+
+  		(function() {
+    	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  		})();
+		</script>
+<!-- End  Google Analytics -->
+
+</body>
+</html>

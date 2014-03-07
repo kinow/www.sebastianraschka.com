@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+		<!--META-->
+		<meta name="description" content="Online tool to easily convert DNA or RNA sequences into
+		their reverse, complementary, or reverse-complementary forms.">
+	    <meta name="Author" content="Sebastian Raschka">
+		<title>Reverse and Complement Tool for DNA & RNA sequences</title>
+
+		<!-- JS -->
+		<script type="text/javascript" src="../JS/complement_reverse.js"></script>
+
+		<!-- jQuery -->
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+		<script type="text/javascript" src="../jQuery/main_app.js"></script>
+
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="../CSS/main.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="../CSS/main_app.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="../CSS/content.css" media="screen" />
+</head>
+<body>
+
+	<div id ='container' >
+
+		<div id ='header_new'>
+		             
+				<a href = "../index.html"><img src="../Images/title_text.png" style="border-style:none"/></a>	
+				<hr>
+				<div align="right" style="padding-right:20px">
+					<a href = "../articles.html" class ="menubar">blog</a> &#8226;
+					<a href = "../webapps.html" class ="menubar"><font color="#6495ED">webapps</font></a> &#8226;
+					<a href = "../software.html" class ="menubar">software</a> &#8226;
+					<a href = "../publications.html" class ="menubar">books</a> &#8226;
+					<a href = "../contact.html" class ="menubar">about+contact</a> 
+					 
+				</div>
+				<hr>
+		</div> <!--close header -->
+	</div><!--close container -->
+
+
+		<div id ='content'>
+			
+		
+
+			<div id ='main'>
+
+				<h1>DNA & RNA COMPLEMENT-REVERSE</h1>
+
+
+
+
+	<!-- START Twitter API -->
+        		 <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://bit.ly/1eGYs7D" 
+                counturl="http://groups.google.com/group/ZEsjUY"
+        		 data-count="none" data-via="rasbt"
+        		 data-text="A webapp to convert DNA & RNA into their reverse and/or complementary sequences." data-lang="en">Tweet</a>
+
+        		<script>!function(d,s,id){var
+        		js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	<!-- END Twitter API --> <br> 
+
+
+
+
+				<p style="font-size:0.9em"><strong style="color:#0d4cd6">Paste your DNA or RNA sequence </strong>into the text field below to convert it into its <br> complementary, reverse, or reverse-complementary sequence.</p>
+
+				<form name="textform">
+					<textarea name="input_box" rows = "20" cols = "62" value =" >Your Sequence" wrap="virtual" onFocus="if (this.value == this.defaultValue) { this.value = ''; }" style = 'font-family:Courier; font-size:12px; align:left'>
+> Your Sequence:
+   1 ATGGAAGCTC TGAGTCACGT CGGCATTGGT CTCTCCCCAT TCCAATTATG
+  51 CCGATTACCA CCGGCGACGA CAAAGCTCCG ACGTAGCCAC AACACCTCTA
+ 101 CAACTATCTG CTCCGCCAGC AAATGGGCCG ACCGTCTTCT CTCCGACTTC
+ 151 AATTTCACCT CCGATTCCTC CTCCTCCTCC TTCGCCACCG CCACCACCAC
+ 201 CGCCACTCTC GTCTCTCCGC CACCATCTAT TGATCGTCCC GAACGCCACG
+ 251 TCCCCATCCC CATTGATTTC TACCAGGTAT TAGGAGCTCA AACACATTTC
+ 301 TTAACCGATG GAATCAGAAG AGCATTCGAA GCTAGGGTTT CGAAACCGCC
+ 351 GCAATTCGGT TTCAGCGACG ACGCTTTAAT CAGCCGGAGA CAGATTCTTC
+ 401 AAGCTGCTTG CGAAACTCTG TCTAATCCTC GGTCTAGAAG AGAGTACAAT
+ 451 GAAGGTCTTC TTGATGATGA AGAAGCTACA GTCATCACTG ATGTTCCTTG
+ 501 GGATAAGGTT CCTGGTGCTC TCTGTGTATT GCAAGAAGGT GGTGAGACTG
+ 551 AGATAGTTCT TCGGGTTGGT GAGGCTCTGC TTAAGGAGAG GTTGCCTAAG
+ 601 TCGTTTAAGC AAGATGTGGT TTTAGTTATG GCGCTTGCGT TTCTCGATGT
+ 651 CTCGAGGGAT GCTATGGCAT TGGATCCACC TGATTTTATA ACTGGTTATG
+ 701 AGTTTGTTGA GGAAGCTTTG AAGCTTTTAC AGGAGGAAGG AGCAAGTAGC
+ 751 CTTGCACCGG ATTTACGTGC ACAAATTGAT GAGACTTTGG AAGAGATCAC
+ 801 TCCGCGTTAT GTCTTGGAGC TACTTGGCTT ACCGCTTGGT GATGATTACG
+ 851 CTGCGAAAAG ACTAAATGGT TTAAGCGGTG TGCGGAATAT TTTGTGGTCT
+ 901 GTTGGAGGAG GTGGAGCATC AGCTCTTGTT GGGGGTTTGA CCCGTGAGAA
+ 951 GTTTATGAAT GAGGCGTTTT TACGAATGAC AGCTGCTGAG CAGGTTGATC
+1001 TTTTTGTAGC TACCCCAAGC AATATTCCAG CAGAGTCATT TGAAGTTTAC
+1051 GAAGTTGCAC TTGCTCTTGT GGCTCAAGCT TTTATTGGTA AGAAGCCACA
+1101 CCTTTTACAG GATGCTGATA AGCAATTCCA GCAACTTCAG CAGGCTAAGG
+1151 TAATGGCTAT GGAGATTCCT GCGATGTTGT ATGATACACG GAATAATTGG
+1201 GAGATAGACT TCGGTCTAGA AAGGGGACTC TGTGCACTGC TTATAGGCAA
+1251 AGTTGATGAA TGCCGTATGT GGTTGGGCTT AGACAGTGAG GATTCACAAT
+1301 ATAGGAATCC AGCTATTGTG GAGTTTGTTT TGGAGAATTC AAATCGTGAT
+1351 GACAATGATG ATCTCCCTGG ACTATGCAAA TTGTTGGAAA CCTGGTTGGC
+				</textarea>
+					<br>
+					<br>
+					<table>
+						<tr>
+						<td>	
+						<div id ="compreverse1" class="menu1" style="width:140px;">
+						<center>	<input type="button"  value="REVERSE" onClick="Reverse(this.form)" ></center>
+						</div></td>
+						<td><div id ="compreverse2" class="menu2"  style="width:140px;">
+						<center><input type="button"  value="COMPLEMENT" onClick="Complement(this.form)"></center></td>
+						</div>
+						<td><div class="menu3" id ="compreverse3" style="width:140px; ">
+						<center><input type="button"  value="COMPLEMENT REVERSE" onClick="ComplementReverse(this.form)">
+						</center></td>
+					
+						</div>
+						</tr>
+					</table>
+					<br><input TYPE="button" onClick='window.location.href=window.location.href' VALUE="RESET">
+					&nbsp;<br />
+					&nbsp;<br />
+					&nbsp;<br />
+					&nbsp;<br />
+				</form>
+
+
+
+
+		
+
+			<!--/div--><!--close main -->
+
+			
+
+	</div><!--close content -->
+	
+
+
+
+<!-- START Footer -->
+
+	<div id ='footer'>	
+        <center>
+	  <hr>
+        <div style="height:20px;"></div>
+        HTML and JavaScripts were written by Sebastian Raschka <br>
+        Copyright (C) 2013-2014 Sebastian Raschka</p>
+
+
+	<!-- START Twitter API -->
+        	 <a href="https://twitter.com/rasbt" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @rasbt</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>	<!-- END Twitter API -->
+
+	
+     
+        
+		 <div style="height:10px;"></div>
+		</center>
+	</div>
+<!-- END Footer -->
+
+<!-- Start Google Analytics -->
+		<script type="text/javascript">
+
+  		var _gaq = _gaq || [];
+  		_gaq.push(['_setAccount', 'UA-38457794-1']);
+  		_gaq.push(['_trackPageview']);
+
+  		(function() {
+    	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  		})();
+		</script>
+<!-- End  Google Analytics -->
+
+</body>
+</html>

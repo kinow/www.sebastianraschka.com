@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+		<!--META-->
+		<meta name="description" content="Web application that calculates the sum, mean, median, mode, variance, standard deviation and standard error of a data set.">
+	    <meta name="Author" content="Sebastian Raschka">
+	    <title>Basic Statistics Calculator</title>
+
+	    <!-- JS -->
+	    <script type="text/javascript" src="../JS/basic_statistics.js"></script>
+
+		<!-- jQuery -->
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+		<script type="text/javascript" src="../jQuery/main_app.js"></script>
+
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="../CSS/main.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="../CSS/main_app.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="../CSS/content.css" media="screen" />
+</head>
+<body>
+
+	<div id ='container' >
+
+		<div id ='header_new'>
+		             
+				<a href = "../index.html"><img src="../Images/title_text.png" style="border-style:none"/></a>	
+				<hr>
+				<div align="right" style="padding-right:20px">
+					<a href = "../articles.html" class ="menubar">blog</a> &#8226;
+					<a href = "../webapps.html" class ="menubar"><font color="#6495ED">webapps</font></a> &#8226;
+					<a href = "../software.html" class ="menubar">software</a> &#8226;
+					<a href = "../publications.html" class ="menubar">books</a> &#8226;
+					<a href = "../contact.html" class ="menubar">about+contact</a> 
+					 
+				</div>
+				<hr>
+		</div> <!--close header -->
+	</div><!--close container -->
+
+
+		<div id ='content'>
+
+			
+			
+
+			<div id ='main'>
+
+				<h1>Basic Statistics Calculator</h1>
+
+
+
+	<!-- START Twitter API -->
+        		 <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://bit.ly/1bCAoga" 
+                counturl="http://groups.google.com/group/ZEsjUY"
+        		 data-count="none" data-via="rasbt"
+        		 data-text="A webapp to calculate basic statistics." data-lang="en">Tweet</a>
+
+        		<script>!function(d,s,id){var
+        		js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	<!-- END Twitter API --> <br> 
+
+
+
+	<!-- test if javascript is on -->
+	<noscript><div style="color:#2a9c3b; border:1.5px solid; width:420; padding:5px"><strong>JavaScript is turned off.</strong> Please enable JavaScript in your Browser to use this application.</div></noscript>
+
+
+	<p style="font-size:0.9em"><strong>Paste your data set </strong>into the text field below.
+	</p>
+	
+
+	<form name="textform">
+		<textarea name="input_box" rows = "20" cols = "60" wrap="virtual" style = 'font-family:Courier; font-size:12px' onFocus="if (this.value == this.defaultValue) { this.value = ''; }">1,2,3,4,5,6,7,8,9,10,11
+          11
+          12
+          13
+          14
+          15
+16 - 17 - 18 -19 - 20
+  22  23  24  25  26    
+    28, 29, 30, 31
+      31 32 33 34
+        35-36-27
+          38 39
+            40
+		</textarea><br />
+	
+
+<div id ="basicStatistics" class="menu1" style="width:435px">
+<p> (Click into the text field to clear) </p>
+
+
+
+
+
+<!-- BUTTONS -->
+	<br />
+        <label><input type="checkbox" name="dataPoints" checked>Data Points</label><br>
+        <label><input type="checkbox" name="sum" checked>Sum</label><br>
+        <label><input type="checkbox" name="mean" checked>Mean</label><br>
+        <label><input type="checkbox" name="median" checked>Median</label><br>
+        <label><input type="checkbox" name="variance" checked>Variance</label><br>
+        <label><input type="checkbox" name="stDev" checked>Standard Deviation</label><br>
+        <label><input type="checkbox" name="stErr" checked>Standard Error</label><br>
+        <label><input type="checkbox" name="mode" checked>Mode</label><br>
+        <label><input type="checkbox" name="CI" checked>Confidence Intervals</label><br><br>
+
+
+        <input type="button" name="button" value="Submit" onClick="dataStats(this.form)">
+		<input type="button" name="button" value="Convert to CSV" onClick="dataCSV(this.form)">
+		<input type="button" onClick='window.location.href=window.location.href' VALUE="RESET">
+	
+    </form>
+    </div>
+
+	&nbsp;<br />
+	&nbsp;<br />
+
+
+
+
+			
+                </div>
+
+			</div><!--close main -->
+
+			
+
+	</div><!--close content -->
+	
+
+
+
+
+<!-- START Footer -->
+
+	<div id ='footer'>	
+        <center>
+	  <hr>
+        <div style="height:20px;"></div>
+        HTML and JavaScripts were written by Sebastian Raschka <br>
+        Copyright (C) 2013-2014 Sebastian Raschka</p>
+
+
+	<!-- START Twitter API -->
+        	 <a href="https://twitter.com/rasbt" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @rasbt</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>	<!-- END Twitter API -->
+
+	
+     
+        
+		 <div style="height:10px;"></div>
+		</center>
+	</div>
+<!-- END Footer -->
+
+<!-- Start Google Analytics -->
+		<script type="text/javascript">
+
+  		var _gaq = _gaq || [];
+  		_gaq.push(['_setAccount', 'UA-38457794-1']);
+  		_gaq.push(['_trackPageview']);
+
+  		(function() {
+    	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  		})();
+		</script>
+<!-- End  Google Analytics -->
+
+</body>
+</html>

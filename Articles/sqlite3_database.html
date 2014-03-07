@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head>
+		<!--META-->
+		<meta name="description" content="A simple tutorial about using SQLite databases via the sqlite3 module in Python.">
+		<meta name="Author" content="Sebastian Raschka">
+		<title>SQLite - Working with large data sets in Python effectively</title>
+
+		<!-- jQuery -->
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+		<script type="text/javascript" src="../jQuery/main_app.js"></script>
+		<script type="text/javascript" src=" ../jQuery/index.js"></script>
+
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="../CSS/main.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="../CSS/content.css" media="screen" />
+</head>
+<body>
+
+	<div id ='container' >
+
+		<div id ='header_new'>
+		             
+				<a href = "../index.html"><img src="../Images/title_text.png" style="border-style:none"/></a>	
+				<hr>
+				<div align="right" style="padding-right:20px">
+					<a href = "../articles.html" class ="menubar"><font color="#6495ED">blog</font></a> &#8226;
+					<a href = "../webapps.html" class ="menubar">webapps</a> &#8226;
+					<a href = "../software.html" class ="menubar">software</a> &#8226;
+					<a href = "../publications.html" class ="menubar">books</a> &#8226;
+					<a href = "../contact.html" class ="menubar">about+contact</a> 
+					 
+				</div>
+				<hr>
+		</div> <!--close header -->
+	</div><!--close container -->
+
+
+		<div id ='content'>
+			
+		
+
+
+			<div id ='main'>
+
+                <h2 class="article_top">SQLite - Working with large data sets in Python effectively</h2>
+					<p id="article_header"><em>-- written by Sebastian Raschka</em> on November 3, 2013</p>
+
+	<!-- START Twitter API -->
+        		 <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://bit.ly/HvNXpl" 
+                counturl="http://groups.google.com/group/ZEsjUY"
+        		 data-count="none" data-via="rasbt"
+        		 data-text="SQLite - Working with large data sets in Python effectively" data-lang="en">Tweet</a>
+
+        		<script>!function(d,s,id){var
+        		js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	<!-- END Twitter API -->  
+
+
+	<div style="clear:both;">
+
+
+				<div class="article" style="font-size: 16px;">
+		<div style="padding-right:70px">
+		  <p style="line-height:1.7"><strong>
+My new project confronted me with the task to screen a huge set of large data files in text format with billions of entries each.<br />
+I will have to retrieve data repeatedly and frequently in future, thus I was tempted to find a better solution than brute-force scanning through ~20 separate 1-column text files with ~6 billion entries every time line by line.
+</strong></p></div>
+
+<div style="width: 400px;">
+  <hr>
+</div>
+<div style="width: 400px; margin-left:60px;">
+<h4>OVERVIEW</h4>		  
+	  
+<b><a href="#sqlite" class ="contents_table">SQLite</a><br>
+<a href="#sqlite3" class ="contents_table">sqlite3 in a nutshell</a><br></b>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#creating_db" class ="contents_table">Creating an SQLite database</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#updating_db" class ="contents_table">Updating an existing database</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#querying_db" class ="contents_table">Querying the SQLite database</a><br>
+<b><a href="#benchmarks" class ="contents_table">Benchmarks</a><br></b>		  
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#read_lines" class ="contents_table">a) read_lines.py</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#create_sqlite" class ="contents_table">b) create_sqlite_db.py</a><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#query_sqlite" class ="contents_table">c) query_sqlite_db.py</a><br>
+<b><a href="#results" class ="contents_table">Results and Conclusions</a><br></b>
+
+</div>
+
+<div style="width: 400px;">
+  <hr>
+</div>		
+<br>
+<br>
+<br>
+
+<img src="../Images/database_input_txtfiles.png" alt="title" />
+
+
+<p>At the end of the day, I wanted to have a unified database structure available that combines all those columns, which represent different features, that are currently listed in those separate text files. This database should be extendable, and my workflow will require that I can pull out entries with intersecting features for further computation efficiently.</p>
+
+<p>So I've been looking around and it was not too long until I stumbled upon this awesome sqlite3 Python module for working with SQLite database structures.<br />
+Fortunately, you don't have to be an SQL expert to dive in, the sqlite3 module documentation is really well written and will serve you as a good point of entry:<br /> 
+<a href="http://docs.python.org/2/library/sqlite3.html">http://docs.python.org/2/library/sqlite3.html</a></p>
+<br /> 
+
+<p id="sqlite"></p>
+<p><img src="../Images/sqlite_logo.png" alt="title" /> <br />
+SQLite is an open-source SQL database engine that is ideal for smaller workgroups, because it is a single locally stored database file that does not require any server infrastructure.<br />
+Furthermore, SQLite works on all common operating systems and is compatible to 32bit and 64bit machines. There are plenty of applications that let you use the powerful SQL syntax, and SQLite has gained a reputation of being very reliable as it is used by popular companies, such as Google, Mozilla, Adobe, Apple, Microsoft, etc. The only downside I could find was that there is a size limit of 140 terabytes per database file, but "foreign keys" allow cross-queries between different data base files, so even this size limit shouldn't be a big concern.<br />
+If you want to learn more about SQLite, you can check out their website at <a href="http://www.sqlite.org">http://www.sqlite.org</a>.</p>
+
+<p id="sqlite3"></p>
+<br> <br>
+
+<h1>sqlite3 in a nutshell</h1>
+
+<p>In the following section I will present some code to show how easy it is to use the sqlite3 module in Python. I added comments with the hope to make it as self-explanatory as possible.
+After the code examples I have some interesting benchmarks that demonstrates the efficiency of SQL queries.</p>
+
+<p id="creating_db"></p><br> 
+
+<h2>Creating an SQLite database</h2>
+
+<pre><code><p style="line-height:1.2">
+import sqlite3
+
+<font color="gray"># create new db and make connection</font>
+conn = sqlite3.connect('my_db.db')    
+c = conn.cursor()
+
+<font color="gray"># create table</font>
+c.execute('''CREATE TABLE my_db
+             (id TEXT, my_var1 TEXT, my_var2 INT)''')
+
+<font color="gray"># insert one row of data</font>
+c.execute("INSERT INTO my_db VALUES ('ID_2352532','YES', 4)")
+
+<font color="gray"># insert multiple lines of data</font>
+multi_lines =[ ('ID_2352533','YES', 1),
+               ('ID_2352534','NO', 0),
+               ('ID_2352535','YES', 3),
+               ('ID_2352536','YES', 9),
+               ('ID_2352537','YES', 10) 
+              ]
+c.executemany('INSERT INTO my_db VALUES (?,?,?)', multi_lines)
+
+<font color="gray"># save (commit) the changes</font>
+conn.commit()
+
+<font color="gray"># close connection</font>
+conn.close()
+</p></code></pre><br />
+
+<hr>
+<em><b> Note: </b> As a careful reader pointed out in the comment section below, it would make sense to use integers as IDs instead of strings to increase computational efficiency - given that the relevant identifier consisted of numbers only.
+In the case I picked for this example (ID_2352533, ID_2352534, ...) the IDs seems to follow the same pattern: "ID_" + number. So instead of using it as is, we could convert it to an integer before we insert it into the database.
+E.g., by a simple Python expression:</em> <code> int("ID_2352533"[3:])</code>
+<hr>
+
+<br> <br>
+
+<p id="updating_db"></p>
+<h2>Updating an existing database</h2>
+
+<pre><code><p style="line-height:1.2">
+
+import sqlite3
+
+<font color="gray"># make connection to existing db</font>
+conn = sqlite3.connect('my_db.db')
+c = conn.cursor()
+
+<font color="gray"># update field</font>
+t = ('NO', 'ID_2352533', )
+c.execute("UPDATE my_db SET my_var1=? WHERE id=?", t)
+print "Total number of rows changed:", conn.total_changes
+
+<font color="gray"># delete rows</font>
+t = ('NO', )
+c.execute("DELETE FROM my_db WHERE my_var1=?", t)
+print "Total number of rows deleted: ", conn.total_changes
+
+<font color="gray"># add column</font>
+c.execute("ALTER TABLE my_db ADD COLUMN 'my_var3' TEXT")
+
+<font color="gray"># save changes</font>
+conn.commit()
+
+<font color="gray"># print column names</font>
+c.execute("SELECT * FROM my_db")
+col_name_list = [tup[0] for tup in c.description]
+print col_name_list
+
+<font color="gray"># close connection</font>
+conn.close()
+</p></pre></code></br>
+
+<p id="querying_db"></p>
+<h2>Querying the SQLite database</h2>
+
+<pre><code><p style="line-height:1.2">
+
+import sqlite3
+
+<font color="gray"># open existing database</font>
+conn = sqlite3.connect('my_db.db')<br />
+c = conn.cursor()
+
+<font color="gray"># print all lines ordered by integer value in my_var2</font>
+for row in c.execute('SELECT * FROM my_db ORDER BY my_var2'):
+    print row
+
+<font color="gray"># print all lines that have "YES" as my_var1 value 
+# and have an integer value &lt;= 7 in my_var2</font>
+t = ('YES',7,)
+for row in c.execute('SELECT * FROM my_db WHERE my_var1=? AND my_var2 &lt;= ?', t):
+    print row
+
+<font color="gray"># print all lines that have "YES" as my_var1 value 
+# and have an integer value &lt;= 7 in my_var2</font>
+t = ('YES',7,)
+c.execute('SELECT * FROM my_db WHERE my_var1=? AND my_var2 &lt;= ?', t)
+rows = c.fetchall()
+for r in rows:
+    print r
+
+<font color="gray"># close connection</font>
+conn.close()
+</p></pre></code> <br >
+
+<p id="benchmarks"></p>
+<h1>Benchmarks</h1>
+
+<p>After I tinkered with the sqlite3 module, my next important question was: How fast is SQLite really?<br />
+To do some simple speed comparisons, I set up an example file of 6.1 Million lines (75 Mb) in order to measure the CPU time to <br>
+<b> a) read in the text file line by line with simple Python code <br>
+b) read in the text file to create an SQLite database <br>
+c) query the whole data base.</b></p>
+
+<p>I simply wanted to see how much I can gain by querying the database (c) in contrast to reading the whole file from scratch every time (a). I was also interested how long it might take to build the SQLite data base in the first place.
+Note that this is just a simplified example using a single text file consisting of one column. In a real application I would have to scan 20 files with 6 billion rows each or querying 1 database with 6 billion entries in 21 columns, respectively.</p>
+
+<p>Below you find the 3 short Python scripts that I used to measure the CPU time for the three scenarios a), b), and c) mentioned above.</p> <br />
+
+<p id="read_lines"></p>
+<h2>a) read_lines.py</h2>
+
+<p><pre><code><p style="line-height:1.2">
+import time
+
+start_time = time.clock()
+
+lines = 0
+    with open("feature1.txt", "rb") as fileobj:
+    for line in fileobj:
+    lines += 1
+
+elapsed_time = time.clock() - start_time
+print "Time elapsed: {} seconds".format(elapsed_time)
+print "Read {} lines".format(lines)
+</pre></code> </p><br />
+
+<p id="create_sqlite"></p>
+<h2>b) create_sqlite_db.py</h2>
+
+<pre><code><p style="line-height:1.2">
+import sqlite3
+import time
+
+start_time = time.clock()
+
+conn = sqlite3.connect('my_db1.db')
+c = conn.cursor()
+
+c.execute('''CREATE TABLE my_db1 (id TEXT, feature1 TEXT, feature2 INT)''')
+
+lines = 0
+lst = list()
+
+with open("feature1.txt", "rb") as myfile:
+    for line in myfile:
+    line = line.strip()
+    lst.append((line, "Yes", None))
+    lines += 1
+c.executemany("INSERT INTO my_db1 VALUES (?,?,?)", lst)
+
+conn.commit()
+conn.close()
+
+elapsed_time = time.clock() - start_time
+print "Time elapsed: {} seconds".format(elapsed_time)
+print "Read {} lines".format(lines)
+
+</p></pre></code> </br>
+
+<p id="query_sqlite"></p>
+<h2>c) query_sqlite_db.py</h2>
+<pre><code><p style="line-height:1.2">
+import sqlite3
+import time
+
+start_time = time.clock()
+
+conn = sqlite3.connect('my_db1.db')
+c = conn.cursor()
+
+lines = 0
+lst = list()
+t = ('YES',)
+for row in c.execute('SELECT * FROM my_db1 WHERE feature1=?', t):
+    lst.append(row)
+    lines += 1
+
+conn.close()
+
+elapsed_time = time.clock() - start_time
+print "Time elapsed: {} seconds".format(elapsed_time)
+print "Read {} lines".format(lines)
+</p></pre></code></br>
+
+<p id="results"></p>
+<h2>Results and Conclusions</h2>
+
+<p>As you can see in the chart below, the results are really impressive, and SQLite didn't dissapoint.
+<img src="../Images/sqlite3_benchmark1.001.png" alt="title" /></p>
+
+<p>Python (on my machine) requires not more than 20 sec to go through 6 million lines of text (first column) - without any additional computation or analysis, however.<br />
+When it added those lines to a SQLite database, the CPU time just increases by one-third (second column).
+Reading the text file line by line is definitely faster than I expected, but sqlite3 puts the plain Python code in the shade: Querying my whole 6-million-entries-database and pulling out ALL of them just takes about 1 second (third column)! That is approximately 20x faster than Python code scanning a plain text file (remember that 1 have 20 text files and each of those is 1000x larger than this example file).</p>
+
+<p>If we were to make a very simplified comparison: Imagine it would take Python ~5 min to go through every of my real data set files, and I have 20 of them. If I cross compare the data for intersecting features, I would easily end up with &gt; 2 h of CPU time. And this process would have to repeated for every time I set up a new screening.
+But if I would have my SQLite database, I could do the same thing in &lt; 1 min. For screening on a daily basis, after the first week I could already come down to 10 h Python line-by-line screening VS. 5 min SQL queries. I think it is just awesome.</p>
+
+
+
+
+				  
+	
+		&nbsp;<br>
+     	  &nbsp;<br>   
+        
+					
+	
+
+		</div> 	<!-- close article -->
+
+
+
+			</div><!--close main -->
+		
+	</div><!--close content -->
+	
+
+
+
+
+<!-- START Footer -->
+
+	<div id ='footer'>	
+        <center>
+	<hr>
+        <div style="height:20px;"></div>
+        <p>HTML and JavaScripts were written by Sebastian Raschka <br>
+        Copyright (C) 2013-2014 Sebastian Raschka</p>
+
+
+	<!-- START Twitter API -->
+
+ <a href="https://twitter.com/rasbt" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @rasbt</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	<!-- END Twitter API -->
+<div style="height:20px;"></div>
+
+	<hr>
+
+     
+        
+		 <div style="height:10px;"></div>
+		</center>
+	</div>
+<!-- END Footer -->
+
+
+<!-- Start DISQUS -->
+
+ <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'sebastianraschka'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+<!-- Start Google Analytics -->
+		<script type="text/javascript">
+
+  		var _gaq = _gaq || [];
+  		_gaq.push(['_setAccount', 'UA-38457794-1']);
+  		_gaq.push(['_trackPageview']);
+
+  		(function() {
+    	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  		})();
+		</script>
+<!-- End  Google Analytics -->
+
+</body>
+</html>
