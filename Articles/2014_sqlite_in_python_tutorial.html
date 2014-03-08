@@ -90,6 +90,7 @@ After I wrote the initial teaser article "<a href="http://sebastianraschka.com/A
 &#8226; <a href="#inserting_updating">Inserting and updating rows</a><br>
 &#8226; <a href="#unique_indexes">Creating unique indexes</a><br>
 &#8226; <a href="#querying">Querying the database - Selecting rows</a><br>
+&#8226; <a href="#security">Security and injection attacks</a><br>
 &#8226; <a href="#date_time">Date and time operations</a><br>
 &#8226; <a href="#db_summary">Printing a database summary</a><br>
 &#8226; <a href="#conclusion">Conclusion</a><br></p>
@@ -437,6 +438,37 @@ if we use the <code>.fetchall()</code> method, we return a list of tuples from t
 <img src="../Images/6_sqlite3_print_selecting_rows.png" alt="6_sqlite3_print_selecting_rows.png" />
 <br>
 <br></p>
+
+<p><a name="security"></a>
+<br></p>
+
+
+<h2>Security and injection attacks</h2>
+
+<p>So far, we have been using Python's string formatting method to insert parameters like table and column names into the <code>c.execute()</code> functions. This is fine if we just want to use the database for ourselves. However, this leaves our database vulnerable to injection attacks. For example, if our database would be part of a web application, it would allow hackers to directly communicate with the database in order to bypass login and password verification and steal data.<br/>
+In order to prevent this, it is recommended to use <code>?</code> place holders in the SQLite commands instead of the <code>%</code> formatting expression or the <code>.format()</code> method, which we have been using in this tutorial.<br/>
+For example, instead of using</p>
+
+<div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #888888"># 5) Check if a certain ID exists and print its column contents</span>
+c<span style="color: #333333">.</span>execute(<span style="background-color: #fff0f0">&quot;SELECT * FROM {tn} WHERE {idf}={my_id}&quot;</span><span style="color: #333333">.</span>\
+        format(tn<span style="color: #333333">=</span>table_name, cn<span style="color: #333333">=</span>column_2, idf<span style="color: #333333">=</span>id_column, my_id<span style="color: #333333">=</span>some_id))
+</pre></div>
+
+
+<p>in the <a href="#querying">Querying the database - Selecting rows</a> section above, we would want to use the <code>?</code> placeholder for the queried column value and include the variable(s) (here: <code>123456</code>), which we want to insert, as tuple at the end of the <code>c.execute()</code> string.</p>
+
+<div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #888888"># 5) Check if a certain ID exists and print its column contents</span>
+c<span style="color: #333333">.</span>execute(<span style="background-color: #fff0f0">&quot;SELECT * FROM {tn} WHERE {idf}=?&quot;</span><span style="color: #333333">.</span>\
+        format(tn<span style="color: #333333">=</span>table_name, cn<span style="color: #333333">=</span>column_2, idf<span style="color: #333333">=</span>id_column), (<span style="color: #0000DD; font-weight: bold">123456</span>,))   
+</pre></div>
+
+<p>However, the problem with this approach is that it would only work for values, not for column or table names. So what are we supposed to do with the rest of the string if we want to protect ourselves from injection attacks?
+The easy solution would be to refrain from using variables in SQLite queries whenever possible, and if  it cannot be avoided, we would want to use a function that strips all non-alphanumerical characters from the stored content of the variable, e.g.,</p>
+
+<div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">clean_name</span>(some_var):
+    <span style="color: #008800; font-weight: bold">return</span> <span style="background-color: #fff0f0">&#39;&#39;</span><span style="color: #333333">.</span>join(char <span style="color: #008800; font-weight: bold">for</span> char <span style="color: #000000; font-weight: bold">in</span> some_var <span style="color: #008800; font-weight: bold">if</span> char<span style="color: #333333">.</span>isalnum())
+</pre></div>
+
 
 <p><a name="date_time"></a>
 <br></p>
