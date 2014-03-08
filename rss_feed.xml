@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+<channel>
+
+<image>
+    <url>http://sebastianraschka.com/Images/rss1.gif</url>
+	<title>sebastianraschka.com</title>
+	<link>http://sebastianraschka.com</link>
+	    <width>111</width>
+    <height>32</height>
+    <description>My latest blog articles about programming, bioinformatics, and computational biology.</description>
+  </image>
+
+
+
+<item>
+<title>A thorough guide to SQLite database operations in Python</title>
+<link>http://sebastianraschka.com/Articles/2014_sqlite_in_python_tutorial.html</link>
+<guid>http://sebastianraschka.com/Articles/2014_sqlite_in_python_tutorial.html</guid>
+<pubDate>07 Mar 2014</pubDate>
+<description>After I wrote the initial teaser article "SQLite - Working with large data sets in Python effectively" about how awesome SQLite databases are via sqlite3 in Python, I wanted to delve a little bit more into the SQLite syntax and provide you with some more hands-on examples.</description>
+</item>
+
+<item>
+<title>Using OpenEye software for substructure alignments and best-matching low-energy conformer overlays</title>
+<link>http://sebastianraschka.com/Articles/2014_openeye_alignments_overlays.html</link>
+<guid>http://sebastianraschka.com/Articles/2014_openeye_alignments_overlays.html</guid>
+<pubDate>23 Feb 2014</pubDate>
+<description>This is a quickguide showing how to use OpenEye software command line tools to align target molecules to a query based on substructure matches and how to retrieve the best molecule overlay from two sets of low-energy conformers.</description>
+</item>
+
+<item>
+<title>PyPrind - A simple Python Progress Indidicator</title>
+<link>http://sebastianraschka.com/Articles/2014_pyprind_intro.html</link>
+<guid>http://sebastianraschka.com/Articles/2014_pyprind_intro.html</guid>
+<pubDate>02 Feb 2014</pubDate>
+<description>Sometimes it can be useful to display the progress of a computation, especially for more intensive tasks. I have written a simple module that tracks the progress of iterative Python procedures via a progress bar or percentage indicator. I've been using this tool for a while now, and I thought that it might be worthwhile to share it with you in hope it can also be useful to one or the other.</description>
+</item>
+
+<item>
+<title>Moving from MATLAB matrices to NumPy arrays - A Matrix Cheatsheet</title>
+<link>http://sebastianraschka.com/Articles/2014_matlab_vs_numpy.html</link>
+<guid>http://sebastianraschka.com/Articles/2014_matlab_vs_numpy.html</guid>
+<pubDate>22 Jan 2014</pubDate>
+<description>Over time Python became my favorite programming language for the quick automation of tasks, such as manipulating and analyzing data. Also, I grew fond of the great matplotlib plotting library for Python. MATLAB/Octave was usually my tool of choice when my tasks involved matrices and linear algebra. However, since I feel more comfortable with Python in general, I recently took a second look at Python's NumPy module to integrate matrix operations more easily into larger programs/scripts.</description>
+</item>
+
+<item>
+<title>An evaluation of simple Python performance tweaks</title>
+<link>http://sebastianraschka.com/Articles/2014_python_performance_tweaks.html</link>
+<guid>http://sebastianraschka.com/Articles/2014_python_performance_tweaks.html</guid>
+<pubDate>18 Jan 2014</pubDate>
+<description>
+When we are solving computational problems, we usually have almost unlimited possibilities to write and organize our code. The number of possible solutions is only limited by our own creativity. However, the goal is often not the most creative solution, but the most efficient one. Especially, when I write code to analyze massive amounts of data, I want to it to do the job as efficiently as possible.
+In order to optimize some of my Python code, I analyzed the efficiency of different approaches to solve similar problems, which I want to share with you in this article.</description>
+</item>
+
+<item>
+<title>Unit testing in Python - Why we want to make it a habit</title>
+<link>http://sebastianraschka.com/Articles/2013_python_unittest.html</link>
+<guid>http://sebastianraschka.com/Articles/2013_python_unittest.html</guid>
+<pubDate>14 Dec 2013</pubDate>
+<description>
+Let’s be honest, code testing is everything but a joyful task. However, a good unit testing framework makes this process as smooth as possible. Eventually, testing becomes a regular and continuous process, accompanied by the assurance that our code will operate just as exact and seamlessly as a Swiss clockwork.</description>
+</item>
+
+<item>
+<title>A short tutorial for decent heat maps in R</title>
+<link>http://sebastianraschka.com/Articles/heatmaps_in_r.html</link>
+<guid>http://sebastianraschka.com/Articles/heatmaps_in_r.html</guid>
+<pubDate>08 Dec 2013</pubDate>
+<description>
+I received many questions from people who want to quickly visualize their data via heat maps - ideally as quickly as possible. This is the major issue of exploratory data analysis, since we often don’t have the time to digest whole books about the particular techniques in different software packages to just get the job done.
+But once we are happy with our initial results, it might be worthwhile to dig deeper into the topic in order to further customize our plots and maybe even polish them for publication. In this post, my aim is to briefly introduce one of R’s several heat map libraries for a simple data analysis.</description>
+</item>
+
+<item>
+<title>BondPack - A collection of plugins to visualize molecular bonds in PyMOL</title>
+<link>http://sebastianraschka.com/Software/bondpack.html</link>
+<guid>http://sebastianraschka.com/Software/bondpack.html</guid>
+<pubDate>17 Nov 2013</pubDate>
+<description>
+PyMOL is without any doubt a great tool to visualize protein and ligand molecules. However, drawing interactions between atoms can be often quite cumbersome when done manually. For the sake of convenience, I developed three plugins for PyMOL that will make our life as protein biologists a little bit easier.
+All three PyMOL plugins can be installed and used separately; they don't depend on each other, but rather complement each other. At the end of this article, you will find brief instructions on how to install plugins in PyMOL - a very quick and simple process.</description>
+</item>
+
+<item>
+<title>SQLite - Working with large data sets in Python effectively</title>
+<link>http://sebastianraschka.com/Articles/sqlite3_database.html</link>
+<guid>http://sebastianraschka.com/Articles/sqlite3_database.html</guid>
+<pubDate>03 Nov 2013</pubDate>
+<description>
+My new project confronted me with the task to screen a huge set of large data files in text format with billions of entries each.
+I will have to retrieve data repeatedly and frequently in future, thus I was tempted to find a better solution than brute-force scanning through ~20 separate 1-column text files with ~6 billion entries every time line by line.</description>
+</item>
+
+<item>
+<title>Structural Classification of Food Allergen Epitopes - The PDB To FASTA Converter in Action!</title>
+<link>http://sebastianraschka.com/Articles/food_allergen_epitopes.html</link>
+<guid>http://sebastianraschka.com/Articles/food_allergen_epitopes.html</guid>
+<pubDate>25 Aug 2013</pubDate>
+<description>
+Naveen Chakicherla discovered the shared tertiary structure consensus motif of an important group of allergen epitopes in his research project at Lawrence Berkeley National Laboratory. His results were reported in a research article that was published in the July 2013 issue of the Computational Crystallography Newsletter.</description>
+</item>
+
+<item>
+<title>Be aware of the streamlined exception hierarchy in Python 3.3.0</title>
+<link>http://sebastianraschka.com/Articles/python3_OSError.html</link>
+<guid>http://sebastianraschka.com/Articles/python3_OSError.html</guid>
+<pubDate>03 Mar 2013</pubDate>
+<description>
+It is really nice to see the active development of Python. Thanks to the great community, Python has evolved into the favorite and most popular interpreted programming language.
+An important date in the history of Python certainly was December 3rd, 2008 - the release of Python 3.0. However, Python 3 did not please everyone, the community was literally divided; as until today, many people are still using Python 2.7x.
+</description>
+</item>
+
+<item>
+<title>Misleading FASTA sequences in the Protein Data Bank</title>
+<link>http://sebastianraschka.com/Articles/misleading-fasta-on-pdb.html</link>
+<guid>http://sebastianraschka.com/Articles/misleading-fasta-on-pdb.html</guid>
+<pubDate>23 Feb 2013</pubDate>
+<description>
+The Protein Data Bank (rcsb.org) deposited amino acid sequences in FASTA format for each PDB structure file. However, those FASTA sequences are not necessarily identical to the amino acid sequences in the corresponding PDB files. Oftentimes, the amino acid sequences from the PDB files are missing a few residues at the n-terminus; sometimes deletions can also be found somewhere within the protein. Using the wrong sequence could lead to inaccurate results in BLAST searches and erroneous protein structure models.</description>
+</item>
+
+</channel>
+</rss>es.</description>
