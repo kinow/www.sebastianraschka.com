@@ -68,17 +68,17 @@ code {
 		<div style="padding-right:70px">
 		  <p style="line-height:1.7"><strong>
 
-After I wrote the initial teaser article "<a href="http://sebastianraschka.com/Articles/sqlite3_database.html">SQLite - Working with large data sets in Python effectively</a>" about how awesome SQLite databases are via sqlite3 in Python, I wanted to dwevle a little bit more into the SQLite syntax and provide you with some more hands-on examples.
+After I wrote the initial teaser article "<a href="http://sebastianraschka.com/Articles/sqlite3_database.html">SQLite - Working with large data sets in Python effectively</a>" about how awesome SQLite databases are via sqlite3 in Python, I wanted to delve a little bit more into the SQLite syntax and provide you with some more hands-on examples.
  </strong></p></div>
 
-
-  <hr>
 
 <br>
 <br>
 <p><img src="../Images/sqlite_python_logo.png" alt="sqlite_python_logo.png" /></p>
 <br>
 <br>
+  <hr>
+
 
 <h4>Sections</h4>
 
@@ -94,8 +94,9 @@ After I wrote the initial teaser article "<a href="http://sebastianraschka.com/A
 &#8226; <a href="#db_summary">Printing a database summary</a><br>
 &#8226; <a href="#conclusion">Conclusion</a><br></p>
 
-<p><br></p>
+The complete Python code that I am using in this tutorial can be downloaded from my GitHub repository: <a href="https://github.com/rasbt/python_sqlite_code">https://github.com/rasbt/python_sqlite_code</a> 
 
+<br>  <br>
 <hr>
 
 
@@ -117,9 +118,8 @@ c <span style="color: #333333">=</span> conn<span style="color: #333333">.</span
 
 <p>where the database file (<code>sqlite_file</code>) can reside anywhere on our disk, e.g.,</p>
 
-<pre>
-sqlite_file = '/Users/Sebastian/Desktop/my_db.sqlite' 
-</pre>
+<div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">sqlite_file <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&#39;/Users/Sebastian/Desktop/my_db.sqlite&#39;</span> 
+</pre></div>
 
 
 <p>Conveniently, a new database file (<code>.sqlite</code> file) will be created automatically the first time we try to connect to a database. However, we have to be aware that it won't have a table, yet. In the following section, we will take a look at some example code of how to create a new SQLite database files with tables for storing some data.</p>
