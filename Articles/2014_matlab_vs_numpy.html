@@ -219,10 +219,17 @@ import NumPy like this:<br>
     <tr>
 
 <tr>
-        <td>Determinant of a Matrix:<br/>&nbsp;A -&gt; |A|</td>
+        <td>Determinant of a matrix:<br/>&nbsp;A -&gt; |A|</td>
         <td>&gt;&gt; A = [6 1 1; 4 -2 5; 2 8 7]<br/>A =<br/>&nbsp;&nbsp; 6 &nbsp; 1 &nbsp; 1<br/>&nbsp;&nbsp; 4&nbsp; -2 &nbsp; 5<br/>&nbsp;&nbsp; 2 &nbsp; 8 &nbsp; 7<br/>&gt;&gt; det(A)<br/>ans = -306</td>
         <td>&gt;&gt;&nbsp;A = np.array([[6,1,1],[4,-2,5],[2,8,7]])<br/>&gt;&gt; A<br/>array([[ 6,&nbsp; 1,&nbsp; 1],<br/>&nbsp;&nbsp; &nbsp; &nbsp; [ 4, -2,&nbsp; 5],<br/>&nbsp;&nbsp; &nbsp; &nbsp; [ 2,&nbsp; 8,&nbsp; 7]])<br/>&gt;&gt; np.linalg.det(A)<br/>-306.0</td>
     </tr>
+
+<tr>
+        <td>Inverse of a matrix</td>
+        <td>&gt;&gt; A = [4 7; 2 6]<br/>A =<br/>&nbsp;&nbsp; 4 &nbsp; 7<br/>&nbsp;&nbsp; 2 &nbsp; 6<br/>&gt;&gt; I = [1 0; 0 1]<br/>I =<br/>&nbsp;&nbsp; 1 &nbsp; 0<br/>&nbsp;&nbsp; 0 &nbsp; 1<br/>&gt;&gt; A_inv = inv(A)<br/>A_inv =<br/>&nbsp; &nbsp;0.60000&nbsp; -0.70000<br/>&nbsp; -0.20000 &nbsp; 0.40000</td>
+        <td>&gt;&gt; A = np.array([[4, 7], [2, 6]])<br/>&gt;&gt; A<br/>array([[4, 7],&nbsp;<br/>&nbsp; &nbsp; &nbsp; &nbsp;[2, 6]])<br/>&gt;&gt; I = np.array([[1, 0], [0, 1]])<br/>&gt;&gt; I<br/>array([[1, 0],&nbsp;<br/>&nbsp; &nbsp; &nbsp; &nbsp;[0, 1]])<br/>&gt;&gt; A_inverse = np.linalg.inv(A)<br/>&gt;&gt; A_inverse<br/>array([[ 0.6, -0.7],&nbsp;<br/>&nbsp; &nbsp; &nbsp; &nbsp;[-0.2,  0.4]])<br/><br/># A * A^-1 should yield the Identity matrix<br/>assert(np.dot(A, A_inverse).all() == I.all())</td>
+    </tr>
+
 
         <td>Calculating a&nbsp;<br/>covariance matrix&nbsp;<br/>of 3 random variables<br/>(here: covariances of <br/>the means&nbsp;<br/>of x1, x2, and x3)</td>
         <td>&gt;&gt; x1 = [4.0000 4.2000 3.9000 4.3000 4.1000]&rsquo;<br/>&gt;&gt; x2 = [2.0000 2.1000 2.0000 2.1000 2.2000]'<br/>&gt;&gt; x3 = [0.60000 0.59000 0.58000 0.62000 0.63000]&rsquo;<br/><br/>&gt;&gt; cov( [x1,x2,x3] )<br/>ans =<br/>&nbsp;&nbsp; 2.5000e-02 &nbsp; 7.5000e-03 &nbsp; 1.7500e-03<br/>&nbsp;&nbsp; 7.5000e-03 &nbsp; 7.0000e-03 &nbsp; 1.3500e-03<br/>&nbsp;&nbsp; 1.7500e-03 &nbsp; 1.3500e-03 &nbsp; 4.3000e-04</td>
