@@ -586,6 +586,22 @@ CURRENT_TIMESTAMP <span style="color: #888888"># returns current date and time, 
 <br>
 <br></p>
 
+<p><a name="update03162014"></a>
+<br>
+<h4>Update Mar 16, 2014:</h4>
+<br>
+If'd we are interested to calulate the hours between two `DATETIME()` timestamps, we can could use the handy `SRFTIME()` function like this <br><br>
+
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">SELECT</span> (STRFTIME(<span style="background-color: #fff0f0">&#39;%s&#39;</span>,<span style="background-color: #fff0f0">&#39;2014-03-14 14:51:00&#39;</span>) <span style="color: #333333">-</span> STRFTIME(<span style="background-color: #fff0f0">&#39;%s&#39;</span>,<span style="background-color: #fff0f0">&#39;2014-03-16 14:51:00&#39;</span>))<br> <span style="color: #333333">/</span> <span style="color: #333333">-</span><span style="color: #0000DD; font-weight: bold">3600</span>
+</pre></div>
+<br>
+which would calculate the difference in hours between two dates in this particular example above (here: `48`) in this case.  
+<br>And to calculate the difference in hours between the current `DATETIME` and a given `DATETIME` string, we could use the following SQLite syntax:  
+
+<br><br>
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">SELECT</span> (STRFTIME(<span style="background-color: #fff0f0">&#39;%s&#39;</span>,DATETIME(<span style="background-color: #fff0f0">&#39;now&#39;</span>)) <span style="color: #333333">-</span> STRFTIME(<span style="background-color: #fff0f0">&#39;%s&#39;</span>,<span style="background-color: #fff0f0">&#39;2014-03-15 14:51:00&#39;</span>)) <span style="color: #333333">/</span> <span style="color: #0000DD; font-weight: bold">3600</span>
+</pre></div>
+
 <p><a name="colnames"></a>
 <br></p>
 
