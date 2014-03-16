@@ -159,29 +159,30 @@ For this example, I randomly picked a steroid-ring containing structure from the
 
 <p>Run OpenEye's OEChem RMSD tool to align target molecules to the reference molecule based on the extracted substructure. The aligned pairs will be written to a new file. The command-line syntax for a typical usage of the OEChem RMSD toll could be:</p>
 
-<pre><code>/soft/linux64/openeye/.../oechem-utilities/rmsd\
--in /home/.../ query.mol2\ 
--ref ~/Desktop/reference_molecule.mol2\
--overlay\
--out /home/.../output.mol2\     
--automorph false\
--smarts C1CCC2C(C1)CCC3C4CCCC4CCC23
-</code></pre>
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">/soft/linux64/openeye/.../oechem-utilities/rmsd<span style="color: #666666; font-weight: bold; background-color: #fff0f0">\</span>
+-in /home/.../ query.mol2<span style="color: #666666; font-weight: bold; background-color: #fff0f0">\ </span>
+-ref ~/Desktop/reference_molecule.mol2<span style="color: #666666; font-weight: bold; background-color: #fff0f0">\</span>
+-overlay<span style="color: #666666; font-weight: bold; background-color: #fff0f0">\</span>
+-out /home/.../output.mol2<span style="color: #666666; font-weight: bold; background-color: #fff0f0">\ </span>    
+-automorph <span style="color: #007020">false</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\</span>
+-smarts C1CCC2C<span style="color: #333333">(</span>C1<span style="color: #333333">)</span>CCC3C4CCCC4CCC23
+</pre></div>
+
 
 <p><strong>More details</strong> about the different parameters (from <code>.../oechem-utilities/rmsd --help</code>):</p>
 
-<pre><code>rmsd -in &lt;filename&gt; -ref &lt;reference filename&gt;
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">rmsd -in &lt;filename&gt; -ref &lt;reference filename&gt;
 
 Options:
- -automorph (default false): assign best atom association. By setting
-  this option to true, rmsd will ignore atom names and orders present in the
+ -automorph <span style="color: #333333">(</span>default <span style="color: #007020">false</span><span style="color: #333333">)</span>: assign best atom association. By setting
+  this option to <span style="color: #007020">true</span>, rmsd will ignore atom names and orders present in the
   file and will use structural and chemical information to make the best
-  matches.  This should fix the problem of abnormally high RMSD values for
-  symmetric molecules/functional groups that have been rotated.
+  matches.  This should fix the problem of abnormally high RMSD values <span style="color: #008800; font-weight: bold">for</span>
+<span style="color: #008800; font-weight: bold">  </span>symmetric molecules/functional groups that have been rotated.
 
- -heavyonly (default true): ignores hydrogens in rmsd calculation
+ -heavyonly <span style="color: #333333">(</span>default <span style="color: #007020">true</span><span style="color: #333333">)</span>: ignores hydrogens in rmsd calculation
 
- -overlay (default true): performs a least squares fit and superimposes
+ -overlay <span style="color: #333333">(</span>default <span style="color: #007020">true</span><span style="color: #333333">)</span>: performs a least squares fit and superimposes
   the molecules prior to making the RMSD calculation.
 
  -origconfout : output original conformation too
@@ -191,7 +192,8 @@ Options:
  -refout : output reference mol
 
  -smarts : rmsd of corresponding matched atoms only
-</code></pre>
+</pre></div>
+
 
 
 <p><a name="scriptsaut1"></a></p>
@@ -203,16 +205,18 @@ Options:
 
 <p>If your target molecules are in a multi-mol2-file, you can use the Python script <a href="https://github.com/rasbt/proteinscience_tutorials/blob/master/substructure_alignment/Scripts/split_multimol2.py">split_multimol2.py</a> to split it into individual mol2 files:</p>
 
-<pre><code>USAGE: python3 multimol2.mol2 output_directory
-</code></pre>
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">USAGE: python3 multimol2.mol2 output_directory
+</pre></div>
+
 <br>
 
 <h4>4 b) Python subprocess.call() wrapper</h4>
 
 <p>And to automate the RMSD substructure alignment over the individual mol2 files, you can use the script <a href="https://github.com/rasbt/proteinscience_tutorials/blob/master/substructure_alignment/Scripts/multimol2_rmsd_align.py">multimol2_rmsd_align.py</a> where you just have to modify the path to your OpenEye RMSD executable.</p>
 
-<pre><code>USAGE: python3 mmol2_rmsd_align.py input_dir/ output_dir/ ref.mol2 smiles_string
-</code></pre>
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">USAGE: python3 mmol2_rmsd_align.py input_dir/ output_dir/ ref.mol2 smiles_string
+</pre></div>
+
 <br>
 
 <h4>4 c) Concatenating the results</h4>
@@ -220,9 +224,9 @@ Options:
 <p>Finally, you can concatenate the resulting alignments back into one single multi-mol2 file for further analysis and visualization
  via</p>
 
-<pre><code>&gt; cat mol2_dir/*.mol2 &gt; my_multimol2 file
-</code>
-</pre>
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">cat mol2_dir/*.mol2 &gt; my_multimol2 file
+</pre></div>
+
 
 
 
@@ -262,14 +266,16 @@ Options:
 
 <p>To find the best scoring overlay, I recommend to generate low-energy conformers of both target and query molecule via OpenEye's OMEGA2 tool first.</p>
 
-<pre><code>/soft/linux64/openeye/bin/omega2\
-    -in .../ZINC00062008.mol2\
-    -out .../ZINC00062008_confs.mol2\
-    -warts true\
-    -fraglib /soft/linux64/openeye/data/omega2/fraglib.oeb.gz\
-    -commentEnergy true\
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">&lt;pre&gt;&lt;code&gt;/soft/linux64/openeye/bin/omega2<span style="color: #666666; font-weight: bold; background-color: #fff0f0">\</span>
+    -in .../ZINC00062008.mol2<span style="color: #666666; font-weight: bold; background-color: #fff0f0">\</span>
+    -out .../ZINC00062008_confs.mol2<span style="color: #666666; font-weight: bold; background-color: #fff0f0">\</span>
+    -warts <span style="color: #007020">true</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\</span>
+    -fraglib /soft/linux64/openeye/data/omega2/fraglib.oeb.gz<span style="color: #666666; font-weight: bold; background-color: #fff0f0">\</span>
+    -commentEnergy <span style="color: #007020">true</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\</span>
     -prefix om2
-</code></pre>
+&lt;/code&gt;&lt;/pre&gt;
+</pre></div>
+
 
 <p>The details about the algorithms behind OMEGA2 conformer generation can be found in the following paper by Paul C. D. Hawkins, A. Geoffrey Skillman, Gregory L. Warren, Benjamin A. Ellingson, and Matthew T. Stahl:<br/>
 <a href="http://pubs.acs.org/doi/abs/10.1021/ci100031x">Conformer Generation with OMEGA: Algorithm and Validation Using High Quality Structures from the Protein Databank and Cambridge Structural Database</a></p>
@@ -288,21 +294,23 @@ Options:
 
 <p>Now, after we generated ~200 low-energy conformers (200 is the max. default value) for both the target and query molecule, we can use OpenEye ROCS to overlay all low-energy conformations with each other (= ~200 x ~200 overlays). Here, we are only interested in the top-scoring overlayed pair:</p>
 
-<pre><code>/soft/.../rocs\
-    -query\
-    -dbase\
-    -randomstarts 20\ 
-    -stats best\
-    -besthits 0\ 
-    -maxhits 0\
-    -maxconfs 1\
-    -rankby TanimotoCombo\
-    -mcquery\
-    -prefix rcs\
-    -reportfile rocs.rpt\ 
-    -oformat mol2\ 
-    -report one\
-</code></pre>
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">&lt;pre&gt;&lt;code&gt;/soft/.../rocs<span style="color: #666666; font-weight: bold; background-color: #fff0f0">\</span>
+    -query<span style="color: #666666; font-weight: bold; background-color: #fff0f0">\</span>
+    -dbase<span style="color: #666666; font-weight: bold; background-color: #fff0f0">\</span>
+    -randomstarts 20<span style="color: #666666; font-weight: bold; background-color: #fff0f0">\ </span>
+    -stats best<span style="color: #666666; font-weight: bold; background-color: #fff0f0">\</span>
+    -besthits 0<span style="color: #666666; font-weight: bold; background-color: #fff0f0">\ </span>
+    -maxhits 0<span style="color: #666666; font-weight: bold; background-color: #fff0f0">\</span>
+    -maxconfs 1<span style="color: #666666; font-weight: bold; background-color: #fff0f0">\</span>
+    -rankby TanimotoCombo<span style="color: #666666; font-weight: bold; background-color: #fff0f0">\</span>
+    -mcquery<span style="color: #666666; font-weight: bold; background-color: #fff0f0">\</span>
+    -prefix rcs<span style="color: #666666; font-weight: bold; background-color: #fff0f0">\</span>
+    -reportfile rocs.rpt<span style="color: #666666; font-weight: bold; background-color: #fff0f0">\ </span>
+    -oformat mol2<span style="color: #666666; font-weight: bold; background-color: #fff0f0">\ </span>
+    -report one<span style="color: #666666; font-weight: bold; background-color: #fff0f0">\</span>
+&lt;/code&gt;&lt;/pre&gt;
+</pre></div>
+
 
 <p>It is worth mentioning that we are ranking by the <code>TanimotoCombo</code> here, which is a combination of <code>ShapeTanimoto</code> (3D shape similarity via volume optimization) and <code>ColorTanimoto</code> (functional group matching). Depending on your priorities, you may want to use a different argument for the <code>rankby</code> parameter.
 More information about the command line interface can be found at: <a href="http://www.eyesopen.com/docs/rocs/current/html/usage.html#command-line-interface">http://www.eyesopen.com/docs/rocs/current/html/usage.html#command-line-interface</a>.</p>

@@ -121,7 +121,64 @@ R script: <a href="https://raw.github.com/rasbt/tutorials_cheatsheets/master/scr
 <br>
 <br>
 
-<img src="../Images/heatmaps_in_r3.png" alt="heatmapcode.png" title="heatmapcode.png" /> 
+<br><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #888888">#########################################################</span>
+<span style="color: #888888">### A) Installing and loading required packages</span>
+<span style="color: #888888">#########################################################</span>
+
+<span style="color: #008800; font-weight: bold">if</span> (<span style="color: #333333">!</span>require(<span style="background-color: #fff0f0">&quot;gplots&quot;</span>)) {
+   install.packages(<span style="background-color: #fff0f0">&quot;gplots&quot;</span>, dependencies <span style="color: #333333">=</span> <span style="color: #008800; font-weight: bold">TRUE</span>)
+   library(gplots)
+   }
+<span style="color: #008800; font-weight: bold">if</span> (<span style="color: #333333">!</span>require(<span style="background-color: #fff0f0">&quot;RColorBrewer&quot;</span>)) {
+   install.packages(<span style="background-color: #fff0f0">&quot;RColorBrewer&quot;</span>, dependencies <span style="color: #333333">=</span> <span style="color: #008800; font-weight: bold">TRUE</span>)
+   library(RColorBrewer)
+   }
+
+
+<span style="color: #888888">#########################################################</span>
+<span style="color: #888888">### B) Reading in data and transform it into matrix format</span>
+<span style="color: #888888">#########################################################</span>
+
+data <span style="color: #333333">&lt;-</span> read.csv(<span style="background-color: #fff0f0">&quot;../datasets/heatmaps_in_r.csv&quot;</span>, comment.char<span style="color: #333333">=</span><span style="background-color: #fff0f0">&quot;#&quot;</span>)
+rnames <span style="color: #333333">&lt;-</span> data[,<span style="color: #6600EE; font-weight: bold">1</span>]                            <span style="color: #888888"># assign labels in column 1 to &quot;rnames&quot;</span>
+mat_data <span style="color: #333333">&lt;-</span> data.matrix(data[,<span style="color: #6600EE; font-weight: bold">2</span><span style="color: #333333">:</span>ncol(data)])  <span style="color: #888888"># transform column 2-5 into a matrix</span>
+rownames(mat_data) <span style="color: #333333">&lt;-</span> rnames                  <span style="color: #888888"># assign row names </span>
+
+
+<span style="color: #888888">#########################################################</span>
+<span style="color: #888888">### C) Customizing and plotting the heat map</span>
+<span style="color: #888888">#########################################################</span>
+
+<span style="color: #888888"># creates a own color palette from red to green</span>
+my_palette <span style="color: #333333">&lt;-</span> colorRampPalette(c(<span style="background-color: #fff0f0">&quot;red&quot;</span>, <span style="background-color: #fff0f0">&quot;yellow&quot;</span>, <span style="background-color: #fff0f0">&quot;green&quot;</span>))(n <span style="color: #333333">=</span> <span style="color: #6600EE; font-weight: bold">299</span>)
+
+<span style="color: #888888"># (optional) defines the color breaks manually for a &quot;skewed&quot; color transition</span>
+col_breaks <span style="color: #333333">=</span> c(seq(<span style="color: #6600EE; font-weight: bold">-1</span>,<span style="color: #6600EE; font-weight: bold">0</span>,length<span style="color: #333333">=</span><span style="color: #6600EE; font-weight: bold">100</span>),  <span style="color: #888888"># for red</span>
+  seq(<span style="color: #6600EE; font-weight: bold">0</span>,<span style="color: #6600EE; font-weight: bold">0.8</span>,length<span style="color: #333333">=</span><span style="color: #6600EE; font-weight: bold">100</span>),              <span style="color: #888888"># for yellow</span>
+  seq(<span style="color: #6600EE; font-weight: bold">0.8</span>,<span style="color: #6600EE; font-weight: bold">1</span>,length<span style="color: #333333">=</span><span style="color: #6600EE; font-weight: bold">100</span>))              <span style="color: #888888"># for green</span>
+
+<span style="color: #888888"># creates a 5 x 5 inch image</span>
+png(<span style="background-color: #fff0f0">&quot;../images/heatmaps_in_r.png&quot;</span>,    <span style="color: #888888"># create PNG for the heat map        </span>
+  width <span style="color: #333333">=</span> <span style="color: #6600EE; font-weight: bold">5</span><span style="color: #333333">*</span><span style="color: #6600EE; font-weight: bold">300</span>,        <span style="color: #888888"># 5 x 300 pixels</span>
+  height <span style="color: #333333">=</span> <span style="color: #6600EE; font-weight: bold">5</span><span style="color: #333333">*</span><span style="color: #6600EE; font-weight: bold">300</span>,
+  res <span style="color: #333333">=</span> <span style="color: #6600EE; font-weight: bold">300</span>,            <span style="color: #888888"># 300 pixels per inch</span>
+  pointsize <span style="color: #333333">=</span> <span style="color: #6600EE; font-weight: bold">8</span>)        <span style="color: #888888"># smaller font size</span>
+
+heatmap.2(mat_data, 
+  cellnote <span style="color: #333333">=</span> mat_data,  <span style="color: #888888"># same data set for cell labels</span>
+  main <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&quot;Correlation&quot;</span>, <span style="color: #888888"># heat map title</span>
+  notecol<span style="color: #333333">=</span><span style="background-color: #fff0f0">&quot;black&quot;</span>,      <span style="color: #888888"># change font color of cell labels to black</span>
+  density.info<span style="color: #333333">=</span><span style="background-color: #fff0f0">&quot;none&quot;</span>,  <span style="color: #888888"># turns off density plot inside color legend</span>
+  trace<span style="color: #333333">=</span><span style="background-color: #fff0f0">&quot;none&quot;</span>,         <span style="color: #888888"># turns off trace lines inside the heat map</span>
+  margins <span style="color: #333333">=</span>c(<span style="color: #6600EE; font-weight: bold">12</span>,<span style="color: #6600EE; font-weight: bold">9</span>),     <span style="color: #888888"># widens margins around plot</span>
+  col<span style="color: #333333">=</span>my_palette,       <span style="color: #888888"># use on color palette defined earlier </span>
+  breaks<span style="color: #333333">=</span>col_breaks,    <span style="color: #888888"># enable color transition at specified limits</span>
+  dendrogram<span style="color: #333333">=</span><span style="background-color: #fff0f0">&quot;row&quot;</span>,     <span style="color: #888888"># only draw a row dendrogram</span>
+  Colv<span style="color: #333333">=</span><span style="background-color: #fff0f0">&quot;NA&quot;</span>)            <span style="color: #888888"># turn off column clustering</span>
+
+dev.off()               <span style="color: #888888"># close the PNG device</span>
+</pre></div><br>
+
 <br>
 <br>
 <a href="https://raw.github.com/rasbt/tutorials_cheatsheets/master/scripts/heatmaps_in_r.R">(download the script)</a></p>
@@ -133,7 +190,9 @@ R script: <a href="https://raw.github.com/rasbt/tutorials_cheatsheets/master/scr
 <h1>Running a script in R</h1>
 
 <p>To run a script in R, start a new R session by either typing R into a shell terminal, or execute R from you Applications folder. Now, you can type the following command in R to execute a script:
-<pre>source("path/to/the/script/heatmaps_in_R.R")</pre></p>
+<br><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">source(<span style="background-color: #fff0f0">&quot;path/to/the/script/heatmaps_in_R.R&quot;</span>)
+</pre></div><br>
+
 
 <p><a name="script_details"></a></p>
 <br>
@@ -146,16 +205,17 @@ R script: <a href="https://raw.github.com/rasbt/tutorials_cheatsheets/master/scr
 <h3>A) Installing and loading required packages</h3>
 
 <p>At first glance, this section might look a little bit more complicated then it need be, since executing <code>library(packagename)</code> is already sufficient to load required R packages if they are already installed.
-<pre>
-if (!require("gplots")) {
- install.packages("gplots", dependencies = TRUE)
+
+<br><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">if</span> (<span style="color: #333333">!</span>require(<span style="background-color: #fff0f0">&quot;gplots&quot;</span>)) {
+ install.packages(<span style="background-color: #fff0f0">&quot;gplots&quot;</span>, dependencies <span style="color: #333333">=</span> <span style="color: #008800; font-weight: bold">TRUE</span>)
  library(gplots)
  }
-if (!require("RColorBrewer")) {
- install.packages("RColorBrewer", dependencies = TRUE)
+<span style="color: #008800; font-weight: bold">if</span> (<span style="color: #333333">!</span>require(<span style="background-color: #fff0f0">&quot;RColorBrewer&quot;</span>)) {
+ install.packages(<span style="background-color: #fff0f0">&quot;RColorBrewer&quot;</span>, dependencies <span style="color: #333333">=</span> <span style="color: #008800; font-weight: bold">TRUE</span>)
  library(RColorBrewer)
  }
-</pre>
+</pre></div><br>
+
 The lines preceding the <code>library()</code> command are only there for convenience, to ensure that we will be prompted to install the required packages if we haven&#8217;t set them up previously yet.<br>
 We are importing the <code>gplot</code> package to call the function <code>heatmap.2()</code> as we will see in the later sections. There are a bunch of other options to create heat maps in R, such as R&#8217;s basic <code>heatmap()</code> function and functions from the <code>ggplot2</code> package.<br>
 I simply chose <code>heatmap.2()</code> here because it offers some nice extra features over R&#8217;s in-built <code>heatmap()</code> function, such as a color legend, but follows the same familiar syntax.
@@ -173,36 +233,43 @@ The <code>RColorBrewer</code> package is more optional, and we will use it to ma
 When we open the CSV file in our favorite plain text editor instead of using a spread sheet program (Excel, Numbers, etc.), it looks like this:
 </p>
 
-<pre>#heat map example data set,,,,
-#12/08/13 sr,,,,#
-
+<br><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #888888">#heat map example data set,,,,</span>
+<span style="color: #888888">#12/08/13 sr,,,,</span>
+<span style="color: #888888">#</span>
 ,var1,var2,var3,var4
-measurement1,0.094,0.668,0.4153,0.4613
-measurement2,0.1138,&#8211;0.3847,0.2671,0.1529
-measurement3,0.1893,0.3303,0.5821,0.2632
-measurement4,&#8211;0.0102,&#8211;0.4259,&#8211;0.5967,0.18
-measurement5,0.1587,0.2948,0.153,&#8211;0.2208
-measurement6,&#8211;0.4558,0.2244,0.6619,0.0457
-measurement7,&#8211;0.6241,&#8211;0.3119,0.3642,0.2003
-measurement8,&#8211;0.227,0.499,0.3067,0.3289
-measurement9,0.7365,&#8211;0.0872,&#8211;0.069,&#8211;0.4252
-measurement10,0.9761,0.4355,0.8663,0.8107
-</pre>
+measurement1,<span style="color: #6600EE; font-weight: bold">0.094</span>,<span style="color: #6600EE; font-weight: bold">0.668</span>,<span style="color: #6600EE; font-weight: bold">0.4153</span>,<span style="color: #6600EE; font-weight: bold">0.4613</span>
+measurement2,<span style="color: #6600EE; font-weight: bold">0.1138</span>,<span style="color: #6600EE; font-weight: bold">-0.3847</span>,<span style="color: #6600EE; font-weight: bold">0.2671</span>,<span style="color: #6600EE; font-weight: bold">0.1529</span>
+measurement3,<span style="color: #6600EE; font-weight: bold">0.1893</span>,<span style="color: #6600EE; font-weight: bold">0.3303</span>,<span style="color: #6600EE; font-weight: bold">0.5821</span>,<span style="color: #6600EE; font-weight: bold">0.2632</span>
+measurement4,<span style="color: #6600EE; font-weight: bold">-0.0102</span>,<span style="color: #6600EE; font-weight: bold">-0.4259</span>,<span style="color: #6600EE; font-weight: bold">-0.5967</span>,<span style="color: #6600EE; font-weight: bold">0.18</span>
+measurement5,<span style="color: #6600EE; font-weight: bold">0.1587</span>,<span style="color: #6600EE; font-weight: bold">0.2948</span>,<span style="color: #6600EE; font-weight: bold">0.153</span>,<span style="color: #6600EE; font-weight: bold">-0.2208</span>
+measurement6,<span style="color: #6600EE; font-weight: bold">-0.4558</span>,<span style="color: #6600EE; font-weight: bold">0.2244</span>,<span style="color: #6600EE; font-weight: bold">0.6619</span>,<span style="color: #6600EE; font-weight: bold">0.0457</span>
+measurement7,<span style="color: #6600EE; font-weight: bold">-0.6241</span>,<span style="color: #6600EE; font-weight: bold">-0.3119</span>,<span style="color: #6600EE; font-weight: bold">0.3642</span>,<span style="color: #6600EE; font-weight: bold">0.2003</span>
+measurement8,<span style="color: #6600EE; font-weight: bold">-0.227</span>,<span style="color: #6600EE; font-weight: bold">0.499</span>,<span style="color: #6600EE; font-weight: bold">0.3067</span>,<span style="color: #6600EE; font-weight: bold">0.3289</span>
+measurement9,<span style="color: #6600EE; font-weight: bold">0.7365</span>,<span style="color: #6600EE; font-weight: bold">-0.0872</span>,<span style="color: #6600EE; font-weight: bold">-0.069</span>,<span style="color: #6600EE; font-weight: bold">-0.4252</span>
+measurement10,<span style="color: #6600EE; font-weight: bold">0.9761</span>,<span style="color: #6600EE; font-weight: bold">0.4355</span>,<span style="color: #6600EE; font-weight: bold">0.8663</span>,<span style="color: #6600EE; font-weight: bold">0.8107</span>
+</pre></div><br>
 <a href="https://raw.github.com/rasbt/tutorials_cheatsheets/master/datasets/heatmaps_in_r.csv">(download the CSV file)</a></p>
 
 <p>When we are reading the data from our CSV file into R and assign it to the variable <code>data</code>, note the two lines of comments preceding the main data in our CSV file, indicated by an octothorpe (#) character. Since we don&#8217;t need those lines to plot our heat map, we can ignore them by via the <code>comment.char</code> argument in the <code>read.csv()</code> function.
-<pre>data &lt;- read.csv("../datasets/heatmaps_in_r.csv", comment.char="#")</pre></p>
+<br><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">data <span style="color: #333333">&lt;-</span> read.csv(<span style="background-color: #fff0f0">&quot;../datasets/heatmaps_in_r.csv&quot;</span>, comment.char<span style="color: #333333">=</span><span style="background-color: #fff0f0">&quot;#&quot;</span>)
+</pre></div><br>
+</p>
 
 <p>One tricky part of the <code>heatmap.2()</code> function is that it requires the data in a numerical matrix format in order to plot it. By default, data that we read from files using R&#8217;s <code>read.table()</code> or <code>read.csv()</code> functions is stored in a <code>data table</code> format. The <code>matrix</code> format differs from the <code>data table</code> format by the fact that a <code>matrix</code> can only hold one type of data, e.g., numerical, strings, or logical.<br>
 Fortunately, we don&#8217;t have to worry about the row that contains our column names (var1, var2, var3, var4) since the <code>read.csv()</code> function treats the first line of data as <code>table header</code> by default. But we would run into trouble if we want to include the row names (measurement1, measurment2, etc.) in our numerical matrix.<br>
 For our own convenience, we store those row names in the first column as variable <code>rnames</code>, which we can use later to assign <code>row names</code> to our matrix after the conversion.
-<pre> rnames &lt;- data[,1] </pre></p>
+<br><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">rnames <span style="color: #333333">&lt;-</span> data[,<span style="color: #6600EE; font-weight: bold">1</span>]
+</pre></div><br>
+</p>
 
 <p>Now, we transform the numerical data from the variable <code>data</code> (column 2 to 5) into a matrix and assign it to a new variable <code>mat_data</code>
-<pre>mat_data &lt;- data.matrix(data[,2:ncol(data)])</pre>
-Instead of using the rather fiddly expression <code>ncol(data)]</code>, which returns the total number of columns from the data table, we could also provide the integer 5 directly in order to specify the last column that we want to include. However, <code>ncol(data)]</code> is more convenient for larger data sets so that we don&#8217;t need to count all columns to get the index of the last column for specifying the upper boundary.<br>
+<br><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">mat_data <span style="color: #333333">&lt;-</span> data.matrix(data[,<span style="color: #6600EE; font-weight: bold">2</span><span style="color: #333333">:</span>ncol(data)])
+</pre></div><br>
+    Instead of using the rather fiddly expression <code>ncol(data)]</code>, which returns the total number of columns from the data table, we could also provide the integer 5 directly in order to specify the last column that we want to include. However, <code>ncol(data)]</code> is more convenient for larger data sets so that we don&#8217;t need to count all columns to get the index of the last column for specifying the upper boundary.<br>
 Next, we assign the column names, which we have saved as <code>rnames</code> previously, to the matrix via
-<pre>rownames(mat_data) &lt;- rnames </pre></p>
+<br><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">rownames(mat_data) <span style="color: #333333">&lt;-</span> rnames
+</pre></div><br>
+</p>
 
 <p><a name="customizing"></a></p>
 <br>
@@ -219,17 +286,18 @@ Next, we assign the column names, which we have saved as <code>rnames</code> pre
 <h4>Optional: Choosing custom color palettes and color breaks</h4>
 
 <p>Instead of using the default colors of the <code>heatmap.2()</code> function, I want to show you how to use the <code>RColorBrewer</code> package for creating our own color palettes. Here, we go with the most popular choice for heat maps: A color range from green over yellow to red.
-<pre>my_palette &lt;- colorRampPalette(c("red", "yellow", "green"))(n = 299)</pre>
+<br><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">my_palette <span style="color: #333333">&lt;-</span> colorRampPalette(c(<span style="background-color: #fff0f0">&quot;red&quot;</span>, <span style="background-color: #fff0f0">&quot;yellow&quot;</span>, <span style="background-color: #fff0f0">&quot;green&quot;</span>))(n <span style="color: #333333">=</span> <span style="color: #6600EE; font-weight: bold">299</span>)
+</pre></div><br>
 There are many different ways to specify colors in R. I find it most convenient to assign colors by their name. A nice overview of the different color names in R can be found at <br> <a href="http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf">http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf</a> </p>
 
 <p>The argument <code>(n = 299)</code> lets us define how many individuals colors we want to have in our palette. Obviously, the higher the number of individual colors, the smoother the transition will be; the number 299 should be sufficiently large enough for a smooth transition.<br>
 By default, RColorBrewer will divide the colors evenly so that every color in our palette will be an interval of individual colors of similar size. However, sometimes we want to have a little skewed color range depending on the data we are analyzing.
 Let&#8217;s assume that our example data set consists of Pearson correlation coefficients (i.e., R values) ranging from &#8211;1 to 1, and we are particularly interested in samples that have a (relatively) high correlation: R values in the range between 0.8 to 1.0. We want to highlight these samples in our heat map by only showing values from 0.8 to 1 in green. In this case, we can define our color breaks "unevenly" by using the following code:
-<pre>
-col_breaks = c(seq(&#8211;1,0,length=100), # for red
-seq(0,0.8,length=100), # for yellow
-seq(0.8,1,length=100)) # for green
-</pre></p>
+<br><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">col_breaks <span style="color: #333333">=</span> c(seq(<span style="color: #6600EE; font-weight: bold">-1</span>,<span style="color: #6600EE; font-weight: bold">0</span>,length<span style="color: #333333">=</span><span style="color: #6600EE; font-weight: bold">100</span>), <span style="color: #888888"># for red</span>
+seq(<span style="color: #6600EE; font-weight: bold">0</span>,<span style="color: #6600EE; font-weight: bold">0.8</span>,length<span style="color: #333333">=</span><span style="color: #6600EE; font-weight: bold">100</span>), <span style="color: #888888"># for yellow</span>
+seq(<span style="color: #6600EE; font-weight: bold">0.8</span>,<span style="color: #6600EE; font-weight: bold">1</span>,length<span style="color: #333333">=</span><span style="color: #6600EE; font-weight: bold">100</span>)) <span style="color: #888888"># for green</span>
+</pre></div><br>
+</p>
 
 <p><a name="png"></a></p>
 <br>
@@ -241,13 +309,12 @@ seq(0.8,1,length=100)) # for green
 I don&#8217;t want to discuss all the details about when to use which particular file format in this tutorial but instead use a more common PNG format for our heat map. I picked PNG instead of JPEG, because PNG offers lossless compression (JPEG is a lossy image format) at the small cost of a slightly larger file size.
 However, you could completely omit the <code>png()</code> function in your script if you just want to show the heat map in an interactive screen in R.</p>
 
-<pre>
-png("../images/heatmaps_in_r.png",    # create PNG for the heat map        
-width = 5*300,        # 5 x 300 pixels
-height = 5*300,
-res = 300,            # 300 pixels per inch
-pointsize = 8)        # smaller font size
-</pre>
+<br><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">png(<span style="background-color: #fff0f0">&quot;../images/heatmaps_in_r.png&quot;</span>,    <span style="color: #888888"># create PNG for the heat map        </span>
+width <span style="color: #333333">=</span> <span style="color: #6600EE; font-weight: bold">5</span><span style="color: #333333">*</span><span style="color: #6600EE; font-weight: bold">300</span>,        <span style="color: #888888"># 5 x 300 pixels</span>
+height <span style="color: #333333">=</span> <span style="color: #6600EE; font-weight: bold">5</span><span style="color: #333333">*</span><span style="color: #6600EE; font-weight: bold">300</span>,
+res <span style="color: #333333">=</span> <span style="color: #6600EE; font-weight: bold">300</span>,            <span style="color: #888888"># 300 pixels per inch</span>
+pointsize <span style="color: #333333">=</span> <span style="color: #6600EE; font-weight: bold">8</span>)        <span style="color: #888888"># smaller font size</span>
+</pre></div><br>
 
 <p>The default parameters of the <code>png()</code> function would yield a relatively small PNG file at very low resolution, which is not really practical for heat maps. Thus we provide additional arguments for the image <code>width</code>, <code>height</code> and the resolution.<br>
 The units of <code>width</code> and <code>height</code> are pixels, not inches. So if we want to create a 5x5 inch image with 300 pixels per inch, we have to do a little math here: [1500 pixels] / [300 pixels/inch] = 5 inches. Also, we choose a slightly smaller font size of 8 pt.</p>
@@ -264,19 +331,18 @@ otherwise you probably won&#8217;t be able to open the PNG file to view it. </b>
 
 <p>Now, let&#8217;s get down to business and take a look at the <code>heatmap.2()</code> function:</p>
 
-<pre>
-heatmap.2(mat_data, 
-  cellnote = mat_data,  # same data set for cell labels
-  main = "Correlation", # heat map title
-  notecol="black",      # change font color of cell labels to black
-  density.info="none",  # turns off density plot inside color legend
-  trace="none",         # turns off trace lines inside the heat map
-  margins =c(12,9),     # widens margins around plot
-  col=my_palette,       # use on color palette defined earlier 
-  breaks=col_breaks,    # enable color transition at specified limits
-  dendrogram="row",     # only draw a row dendrogram
-  Colv="NA")            # turn off column clustering
-  </pre>
+<br><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">heatmap.2(mat_data, 
+  cellnote <span style="color: #333333">=</span> mat_data,  <span style="color: #888888"># same data set for cell labels</span>
+  main <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&quot;Correlation&quot;</span>, <span style="color: #888888"># heat map title</span>
+  notecol<span style="color: #333333">=</span><span style="background-color: #fff0f0">&quot;black&quot;</span>,      <span style="color: #888888"># change font color of cell labels to black</span>
+  density.info<span style="color: #333333">=</span><span style="background-color: #fff0f0">&quot;none&quot;</span>,  <span style="color: #888888"># turns off density plot inside color legend</span>
+  trace<span style="color: #333333">=</span><span style="background-color: #fff0f0">&quot;none&quot;</span>,         <span style="color: #888888"># turns off trace lines inside the heat map</span>
+  margins <span style="color: #333333">=</span>c(<span style="color: #6600EE; font-weight: bold">12</span>,<span style="color: #6600EE; font-weight: bold">9</span>),     <span style="color: #888888"># widens margins around plot</span>
+  col<span style="color: #333333">=</span>my_palette,       <span style="color: #888888"># use on color palette defined earlier </span>
+  breaks<span style="color: #333333">=</span>col_breaks,    <span style="color: #888888"># enable color transition at specified limits</span>
+  dendrogram<span style="color: #333333">=</span><span style="background-color: #fff0f0">&quot;row&quot;</span>,     <span style="color: #888888"># only draw a row dendrogram</span>
+  Colv<span style="color: #333333">=</span><span style="background-color: #fff0f0">&quot;NA&quot;</span>)            <span style="color: #888888"># turn off column clustering</span>
+</pre></div><br>
 
 <p>As you remember, the first argument is the variable <code>mat_data</code> contains our numerical matrix data, which we prepared from our data file.
 This is the only argument that is required to plot a default heat map, all the other following lines are all optional.
@@ -295,20 +361,19 @@ If you want to change the default clustering method (complete linkage method wit
 
 For a square matrix, we can define the distance and cluster based on our matrix data by
 <pre>
-distance = dist(mat_data, method = "manhattan")
-cluster = hclust(distance, method = "ward")
+<br><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">distance <span style="color: #333333">=</span> dist(mat_data, method <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&quot;manhattan&quot;</span>)
+cluster <span style="color: #333333">=</span> hclust(distance, method <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&quot;ward&quot;</span>)
+</pre></div><br>
+
 </pre>
 And eventually plug it into the <code>heatmap.2()</code> function
-
-<pre>
-
-heatmap.2(mat_data, 
-  ...
-  Rowv = as.dendrogram(cluster), # apply default clustering method
-  Colv = as.dendrogram(cluster)) # apply default clustering method
+<br>
+<br><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">heatmap.2(mat_data, 
+  <span style="color: #008800; font-weight: bold">...</span>
+  Rowv <span style="color: #333333">=</span> as.dendrogram(cluster), <span style="color: #888888"># apply default clustering method</span>
+  Colv <span style="color: #333333">=</span> as.dendrogram(cluster)) <span style="color: #888888"># apply default clustering method</span>
 )
-</pre>
-
+</pre></div><br>
 
 Arguments for the <code>dist()</code> function are: <code>euclidean (default), maximum, canberra, binary, minkowski, manhattan</code> <br>
 And arguments for <code>hclust(): complete (default), single, average, mcquitty, median, centroid, ward</code> <br>
@@ -319,19 +384,17 @@ Otherwise you will get a not so pleasant <code>Error in x[rowInd, colInd] : subs
 
 <br>
 
-<pre>
-
-row_distance = dist(mat_data, method = "manhattan")
-row_cluster = hclust(row_distance, method = "ward")
-col_distance = dist(t(mat_data), method = "manhattan")
-col_cluster = hclust(col_distance, method = "ward")
+<br><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">row_distance <span style="color: #333333">=</span> dist(mat_data, method <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&quot;manhattan&quot;</span>)
+row_cluster <span style="color: #333333">=</span> hclust(row_distance, method <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&quot;ward&quot;</span>)
+col_distance <span style="color: #333333">=</span> dist(t(mat_data), method <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&quot;manhattan&quot;</span>)
+col_cluster <span style="color: #333333">=</span> hclust(col_distance, method <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&quot;ward&quot;</span>)
 
 heatmap.2(mat_data, 
-  ...
-  Rowv = as.dendrogram(row_cluster), # apply default clustering method
-  Colv = as.dendrogram(col_cluster)) # apply default clustering method
+  <span style="color: #008800; font-weight: bold">...</span>
+  Rowv <span style="color: #333333">=</span> as.dendrogram(row_cluster), <span style="color: #888888"># apply default clustering method</span>
+  Colv <span style="color: #333333">=</span> as.dendrogram(col_cluster)) <span style="color: #888888"># apply default clustering method</span>
 )
-</pre>
+</pre></div><br>
 
 
 <p><a name="categorizing"></a></p>
@@ -346,27 +409,26 @@ measurement 1-3 = category 1<br>
 measurement 4-6 = category 2<br>
 measurement 7-10 = category 3.<br>
 My solution would be to simply provide <code>RowSideColors</code> as additional argument to the <code>heatmap.2()</code> function. E.g.,
-
-<pre>heatmap.2(mat_data, 
-  ...
-  RowSideColors = c(    # grouping row-variables into different
-     rep("gray", 3),   # categories, Measurement 1-3: green
-     rep("blue", 3),    # Measurement 4-6: blue
-     rep("black", 4)),    # Measurement 7-10: red
-  ...
+<br>
+<br><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">heatmap.2(mat_data, 
+  <span style="color: #008800; font-weight: bold">...</span>
+  RowSideColors <span style="color: #333333">=</span> c(    <span style="color: #888888"># grouping row-variables into different</span>
+     rep(<span style="background-color: #fff0f0">&quot;gray&quot;</span>, <span style="color: #6600EE; font-weight: bold">3</span>),   <span style="color: #888888"># categories, Measurement 1-3: green</span>
+     rep(<span style="background-color: #fff0f0">&quot;blue&quot;</span>, <span style="color: #6600EE; font-weight: bold">3</span>),    <span style="color: #888888"># Measurement 4-6: blue</span>
+     rep(<span style="background-color: #fff0f0">&quot;black&quot;</span>, <span style="color: #6600EE; font-weight: bold">4</span>)),    <span style="color: #888888"># Measurement 7-10: red</span>
+  <span style="color: #008800; font-weight: bold">...</span>
 )
-</pre>
+</pre></div><br>
 Note that we could also provide similar labels to the column variables via the <code>ColSideColors</code> argument.
-Another useful addition would be to add a color legend for our new category labels. The code for this particular example would be:
-<pre>
-par(lend = 1)           # square line ends for the color legend
-legend("topright",      # location of the legend on the heatmap plot
-    legend = c("category1", "category2", "category3"), # category labels
-    col = c("gray", "blue", "black"),  # color key
-    lty= 1,             # line style
-    lwd = 10            # line width
-)          
-</pre>
+Another useful addition would be to add a color legend for our new category labels. The code for this particular example would be:<br>
+<br><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">par(lend <span style="color: #333333">=</span> <span style="color: #6600EE; font-weight: bold">1</span>)           <span style="color: #888888"># square line ends for the color legend</span>
+legend(<span style="background-color: #fff0f0">&quot;topright&quot;</span>,      <span style="color: #888888"># location of the legend on the heatmap plot</span>
+    legend <span style="color: #333333">=</span> c(<span style="background-color: #fff0f0">&quot;category1&quot;</span>, <span style="background-color: #fff0f0">&quot;category2&quot;</span>, <span style="background-color: #fff0f0">&quot;category3&quot;</span>), <span style="color: #888888"># category labels</span>
+    col <span style="color: #333333">=</span> c(<span style="background-color: #fff0f0">&quot;gray&quot;</span>, <span style="background-color: #fff0f0">&quot;blue&quot;</span>, <span style="background-color: #fff0f0">&quot;black&quot;</span>),  <span style="color: #888888"># color key</span>
+    lty<span style="color: #333333">=</span> <span style="color: #6600EE; font-weight: bold">1</span>,             <span style="color: #888888"># line style</span>
+    lwd <span style="color: #333333">=</span> <span style="color: #6600EE; font-weight: bold">10</span>            <span style="color: #888888"># line width</span>
+)         
+</pre></div><br>
 
 The figure below shows how our modified heatmap would look like after we applied row categorization and provided a color legend:
 <br>

@@ -121,35 +121,35 @@ After the code examples I have some interesting benchmarks that demonstrates the
 
 <h2>Creating an SQLite database</h2>
 
-<pre><code><p style="line-height:1.2">
-import sqlite3
+<div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">sqlite3</span>
 
-<font color="gray"># create new db and make connection</font>
-conn = sqlite3.connect('my_db.db')    
-c = conn.cursor()
+<span style="color: #888888"># create new db and make connection</span>
+conn <span style="color: #333333">=</span> sqlite3<span style="color: #333333">.</span>connect(<span style="background-color: #fff0f0">&#39;my_db.db&#39;</span>)    
+c <span style="color: #333333">=</span> conn<span style="color: #333333">.</span>cursor()
 
-<font color="gray"># create table</font>
-c.execute('''CREATE TABLE my_db
-             (id TEXT, my_var1 TEXT, my_var2 INT)''')
+<span style="color: #888888"># create table</span>
+c<span style="color: #333333">.</span>execute(<span style="background-color: #fff0f0">&#39;&#39;&#39;CREATE TABLE my_db</span>
+<span style="background-color: #fff0f0">             (id TEXT, my_var1 TEXT, my_var2 INT)&#39;&#39;&#39;</span>)
 
-<font color="gray"># insert one row of data</font>
-c.execute("INSERT INTO my_db VALUES ('ID_2352532','YES', 4)")
+<span style="color: #888888"># insert one row of data</span>
+c<span style="color: #333333">.</span>execute(<span style="background-color: #fff0f0">&quot;INSERT INTO my_db VALUES (&#39;ID_2352532&#39;,&#39;YES&#39;, 4)&quot;</span>)
 
-<font color="gray"># insert multiple lines of data</font>
-multi_lines =[ ('ID_2352533','YES', 1),
-               ('ID_2352534','NO', 0),
-               ('ID_2352535','YES', 3),
-               ('ID_2352536','YES', 9),
-               ('ID_2352537','YES', 10) 
+<span style="color: #888888"># insert multiple lines of data</span>
+multi_lines <span style="color: #333333">=</span>[ (<span style="background-color: #fff0f0">&#39;ID_2352533&#39;</span>,<span style="background-color: #fff0f0">&#39;YES&#39;</span>, <span style="color: #0000DD; font-weight: bold">1</span>),
+               (<span style="background-color: #fff0f0">&#39;ID_2352534&#39;</span>,<span style="background-color: #fff0f0">&#39;NO&#39;</span>, <span style="color: #0000DD; font-weight: bold">0</span>),
+               (<span style="background-color: #fff0f0">&#39;ID_2352535&#39;</span>,<span style="background-color: #fff0f0">&#39;YES&#39;</span>, <span style="color: #0000DD; font-weight: bold">3</span>),
+               (<span style="background-color: #fff0f0">&#39;ID_2352536&#39;</span>,<span style="background-color: #fff0f0">&#39;YES&#39;</span>, <span style="color: #0000DD; font-weight: bold">9</span>),
+               (<span style="background-color: #fff0f0">&#39;ID_2352537&#39;</span>,<span style="background-color: #fff0f0">&#39;YES&#39;</span>, <span style="color: #0000DD; font-weight: bold">10</span>) 
               ]
-c.executemany('INSERT INTO my_db VALUES (?,?,?)', multi_lines)
+c<span style="color: #333333">.</span>executemany(<span style="background-color: #fff0f0">&#39;INSERT INTO my_db VALUES (?,?,?)&#39;</span>, multi_lines)
 
-<font color="gray"># save (commit) the changes</font>
-conn.commit()
+<span style="color: #888888"># save (commit) the changes</span>
+conn<span style="color: #333333">.</span>commit()
 
-<font color="gray"># close connection</font>
-conn.close()
-</p></code></pre><br />
+<span style="color: #888888"># close connection</span>
+conn<span style="color: #333333">.</span>close()
+</pre></div>
+<br />
 
 <hr>
 <em><b> Note: </b> As a careful reader pointed out in the comment section below, it would make sense to use integers as IDs instead of strings to increase computational efficiency - given that the relevant identifier consisted of numbers only.
@@ -162,71 +162,70 @@ E.g., by a simple Python expression:</em> <code> int("ID_2352533"[3:])</code>
 <p id="updating_db"></p>
 <h2>Updating an existing database</h2>
 
-<pre><code><p style="line-height:1.2">
+<div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">sqlite3</span>
 
-import sqlite3
+<span style="color: #888888"># make connection to existing db</span>
+conn <span style="color: #333333">=</span> sqlite3<span style="color: #333333">.</span>connect(<span style="background-color: #fff0f0">&#39;my_db.db&#39;</span>)
+c <span style="color: #333333">=</span> conn<span style="color: #333333">.</span>cursor()
 
-<font color="gray"># make connection to existing db</font>
-conn = sqlite3.connect('my_db.db')
-c = conn.cursor()
+<span style="color: #888888"># update field</span>
+t <span style="color: #333333">=</span> (<span style="background-color: #fff0f0">&#39;NO&#39;</span>, <span style="background-color: #fff0f0">&#39;ID_2352533&#39;</span>, )
+c<span style="color: #333333">.</span>execute(<span style="background-color: #fff0f0">&quot;UPDATE my_db SET my_var1=? WHERE id=?&quot;</span>, t)
+<span style="color: #008800; font-weight: bold">print</span> <span style="background-color: #fff0f0">&quot;Total number of rows changed:&quot;</span>, conn<span style="color: #333333">.</span>total_changes
 
-<font color="gray"># update field</font>
-t = ('NO', 'ID_2352533', )
-c.execute("UPDATE my_db SET my_var1=? WHERE id=?", t)
-print "Total number of rows changed:", conn.total_changes
+<span style="color: #888888"># delete rows</span>
+t <span style="color: #333333">=</span> (<span style="background-color: #fff0f0">&#39;NO&#39;</span>, )
+c<span style="color: #333333">.</span>execute(<span style="background-color: #fff0f0">&quot;DELETE FROM my_db WHERE my_var1=?&quot;</span>, t)
+<span style="color: #008800; font-weight: bold">print</span> <span style="background-color: #fff0f0">&quot;Total number of rows deleted: &quot;</span>, conn<span style="color: #333333">.</span>total_changes
 
-<font color="gray"># delete rows</font>
-t = ('NO', )
-c.execute("DELETE FROM my_db WHERE my_var1=?", t)
-print "Total number of rows deleted: ", conn.total_changes
+<span style="color: #888888"># add column</span>
+c<span style="color: #333333">.</span>execute(<span style="background-color: #fff0f0">&quot;ALTER TABLE my_db ADD COLUMN &#39;my_var3&#39; TEXT&quot;</span>)
 
-<font color="gray"># add column</font>
-c.execute("ALTER TABLE my_db ADD COLUMN 'my_var3' TEXT")
+<span style="color: #888888"># save changes</span>
+conn<span style="color: #333333">.</span>commit()
 
-<font color="gray"># save changes</font>
-conn.commit()
+<span style="color: #888888"># print column names</span>
+c<span style="color: #333333">.</span>execute(<span style="background-color: #fff0f0">&quot;SELECT * FROM my_db&quot;</span>)
+col_name_list <span style="color: #333333">=</span> [tup[<span style="color: #0000DD; font-weight: bold">0</span>] <span style="color: #008800; font-weight: bold">for</span> tup <span style="color: #000000; font-weight: bold">in</span> c<span style="color: #333333">.</span>description]
+<span style="color: #008800; font-weight: bold">print</span> col_name_list
 
-<font color="gray"># print column names</font>
-c.execute("SELECT * FROM my_db")
-col_name_list = [tup[0] for tup in c.description]
-print col_name_list
-
-<font color="gray"># close connection</font>
-conn.close()
-</p></pre></code></br>
+<span style="color: #888888"># close connection</span>
+conn<span style="color: #333333">.</span>close()
+</pre></div>
+</br>
 
 <p id="querying_db"></p>
 <h2>Querying the SQLite database</h2>
 
-<pre><code><p style="line-height:1.2">
+<div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">sqlite3</span>
 
-import sqlite3
+<span style="color: #888888"># open existing database</span>
+conn <span style="color: #333333">=</span> sqlite3<span style="color: #333333">.</span>connect(<span style="background-color: #fff0f0">&#39;my_db.db&#39;</span>)
 
-<font color="gray"># open existing database</font>
-conn = sqlite3.connect('my_db.db')<br />
-c = conn.cursor()
+c <span style="color: #333333">=</span> conn<span style="color: #333333">.</span>cursor()
 
-<font color="gray"># print all lines ordered by integer value in my_var2</font>
-for row in c.execute('SELECT * FROM my_db ORDER BY my_var2'):
-    print row
+<span style="color: #888888"># print all lines ordered by integer value in my_var2</span>
+<span style="color: #008800; font-weight: bold">for</span> row <span style="color: #000000; font-weight: bold">in</span> c<span style="color: #333333">.</span>execute(<span style="background-color: #fff0f0">&#39;SELECT * FROM my_db ORDER BY my_var2&#39;</span>):
+    <span style="color: #008800; font-weight: bold">print</span> row
 
-<font color="gray"># print all lines that have "YES" as my_var1 value 
-# and have an integer value &lt;= 7 in my_var2</font>
-t = ('YES',7,)
-for row in c.execute('SELECT * FROM my_db WHERE my_var1=? AND my_var2 &lt;= ?', t):
-    print row
+<span style="color: #888888"># print all lines that have &quot;YES&quot; as my_var1 value </span>
+<span style="color: #888888"># and have an integer value &lt;= 7 in my_var2</span>
+t <span style="color: #333333">=</span> (<span style="background-color: #fff0f0">&#39;YES&#39;</span>,<span style="color: #0000DD; font-weight: bold">7</span>,)
+<span style="color: #008800; font-weight: bold">for</span> row <span style="color: #000000; font-weight: bold">in</span> c<span style="color: #333333">.</span>execute(<span style="background-color: #fff0f0">&#39;SELECT * FROM my_db WHERE my_var1=? AND my_var2 &lt;= ?&#39;</span>, t):
+    <span style="color: #008800; font-weight: bold">print</span> row
 
-<font color="gray"># print all lines that have "YES" as my_var1 value 
-# and have an integer value &lt;= 7 in my_var2</font>
-t = ('YES',7,)
-c.execute('SELECT * FROM my_db WHERE my_var1=? AND my_var2 &lt;= ?', t)
-rows = c.fetchall()
-for r in rows:
-    print r
+<span style="color: #888888"># print all lines that have &quot;YES&quot; as my_var1 value </span>
+<span style="color: #888888"># and have an integer value &lt;= 7 in my_var2</span>
+t <span style="color: #333333">=</span> (<span style="background-color: #fff0f0">&#39;YES&#39;</span>,<span style="color: #0000DD; font-weight: bold">7</span>,)
+c<span style="color: #333333">.</span>execute(<span style="background-color: #fff0f0">&#39;SELECT * FROM my_db WHERE my_var1=? AND my_var2 &lt;= ?&#39;</span>, t)
+rows <span style="color: #333333">=</span> c<span style="color: #333333">.</span>fetchall()
+<span style="color: #008800; font-weight: bold">for</span> r <span style="color: #000000; font-weight: bold">in</span> rows:
+    <span style="color: #008800; font-weight: bold">print</span> r
 
-<font color="gray"># close connection</font>
-conn.close()
-</p></pre></code> <br >
+<span style="color: #888888"># close connection</span>
+conn<span style="color: #333333">.</span>close()
+</pre></div>
+ <br >
 
 <p id="benchmarks"></p>
 <h1>Benchmarks</h1>
@@ -245,78 +244,78 @@ Note that this is just a simplified example using a single text file consisting 
 <p id="read_lines"></p>
 <h2>a) read_lines.py</h2>
 
-<p><pre><code><p style="line-height:1.2">
-import time
+<p>
+<div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">time</span>
 
-start_time = time.clock()
+start_time <span style="color: #333333">=</span> time<span style="color: #333333">.</span>clock()
 
-lines = 0
-    with open("feature1.txt", "rb") as fileobj:
-    for line in fileobj:
-    lines += 1
+lines <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>
+    <span style="color: #008800; font-weight: bold">with</span> <span style="color: #007020">open</span>(<span style="background-color: #fff0f0">&quot;feature1.txt&quot;</span>, <span style="background-color: #fff0f0">&quot;rb&quot;</span>) <span style="color: #008800; font-weight: bold">as</span> fileobj:
+    <span style="color: #008800; font-weight: bold">for</span> line <span style="color: #000000; font-weight: bold">in</span> fileobj:
+    lines <span style="color: #333333">+=</span> <span style="color: #0000DD; font-weight: bold">1</span>
 
-elapsed_time = time.clock() - start_time
-print "Time elapsed: {} seconds".format(elapsed_time)
-print "Read {} lines".format(lines)
-</pre></code> </p><br />
+elapsed_time <span style="color: #333333">=</span> time<span style="color: #333333">.</span>clock() <span style="color: #333333">-</span> start_time
+<span style="color: #008800; font-weight: bold">print</span> <span style="background-color: #fff0f0">&quot;Time elapsed: {} seconds&quot;</span><span style="color: #333333">.</span>format(elapsed_time)
+<span style="color: #008800; font-weight: bold">print</span> <span style="background-color: #fff0f0">&quot;Read {} lines&quot;</span><span style="color: #333333">.</span>format(lines)
+</pre></div>
+</p><br />
 
 <p id="create_sqlite"></p>
 <h2>b) create_sqlite_db.py</h2>
 
-<pre><code><p style="line-height:1.2">
-import sqlite3
-import time
+<div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">sqlite3</span>
+<span style="color: #008800; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">time</span>
 
-start_time = time.clock()
+start_time <span style="color: #333333">=</span> time<span style="color: #333333">.</span>clock()
 
-conn = sqlite3.connect('my_db1.db')
-c = conn.cursor()
+conn <span style="color: #333333">=</span> sqlite3<span style="color: #333333">.</span>connect(<span style="background-color: #fff0f0">&#39;my_db1.db&#39;</span>)
+c <span style="color: #333333">=</span> conn<span style="color: #333333">.</span>cursor()
 
-c.execute('''CREATE TABLE my_db1 (id TEXT, feature1 TEXT, feature2 INT)''')
+c<span style="color: #333333">.</span>execute(<span style="background-color: #fff0f0">&#39;&#39;&#39;CREATE TABLE my_db1 (id TEXT, feature1 TEXT, feature2 INT)&#39;&#39;&#39;</span>)
 
-lines = 0
-lst = list()
+lines <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>
+lst <span style="color: #333333">=</span> <span style="color: #007020">list</span>()
 
-with open("feature1.txt", "rb") as myfile:
-    for line in myfile:
-    line = line.strip()
-    lst.append((line, "Yes", None))
-    lines += 1
-c.executemany("INSERT INTO my_db1 VALUES (?,?,?)", lst)
+<span style="color: #008800; font-weight: bold">with</span> <span style="color: #007020">open</span>(<span style="background-color: #fff0f0">&quot;feature1.txt&quot;</span>, <span style="background-color: #fff0f0">&quot;rb&quot;</span>) <span style="color: #008800; font-weight: bold">as</span> myfile:
+    <span style="color: #008800; font-weight: bold">for</span> line <span style="color: #000000; font-weight: bold">in</span> myfile:
+    line <span style="color: #333333">=</span> line<span style="color: #333333">.</span>strip()
+    lst<span style="color: #333333">.</span>append((line, <span style="background-color: #fff0f0">&quot;Yes&quot;</span>, <span style="color: #007020">None</span>))
+    lines <span style="color: #333333">+=</span> <span style="color: #0000DD; font-weight: bold">1</span>
+c<span style="color: #333333">.</span>executemany(<span style="background-color: #fff0f0">&quot;INSERT INTO my_db1 VALUES (?,?,?)&quot;</span>, lst)
 
-conn.commit()
-conn.close()
+conn<span style="color: #333333">.</span>commit()
+conn<span style="color: #333333">.</span>close()
 
-elapsed_time = time.clock() - start_time
-print "Time elapsed: {} seconds".format(elapsed_time)
-print "Read {} lines".format(lines)
-
-</p></pre></code> </br>
+elapsed_time <span style="color: #333333">=</span> time<span style="color: #333333">.</span>clock() <span style="color: #333333">-</span> start_time
+<span style="color: #008800; font-weight: bold">print</span> <span style="background-color: #fff0f0">&quot;Time elapsed: {} seconds&quot;</span><span style="color: #333333">.</span>format(elapsed_time)
+<span style="color: #008800; font-weight: bold">print</span> <span style="background-color: #fff0f0">&quot;Read {} lines&quot;</span><span style="color: #333333">.</span>format(lines)
+</pre></div>
+</br>
 
 <p id="query_sqlite"></p>
 <h2>c) query_sqlite_db.py</h2>
-<pre><code><p style="line-height:1.2">
-import sqlite3
-import time
+<div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">sqlite3</span>
+<span style="color: #008800; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">time</span>
 
-start_time = time.clock()
+start_time <span style="color: #333333">=</span> time<span style="color: #333333">.</span>clock()
 
-conn = sqlite3.connect('my_db1.db')
-c = conn.cursor()
+conn <span style="color: #333333">=</span> sqlite3<span style="color: #333333">.</span>connect(<span style="background-color: #fff0f0">&#39;my_db1.db&#39;</span>)
+c <span style="color: #333333">=</span> conn<span style="color: #333333">.</span>cursor()
 
-lines = 0
-lst = list()
-t = ('YES',)
-for row in c.execute('SELECT * FROM my_db1 WHERE feature1=?', t):
-    lst.append(row)
-    lines += 1
+lines <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>
+lst <span style="color: #333333">=</span> <span style="color: #007020">list</span>()
+t <span style="color: #333333">=</span> (<span style="background-color: #fff0f0">&#39;YES&#39;</span>,)
+<span style="color: #008800; font-weight: bold">for</span> row <span style="color: #000000; font-weight: bold">in</span> c<span style="color: #333333">.</span>execute(<span style="background-color: #fff0f0">&#39;SELECT * FROM my_db1 WHERE feature1=?&#39;</span>, t):
+    lst<span style="color: #333333">.</span>append(row)
+    lines <span style="color: #333333">+=</span> <span style="color: #0000DD; font-weight: bold">1</span>
 
-conn.close()
+conn<span style="color: #333333">.</span>close()
 
-elapsed_time = time.clock() - start_time
-print "Time elapsed: {} seconds".format(elapsed_time)
-print "Read {} lines".format(lines)
-</p></pre></code></br>
+elapsed_time <span style="color: #333333">=</span> time<span style="color: #333333">.</span>clock() <span style="color: #333333">-</span> start_time
+<span style="color: #008800; font-weight: bold">print</span> <span style="background-color: #fff0f0">&quot;Time elapsed: {} seconds&quot;</span><span style="color: #333333">.</span>format(elapsed_time)
+<span style="color: #008800; font-weight: bold">print</span> <span style="background-color: #fff0f0">&quot;Read {} lines&quot;</span><span style="color: #333333">.</span>format(lines)
+</pre></div>
+</br>
 
 <p id="results"></p>
 <h2>Results and Conclusions</h2>
