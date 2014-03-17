@@ -110,15 +110,15 @@ import NumPy like this:<br>
         <td>&gt;&gt; A = [1 2 3; 4 5 6]<br/>A =<br/>&nbsp; &nbsp;1 &nbsp; 2 &nbsp; 3<br/>&nbsp; &nbsp;4 &nbsp; 5 &nbsp; 6<br/>&gt;&gt; size(A)<br/>ans =<br/>&nbsp; &nbsp;2 &nbsp; 3</td>
         <td>&gt;&gt; A = np.array([ [1,2,3], [4,5,6] ])<br/>&gt;&gt; A<br/>array([[1, 2, 3],<br/>&nbsp; &nbsp; &nbsp; &nbsp;[4, 5, 6]])<br/>&gt;&gt; A.shape<br/>(2, 3)</td>
     </tr>
-    <tr>
-        <td>Accessing rows&nbsp;<br/>(here: first row)</td>
-        <td>&gt;&gt; A = [1 2 3; 4 5 6; 7 8 9]<br/>&gt;&gt; A(1,:)<br/>ans =<br/>&nbsp;&nbsp; 1 &nbsp; 2 &nbsp; 3</td>
-        <td>&gt;&gt; A = np.array([ [1,2,3], [4,5,6], [7,8,9] ])<br/>&gt;&gt; A[0,:]<br/>array([1, 2, 3])</td>
+<tr>
+        <td>Selecting rows&nbsp;</td>
+        <td>&gt;&gt; A = [1 2 3; 4 5 6; 7 8 9]<br/><br/>% first row<br/>&gt;&gt; A(1,:)<br/>ans =<br/>&nbsp;&nbsp; 1 &nbsp; 2 &nbsp; 3<br/><br/>% first 2 rows<br/>&gt;&gt; A(1:2,:)<br/>ans =<br/>&nbsp;&nbsp; 1 &nbsp; 2 &nbsp; 3<br/>&nbsp;&nbsp; 4 &nbsp; 5 &nbsp; 6</td>
+        <td>&gt;&gt; A = np.array([ [1,2,3], [4,5,6], [7,8,9] ])<br/><br/># first row<br/>&gt;&gt; A[0,:]<br/>array([1, 2, 3])<br/><br/># first 2 rows<br/>&gt;&gt; A[0:2,:]<br/>array([[1, 2, 3],        [4, 5, 6]])</td>
     </tr>
     <tr>
-        <td>Accessing columns&nbsp;<br/>(here: first column)</td>
-        <td>&gt;&gt; A = [1 2 3; 4 5 6; 7 8 9]<br/>&gt;&gt; A(:,1)<br/>ans =<br/>&nbsp;&nbsp; 1<br/>&nbsp;&nbsp; 4<br/>&nbsp;&nbsp; 7</td>
-        <td>&gt;&gt; A = np.array([ [1,2,3], [4,5,6], [7,8,9] ])<br/>&gt;&gt; A[:,0]<br/>array([1, 4, 7])<br/><br/>&gt;&gt; A[:,[0]]<br/>array([[1],<br/>&nbsp;&nbsp; &nbsp; &nbsp; [4],<br/>&nbsp;&nbsp; &nbsp; &nbsp; [7]])</td>
+        <td>Selecting columns</td>
+        <td>&gt;&gt; A = [1 2 3; 4 5 6; 7 8 9]<br/><br/>% first column<br/>&gt;&gt; A(:,1)<br/>ans =<br/>&nbsp;&nbsp; 1<br/>&nbsp;&nbsp; 4<br/>&nbsp;&nbsp; 7<br/><br/>% first 2 columns<br/>&gt;&gt; A(:,1:2)<br/>ans =<br/>&nbsp;&nbsp; 1 &nbsp; 2<br/>&nbsp;&nbsp; 4 &nbsp; 5<br/>&nbsp;&nbsp; 7 &nbsp; 8</td>
+        <td>&gt;&gt; A = np.array([ [1,2,3], [4,5,6], [7,8,9] ])<br/><br/># first column<br/>&gt;&gt; A[:,0]<br/>array([[1],<br/>&nbsp;&nbsp; &nbsp; &nbsp; [4],<br/>&nbsp;&nbsp; &nbsp; &nbsp; [7]])<br/><br/># first 2 columns<br/>&gt;&gt; A[:,0:2]<br/>array([[1, 2],&nbsp;<br/>&nbsp; &nbsp; &nbsp; &nbsp;[4, 5],&nbsp;<br/>&nbsp; &nbsp; &nbsp; &nbsp;[7, 8]])</td>
     </tr>
 <tr>
         <td>Extracting rows and<br/>columns by criteria<br/>(here: get rows&nbsp;<br/>that have value 9<br/>in column 3)</td>
