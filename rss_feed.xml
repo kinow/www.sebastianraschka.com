@@ -12,6 +12,15 @@
   </image>
 
 
+<item>
+<title>Installing Scientific Packages for Python3 on MacOS 10.9 Mavericks</title>
+<link>http://sebastianraschka.com/Articles/2014_install_python_sci_pkgs.html</link>
+<guid>http://sebastianraschka.com/Articles/2014_install_python_sci_pkgs.html</guid>
+<pubDate>13 Mar 2014</pubDate>
+<description>
+I just went through some pain (again) when I wanted to install some of Python's scientific libraries on my second Mac. 
+I summarized the setup and installation process for future reference.</description>
+</item>
 
 <item>
 <title>A thorough guide to SQLite database operations in Python</title>
