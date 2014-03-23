@@ -13,6 +13,17 @@
 
 
 <item>
+<title>smilite - a Python module for downloading and analyzing SMILE strings</title>
+<link>http://sebastianraschka.com/Articles/2014_smilite_intro.html</link>
+<guid>http://sebastianraschka.com/Articles/2014_smilite_intro.html</guid>
+<pubDate>23 Mar 2014</pubDate>
+<description>
+smilite is a Python module to download and analyze SMILE strings (Simplified Molecular-Input Line-entry System) of chemical compounds from ZINC (a free database of commercially-available compounds for virtual screening, <a href="http://zinc.docking.org">http://zinc.docking.org</a>).  <br/>
+Now supports both Python 3.x and Python 2.x.</description>
+</item>
+
+
+<item>
 <title>Installing Scientific Packages for Python3 on MacOS 10.9 Mavericks</title>
 <link>http://sebastianraschka.com/Articles/2014_install_python_sci_pkgs.html</link>
 <guid>http://sebastianraschka.com/Articles/2014_install_python_sci_pkgs.html</guid>
