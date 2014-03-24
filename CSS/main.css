@@ -45,6 +45,14 @@ h1, h2, h3, h4, h5, h6 {
 		display: table-cell;	 	    
 		margin: 0px auto; 
 	}
+
+#archive_bar {
+		font-size:16px;
+   		font-family:'Roboto', sans-serif;
+		font-weight: 300;
+		background: #ffffff;    
+	}
+
 	
 
 #content {
@@ -99,6 +107,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .menubar:hover {
+        color: #6495ED;        
+        text-decoration: none;
+}
+
+
+.archivebar {
+    color:#000000; 
+    text-decoration:none;
+}
+
+.archivebar:hover {
         color: #6495ED;        
         text-decoration: none;
 }

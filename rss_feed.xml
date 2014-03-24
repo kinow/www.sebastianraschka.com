@@ -13,6 +13,17 @@
 
 
 <item>
+<title>Explaining the difference between a Retina vs. a non-Retina display</title>
+<link>http://sebastianraschka.com/Articles/2014_retina_vs_nonretina.html</link>
+<guid>http://sebastianraschka.com/Articles/2014_retina_vs_nonretina.html</guid>
+<pubDate>24 Mar 2014</pubDate>
+<description>
+Recently, someone wanted me to explain the difference between a Retina vs. a non-Retina display. 
+I had to explain it to her via email, and the catch was that the other person was reading/seeing it on a non-Retina Monitor.</description>
+</item>
+
+
+<item>
 <title>smilite - a Python module for downloading and analyzing SMILE strings</title>
 <link>http://sebastianraschka.com/Articles/2014_smilite_intro.html</link>
 <guid>http://sebastianraschka.com/Articles/2014_smilite_intro.html</guid>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+		<!--META-->
+		<meta name="description" content="Online web tools to manipulate and prepate DNA and amino acid sequences for BLAST searches, extracting a FASTA sequence from
+		a PDP file, or convert a DNA or RNA sequence into it's reverse-complement.">
+		<meta name="Author" content="Sebastian Raschka">
+		<title>Protein Science Articles</title>
+
+		<!-- jQuery -->
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+		<script type="text/javascript" src="../../jQuery/main_app.js"></script>
+		<script type="text/javascript" src="../../jQuery/index.js"></script>
+
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="../../CSS/main.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="../../CSS/content.css" media="screen" />
+</head>
+<body>
+
+	<div id ='container' >
+
+		<div id ='header_new'>
+		             
+				<a href = "../../index.html"><img src="../../Images/title_text.png" style="border-style:none"/></a>	
+				<hr>
+				<a href="../../rss_feed.xml"><img src="../../Images/rss_logo_black_1.png" align="left" style="margin-left:430px"></a>
+
+					<div align="right" style="padding-right:20px">
+					<font color="#6495ED">blog</font> &#8226;
+					<a href = "../../webapps.html" class ="menubar">webapps</a> &#8226;
+					<a href = "../../software.html" class ="menubar">software</a> &#8226;
+					<a href = "../../publications.html" class ="menubar">books</a> &#8226;
+					<a href = "../../contact.html" class ="menubar">about+contact</a> 
+					 
+				</div>
+				<hr>
+		</div> <!--close header -->
+	</div><!--close container -->
+		
+
+	<!--MAIN BODY -->
+	<div id ='main'>
+
+        <div style="float:right;" id ='archive_bar'>
+        <strong>Archives:<br></strong>
+        <a href="../By_year/all_articles.html" class ="archivebar">All</a><br>   
+        <a href="../By_year/2014_articles.html" class ="archivebar">2014</a><br>   
+        <a href="../By_year/2013_articles.html" class ="archivebar">2013</a><br> 
+
+        <br>
+        <br>
+        <strong>Categories:<br></strong>
+  
+        <a href="./macos_articles.html" class ="archivebar">MacOS</a><br>
+        <a href="./matlab_articles.html" class ="archivebar">MATLAB</a><br>
+        <a href="./proteinscience_articles.html" class ="archivebar">Protein Science</a><br>
+        <a href="./python_articles.html" class ="archivebar">Python</a><br> 
+        <a href="./sqlite_articles.html" class ="archivebar">SQLite</a><br>   
+        <a href="./r_articles.html" class ="archivebar">R</a><br>
+        </div>
+	   
+		<table width="680" cellpadding="20px" id="table_black_bottom">
+
+        <tr>
+				<td id="td_black_bottom">
+				<a href="../../Articles/2014_smilite_intro.html"><img src="../../Images/thumb_smilite_overview.png" alt=""/></a>
+				</td>
+
+				<td id="td_black_bottom">
+            		<font size="3em"><a
+					href="../../Articles/2014_smilite_intro.html"
+					class ="frontpage_header">smilite - a Python module for downloading and analyzing SMILE strings</a></font>
+					<p id="article_header"><em>--posted on March 23, 2014</em></p>	
+					<p class="frontpage_text">smilite is a Python module I wrote in order to download and analyze SMILE strings 
+                        (Simplified Molecular-Input Line-entry System) of chemical compounds from ZINC 
+                        (a free database of commercially-available compounds for virtual screening, <a href='http://zinc.docking.org'>http://zinc.docking.org</a>).</p>
+	
+										
+				</td>
+	    </tr>
+
+
+             <tr>
+				<td id="td_black_bottom">
+				<a href="../../Articles/2014_openeye_alignments_overlays.html"><img src="../../Images/thumb_openeyeoverlay.png" alt=""/></a>
+				</td>
+
+				<td id="td_black_bottom">
+            		<font size="3em"><a
+					href="../../Articles/2014_openeye_alignments_overlays.html"
+					class ="frontpage_header">Using OpenEye software for substructure alignments and best-matching low-energy conformer overlays</a></font>
+					<p id="article_header"><em>--posted on February 23, 2014</em></p>	
+					<p class="frontpage_text">This is a quickguide showing how to use OpenEye software command 
+                    line tools to align target molecules to a query based on substructure matches and how to 
+                    retrieve the best molecule overlay from two sets of low-energy conformers.</p>
+	
+										
+				</td>
+	    </tr>
+
+
+   
+
+    
+
+
+
+
+
+			<tr>
+				<td id="td_black_bottom">
+				<a href="../../Software/bondpack.html"><img src="../../Images/thumb_bondpack.png" alt=""/></a>
+				</td>
+
+				<td id="td_black_bottom">
+            		<font size="3em"><a
+					href="../../Software/bondpack.html"
+					class ="frontpage_header">BondPack - A collection of plugins to visualize molecular bonds in PyMOL</a></font>
+					<p id="article_header"><em>--posted on November 17, 2013</em></p>	
+					<p class="frontpage_text">Drawing interactions between atoms can be often quite cumbersome when done manually. 
+					For the sake of convenience, I developed three plugins for PyMOL that will make our life as 
+					protein biologists a little bit easier.</p>	
+					
+						
+				</td>
+				</tr>
+	
+	
+			<tr>
+				<td id="td_black_bottom">
+					<a href="../../Articles/food_allergen_epitopes.html"><img src="../../Images/thumb_fastaspl.png" alt=""/></a>
+				</td>
+				<td id="td_black_bottom">	
+					<font size="3em"><a href="../../Articles/food_allergen_epitopes.html" 
+					class ="frontpage_header">Structural Classification of Food Allergen Epitopes</br>
+						- The PDB To FASTA Converter in Action!</a></font>
+					<p id="article_header"><em>--posted on August 25, 2013</em></p>	
+					<p class="frontpage_text">
+					Naveen Chakicherla discovered the shared tertiary structure consensus motif 
+					of an important group of allergen epitopes in his research project at Lawrence 
+					Berkeley National Laboratory. His results were reported in a research article 
+					that was published in the July 2013 issue of the Computational Crystallography Newsletter.
+					</p>
+				</td>
+			</tr>	  
+
+  
+
+
+
+			<tr>
+				<td>
+					<a href="../../Articles/misleading-fasta-on-pdb.html"><img src="../../Images/thumb_fastamisl.png" alt=""/></a>
+				</td>
+				<td>						
+					<font size="3em"><a href="../../Articles/misleading-fasta-on-pdb.html" 
+					class ="frontpage_header">Misleading FASTA sequences in the Protein Data Bank </a></font>
+					<p id="article_header"><em>--posted on February 23, 2013</em></p>
+					<p class="frontpage_text">
+					The Protein Data Bank (rcsb.org) deposited amino acid sequences in FASTA format
+					for each PDB structure file. However, those FASTA sequences are not necessarily 
+					identical to the amino acid sequences in the corresponding PDB files.
+					</p>
+				</td>
+			</tr>			
+					
+				
+		</table>
+			
+
+		
+	</div>		<!-- end MAIN -->
+
+		
+
+
+	<!-- START Footer -->
+
+	<div id ='footer'>	
+        <center>
+	<hr>
+        <div style="height:20px;"></div>
+        HTML and JavaScripts were written by Sebastian Raschka <br>
+        Copyright (C) 2013-2014 Sebastian Raschka</p>
+
+
+	<!-- START Twitter API -->
+
+ <a href="https://twitter.com/rasbt" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @rasbt</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	<!-- END Twitter API -->
+
+	
+     
+        
+		 <div style="height:10px;"></div>
+		</center>
+	</div>
+	<!-- END Footer -->
+
+<!-- Start Google Analytics -->
+		<script type="text/javascript">
+
+  		var _gaq = _gaq || [];
+  		_gaq.push(['_setAccount', 'UA-38457794-1']);
+  		_gaq.push(['_trackPageview']);
+
+  		(function() {
+    	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  		})();
+		</script>
+<!-- End  Google Analytics -->
+
+</body>
+</html>
+	
+
+
