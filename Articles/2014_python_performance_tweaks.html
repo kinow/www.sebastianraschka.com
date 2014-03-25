@@ -286,6 +286,34 @@ Out of curiosity, I tested the <code>string_subst</code> scripts from this secti
 As a reader pointed out in an email, the string <code>.format()</code> method performes much slower than <code>%</code>, because it
 is doing the formatting for each object itself, where formatting via the binary <code>%</code> is hard-coded for known types.
 
+<br><p>
+<strong> UPDATE 3:</strong><br>
+Just a brief check of the recently Python 3.4.0 version using <code>timeit()</code>
+
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">timeit</span>
+
+format_res <span style="color: #333333">=</span> timeit<span style="color: #333333">.</span>timeit(<span style="background-color: #fff0f0">&quot;[&#39;{}&#39;.format(i) for i in range(10000)]&quot;</span>, number<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">1000</span>)
+
+binaryop_res <span style="color: #333333">=</span> timeit<span style="color: #333333">.</span>timeit(<span style="background-color: #fff0f0">&quot;[&#39;%s&#39; %i for i in range(10000)]&quot;</span>, number<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">1000</span>)
+
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;{}: {}</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\n</span><span style="background-color: #fff0f0">{}: {}&#39;</span><span style="color: #333333">.</span>format(<span style="background-color: #fff0f0">&#39;format()&#39;</span>, format_res, <span style="background-color: #fff0f0">&#39;%s&#39;</span>, binaryop_res))
+
+<span style="color: #888888">################################</span>
+<span style="color: #888888"># On my machine</span>
+<span style="color: #888888">################################</span>
+<span style="color: #888888">#</span>
+<span style="color: #888888"># Python 3.4.0</span>
+<span style="color: #888888"># MacOS X 10.9.2</span>
+<span style="color: #888888"># 2.5 GHz Intel Core i5</span>
+<span style="color: #888888"># 4 GB 1600 Mhz DDR3</span>
+<span style="color: #888888">#</span>
+<span style="color: #888888">################################</span>
+<span style="color: #888888"># format(): 2.815331667999999</span>
+<span style="color: #888888"># %s: 1.630353775999538</span>
+<span style="color: #888888">################################</span>
+</pre></div>
+
+
 				  
 	
 		&nbsp;<br>
