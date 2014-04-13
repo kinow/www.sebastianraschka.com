@@ -13,6 +13,17 @@
 
 
 <item>
+<title>Implementing a Principal Component Analysis (PCA) in Python step by step</title>
+<link>http://sebastianraschka.com/Articles/2014_pca_step_by_step.html</link>
+<guid>http://sebastianraschka.com/Articles/2014_pca_step_by_step.html</guid>
+<pubDate>13 Apr 2014</pubDate>
+<description>
+n this article I want to explain how a Principal Component Analysis (PCA) works by implementing it in Python step by step. At the end we will compare 
+the results to the more convenient Python PCA() classes that are available through the popular matplotlib and scipy 
+libraries and discuss how they differ.</description>
+</item>
+
+<item>
 <title>Implementing simple sequential feature selection algorithms in Python</title>
 <link>http://sebastianraschka.com/Articles/2014_sequential_sel_algos.html</link>
 <guid>http://sebastianraschka.com/Articles/2014_sequential_sel_algos.html</guid>
