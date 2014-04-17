@@ -235,7 +235,7 @@ mean_vector <span style="color: #333333">=</span> np<span style="color: #333333"
 <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;Mean Vector:</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\n</span><span style="background-color: #fff0f0">&#39;</span>, mean_vector)
 
 
-Mean Vector:
+>> Mean Vector:
  [[ <span style="color: #6600EE; font-weight: bold">0.50576644</span>]
  [ <span style="color: #6600EE; font-weight: bold">0.30186591</span>]
  [ <span style="color: #6600EE; font-weight: bold">0.76459177</span>]]
@@ -257,7 +257,7 @@ Mean Vector:
 
 
 
-Scatter Matrix:
+>> Scatter Matrix:
  [[ <span style="color: #6600EE; font-weight: bold">48.91593255</span>   <span style="color: #6600EE; font-weight: bold">7.11744916</span>   <span style="color: #6600EE; font-weight: bold">7.20810281</span>]
  [  <span style="color: #6600EE; font-weight: bold">7.11744916</span>  <span style="color: #6600EE; font-weight: bold">37.92902984</span>   <span style="color: #6600EE; font-weight: bold">2.7370493</span> ]
  [  <span style="color: #6600EE; font-weight: bold">7.20810281</span>   <span style="color: #6600EE; font-weight: bold">2.7370493</span>   <span style="color: #6600EE; font-weight: bold">35.6363759</span> ]]
@@ -278,7 +278,7 @@ for the covariance matrix. Thus, their <strong><em>eigenspaces</em></strong> wil
 <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;Covariance Matrix:</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\n</span><span style="background-color: #fff0f0">&#39;</span>, cov_mat)
 
 
-Covariance Matrix:
+>> Covariance Matrix:
  [[ <span style="color: #6600EE; font-weight: bold">1.25425468</span>  <span style="color: #6600EE; font-weight: bold">0.1824987</span>   <span style="color: #6600EE; font-weight: bold">0.18482315</span>]
  [ <span style="color: #6600EE; font-weight: bold">0.1824987</span>   <span style="color: #6600EE; font-weight: bold">0.97253923</span>  <span style="color: #6600EE; font-weight: bold">0.07018075</span>]
  [ <span style="color: #6600EE; font-weight: bold">0.18482315</span>  <span style="color: #6600EE; font-weight: bold">0.07018075</span>  <span style="color: #6600EE; font-weight: bold">0.91375323</span>]]
@@ -312,7 +312,7 @@ eig_val_cov, eig_vec_cov <span style="color: #333333">=</span> np<span style="co
     
     
     
-Eigenvector <span style="color: #0000DD; font-weight: bold">1</span>: 
+>> Eigenvector <span style="color: #0000DD; font-weight: bold">1</span>: 
 [[<span style="color: #333333">-</span><span style="color: #6600EE; font-weight: bold">0.84190486</span>]
  [<span style="color: #333333">-</span><span style="color: #6600EE; font-weight: bold">0.39978877</span>]
  [<span style="color: #333333">-</span><span style="color: #6600EE; font-weight: bold">0.36244329</span>]]
@@ -349,8 +349,9 @@ Scaling factor:  <span style="color: #6600EE; font-weight: bold">39.0</span>
 
 <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">for</span> i <span style="color: #000000; font-weight: bold">in</span> <span style="color: #007020">range</span>(<span style="color: #007020">len</span>(eig_val_sc)):
     eigv <span style="color: #333333">=</span> eig_vec_sc[:,i]<span style="color: #333333">.</span>reshape(<span style="color: #0000DD; font-weight: bold">1</span>,<span style="color: #0000DD; font-weight: bold">3</span>)<span style="color: #333333">.</span>T
-    np<span style="color: #333333">.</span>testing<span style="color: #333333">.</span>assert_array_almost_equal(scatter_matrix<span style="color: #333333">.</span>dot(eigv), eig_val_sc[i] <span style="color: #333333">*</span> eigv, 
-                                         decimal<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">6</span>, err_msg<span style="color: #333333">=</span><span style="background-color: #fff0f0">&#39;&#39;</span>, verbose<span style="color: #333333">=</span><span style="color: #008800; font-weight: bold">True</span>)
+    np<span style="color: #333333">.</span>testing<span style="color: #333333">.</span>assert_array_almost_equal(scatter_matrix<span style="color: #333333">.</span>dot(eigv),\
+            eig_val_sc[i] <span style="color: #333333">*</span> eigv, decimal<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">6</span>,\
+            err_msg<span style="color: #333333">=</span><span style="background-color: #fff0f0">&#39;&#39;</span>, verbose<span style="color: #333333">=</span><span style="color: #008800; font-weight: bold">True</span>)
 </pre></div>
 
 
@@ -428,7 +429,7 @@ eig_pairs<span style="color: #333333">.</span>reverse()
 <span style="color: #008800; font-weight: bold">for</span> i <span style="color: #000000; font-weight: bold">in</span> eig_pairs:
     <span style="color: #007020">print</span>(i[<span style="color: #0000DD; font-weight: bold">0</span>])
     
-
+>> 
 <span style="color: #6600EE; font-weight: bold">55.3988559573</span>
 <span style="color: #6600EE; font-weight: bold">34.6549343281</span>
 <span style="color: #6600EE; font-weight: bold">32.4275480129</span>
@@ -445,7 +446,7 @@ eig_pairs<span style="color: #333333">.</span>reverse()
 <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;Matrix W:</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\n</span><span style="background-color: #fff0f0">&#39;</span>, matrix_w)
 
 
-Matrix W:
+>> Matrix W:
  [[<span style="color: #333333">-</span><span style="color: #6600EE; font-weight: bold">0.84190486</span>  <span style="color: #6600EE; font-weight: bold">0.30428639</span>]
  [<span style="color: #333333">-</span><span style="color: #6600EE; font-weight: bold">0.39978877</span> <span style="color: #333333">-</span><span style="color: #6600EE; font-weight: bold">0.90640489</span>]
  [<span style="color: #333333">-</span><span style="color: #6600EE; font-weight: bold">0.36244329</span>  <span style="color: #6600EE; font-weight: bold">0.29298458</span>]]
@@ -519,10 +520,14 @@ Y : a projected into PCA space
  
 mlab_pca <span style="color: #333333">=</span> mlabPCA(all_samples<span style="color: #333333">.</span>T) 
 
-<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;PC axes in terms of the measurement axes scaled by the standard deviations:</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\n</span><span style="background-color: #fff0f0">&#39;</span>, mlab_pca<span style="color: #333333">.</span>Wt)
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;PC axes in terms of the measurement axes&#39;</span>\ 
+        <span style="background-color: #fff0f0">&#39; scaled by the standard deviations:</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\n</span><span style="background-color: #fff0f0">&#39;</span>,\
+          mlab_pca<span style="color: #333333">.</span>Wt)
 
-plt<span style="color: #333333">.</span>plot(mlab_pca<span style="color: #333333">.</span>Y[<span style="color: #0000DD; font-weight: bold">0</span>:<span style="color: #0000DD; font-weight: bold">20</span>,<span style="color: #0000DD; font-weight: bold">0</span>],mlab_pca<span style="color: #333333">.</span>Y[<span style="color: #0000DD; font-weight: bold">0</span>:<span style="color: #0000DD; font-weight: bold">20</span>,<span style="color: #0000DD; font-weight: bold">1</span>], <span style="background-color: #fff0f0">&#39;o&#39;</span>, markersize<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">7</span>, color<span style="color: #333333">=</span><span style="background-color: #fff0f0">&#39;blue&#39;</span>, alpha<span style="color: #333333">=</span><span style="color: #6600EE; font-weight: bold">0.5</span>, label<span style="color: #333333">=</span><span style="background-color: #fff0f0">&#39;class1&#39;</span>)
-plt<span style="color: #333333">.</span>plot(mlab_pca<span style="color: #333333">.</span>Y[<span style="color: #0000DD; font-weight: bold">20</span>:<span style="color: #0000DD; font-weight: bold">40</span>,<span style="color: #0000DD; font-weight: bold">0</span>], mlab_pca<span style="color: #333333">.</span>Y[<span style="color: #0000DD; font-weight: bold">20</span>:<span style="color: #0000DD; font-weight: bold">40</span>,<span style="color: #0000DD; font-weight: bold">1</span>], <span style="background-color: #fff0f0">&#39;^&#39;</span>, markersize<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">7</span>, color<span style="color: #333333">=</span><span style="background-color: #fff0f0">&#39;red&#39;</span>, alpha<span style="color: #333333">=</span><span style="color: #6600EE; font-weight: bold">0.5</span>, label<span style="color: #333333">=</span><span style="background-color: #fff0f0">&#39;class2&#39;</span>)
+plt<span style="color: #333333">.</span>plot(mlab_pca<span style="color: #333333">.</span>Y[<span style="color: #0000DD; font-weight: bold">0</span>:<span style="color: #0000DD; font-weight: bold">20</span>,<span style="color: #0000DD; font-weight: bold">0</span>],mlab_pca<span style="color: #333333">.</span>Y[<span style="color: #0000DD; font-weight: bold">0</span>:<span style="color: #0000DD; font-weight: bold">20</span>,<span style="color: #0000DD; font-weight: bold">1</span>], <span style="background-color: #fff0f0">&#39;o&#39;</span>, markersize<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">7</span>,\ 
+        color<span style="color: #333333">=</span><span style="background-color: #fff0f0">&#39;blue&#39;</span>, alpha<span style="color: #333333">=</span><span style="color: #6600EE; font-weight: bold">0.5</span>, label<span style="color: #333333">=</span><span style="background-color: #fff0f0">&#39;class1&#39;</span>)
+plt<span style="color: #333333">.</span>plot(mlab_pca<span style="color: #333333">.</span>Y[<span style="color: #0000DD; font-weight: bold">20</span>:<span style="color: #0000DD; font-weight: bold">40</span>,<span style="color: #0000DD; font-weight: bold">0</span>], mlab_pca<span style="color: #333333">.</span>Y[<span style="color: #0000DD; font-weight: bold">20</span>:<span style="color: #0000DD; font-weight: bold">40</span>,<span style="color: #0000DD; font-weight: bold">1</span>], <span style="background-color: #fff0f0">&#39;^&#39;</span>, markersize<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">7</span>,\
+        color<span style="color: #333333">=</span><span style="background-color: #fff0f0">&#39;red&#39;</span>, alpha<span style="color: #333333">=</span><span style="color: #6600EE; font-weight: bold">0.5</span>, label<span style="color: #333333">=</span><span style="background-color: #fff0f0">&#39;class2&#39;</span>)
 
 plt<span style="color: #333333">.</span>xlabel(<span style="background-color: #fff0f0">&#39;x_values&#39;</span>)
 plt<span style="color: #333333">.</span>ylabel(<span style="background-color: #fff0f0">&#39;y_values&#39;</span>)
@@ -537,11 +542,12 @@ plt<span style="color: #333333">.</span>show()
 
 
 
-PC axes <span style="color: #000000; font-weight: bold">in</span> terms of the measurement axes scaled by the standard deviations:
+>> PC axes <span style="color: #000000; font-weight: bold">in</span> terms of the measurement axes scaled by the standard deviations:
  [[ <span style="color: #6600EE; font-weight: bold">0.65043619</span>  <span style="color: #6600EE; font-weight: bold">0.53023618</span>  <span style="color: #6600EE; font-weight: bold">0.54385876</span>]
  [<span style="color: #333333">-</span><span style="color: #6600EE; font-weight: bold">0.01692055</span>  <span style="color: #6600EE; font-weight: bold">0.72595458</span> <span style="color: #333333">-</span><span style="color: #6600EE; font-weight: bold">0.68753447</span>]
  [ <span style="color: #6600EE; font-weight: bold">0.75937241</span> <span style="color: #333333">-</span><span style="color: #6600EE; font-weight: bold">0.43799491</span> <span style="color: #333333">-</span><span style="color: #6600EE; font-weight: bold">0.48115902</span>]]
 </pre></div>
+
 
 
 <p><img src='../Images/pca_plot_4.png'></p>
