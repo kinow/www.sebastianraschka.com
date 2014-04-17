@@ -575,10 +575,13 @@ Here, we will use the PCA class from the <code>scikit-learn</code> machine-learn
 
 Number of components to keep<span style="color: #333333">.</span> <span style="color: #008800; font-weight: bold">if</span> n_components <span style="color: #000000; font-weight: bold">is</span> <span style="color: #000000; font-weight: bold">not</span> <span style="color: #007020">set</span> <span style="color: #007020">all</span> components are kept:
     n_components <span style="color: #333333">==</span> <span style="color: #007020">min</span>(n_samples, n_features)
-    <span style="color: #008800; font-weight: bold">if</span> n_components <span style="color: #333333">==</span> <span style="color: #FF0000; background-color: #FFAAAA">‘</span>mle<span style="color: #FF0000; background-color: #FFAAAA">’</span>, Minka<span style="color: #FF0000; background-color: #FFAAAA">’</span>s MLE <span style="color: #000000; font-weight: bold">is</span> used to guess the dimension <span style="color: #008800; font-weight: bold">if</span> <span style="color: #0000DD; font-weight: bold">0</span> <span style="color: #333333">&amp;</span>lt; n_components <span style="color: #333333">&amp;</span>lt; <span style="color: #0000DD; font-weight: bold">1</span>, 
-    select the number of components such that the amount of variance that needs to be explained 
+    <span style="color: #008800; font-weight: bold">if</span> n_components <span style="color: #333333">==</span> <span style="background-color: #fff0f0">&#39;mle&#39;</span>, Minka<span style="background-color: #fff0f0">&#39;s MLE is used to guess the dimension </span>
+    <span style="color: #008800; font-weight: bold">if</span> <span style="color: #0000DD; font-weight: bold">0</span> <span style="color: #333333">&lt;=</span> n_components <span style="color: #333333">&lt;=</span> <span style="color: #0000DD; font-weight: bold">1</span>, 
+    select the number of components such that the amount of variance that needs
+    to be explained 
     <span style="color: #000000; font-weight: bold">is</span> greater than the percentage specified by n_components
 </pre></div>
+
 
 <p>Next, we just need to use the <code>.fit_transform()</code> in order to perform the dimensionality reduction.</p>
 
