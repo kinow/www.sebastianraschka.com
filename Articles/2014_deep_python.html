@@ -85,7 +85,7 @@ If you'd like to download the code and try it yourself (you are also very welcom
 
 <ul>
 <li><a href="#c3_class_res">The C3 class resolution algorithm for multiple class inheritance</a></li>
-<li><a href="#pm_in_lists">Using <code>+=</code> on lists creates new objects</a></li>
+<li><a href="#pm_in_lists">Assignment operators and lists - simple-add vs. add-AND operators</a></li>
 <li><a href="#datetime_module"><code>True</code> and <code>False</code> in the datetime module</a></li>
 <li><a href="#python_small_int">Python reuses objects for small integers - always use &quot;==&quot; for equality, &quot;is&quot; for identity</a></li>
 <li><a href="#shallow_vs_deep">Shallow vs. deep copies if list contains other structures and objects</a></li>
@@ -211,7 +211,7 @@ D()<span style="color: #333333">.</span>foo()
 <p><a name='pm_in_lists'></a> <br> <br></p>
 
 
-<h2 id="using-on-lists-creates-new-objects">Using <code>+=</code> on lists creates new objects</h2>
+<h2 id="using-on-lists-creates-new-objects">Assignment operators and lists - simple-add vs. add-AND operators</h2>
 
 
 <p>[<a href="#sections">back to top</a>]</p>
@@ -477,7 +477,7 @@ report_arg()
 1397764090.456688
 </pre></div></p>
 
-<p><p><br> <br> <a name='consuming_generators'></a></p>
+<p><p><br> <br> <a name='consuming_generator'></a></p>
 <h2 id="be-aware-of-the-consuming-generator">Be aware of the consuming generator</h2></p>
 
 <p><p>[<a href="#sections">back to top</a>]</p></p>
@@ -552,6 +552,31 @@ True + True: 2
 3
 4
 </pre></div></p>
+
+
+<p>And if you are really keen on using lists, there is a nifty trick that circumvents this problem as a reader nicely pointed out in the comments: We can simply pass the loop variable <code>i</code> as a default argument to the lambdas.</p>
+
+<!-- HTML generated using hilite.me -->
+
+<p>
+<div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">my_list <span style="color: #333333">=</span> [<span style="color: #008800; font-weight: bold">lambda</span> x<span style="color: #333333">=</span>i: x <span style="color: #008800; font-weight: bold">for</span> i <span style="color: #000000; font-weight: bold">in</span> <span style="color: #007020">range</span>(<span style="color: #0000DD; font-weight: bold">5</span>)]
+<span style="color: #008800; font-weight: bold">for</span> l <span style="color: #000000; font-weight: bold">in</span> my_list:
+    <span style="color: #007020">print</span>(l())
+</pre></div></p>
+
+
+
+<!-- HTML generated using hilite.me -->
+
+<p>
+<div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">0
+1
+2
+3
+4
+</pre></div></p>
+
+
 
 <p><p><br> <br> <a name='python_legb'></a></p><h2 id="pythons-legb-scope-resolution-and-the-keywords-global-and-nonlocal">Python's LEGB scope resolution and the keywords <code>global</code> and <code>nonlocal</code></h2><p>[<a href="#sections">back to top</a>]</p><p>There is nothing particularly surprising about Python's LEGB scope resolution (Local -&gt; Enclosed -&gt; Global -&gt; Built-in), but it is still useful to take a look at some examples!</p><h3 id="global-vs.-local"><code>global</code> vs. <code>local</code></h3>
 <p>According to the LEGB rule, Python will first look for a variable in the local scope. So if we set the variable <code>x = 1</code> <code>local</code>ly in the function's scope, it won't have an effect on the <code>global</code> <code>x</code>.</p></p>
@@ -781,19 +806,22 @@ my_tup <span style="color: #333333">=</span> my_tup <span style="color: #333333"
 <p><p><br> <br> <a name='private_class'></a></p><h2 id="public-vs.-private-class-methods-and-name-mangling">Public vs. private class methods and name mangling</h2><p>[<a href="#sections">back to top</a>]</p><p>Who has not stumbled across this quote &quot;we are all consenting adults here&quot; in the Python community, yet? Unlike in other languages like C++ (sorry, there are many more, but that's one I am most familiar with), we can't really protect class methods from being used outside the class.<br />All we can do is to indicate methods as private to make clear that they are better not used outside the class, but it is really up to the class user, since &quot;we are all consenting adults here&quot;!<br />So, when we want to &quot;make&quot; class methods private, we just put a double-underscore in front of it (same with other class members), which invokes some name mangling if we want to acess the private class member outside the class!<br />This doesn't prevent the class user to access this class member though, but he has to know the trick and also knows that it his own risk...</p>
 <p>Let the following example illustrate what I mean:</p></p>
 
-<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">class</span> <span style="color: #BB0066; font-weight: bold">my_class</span>():
+<p>
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">class</span> <span style="color: #BB0066; font-weight: bold">my_class</span>():
     <span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">public_method</span>(<span style="color: #007020">self</span>):
         <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;Hello public world!&#39;</span>)
-    <span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">private_method</span>(<span style="color: #007020">self</span>):
+    <span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">__private_method</span>(<span style="color: #007020">self</span>):
         <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;Hello private world!&#39;</span>)
-    <span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">call_private_method_in_class</span>(<span style="color: #007020">self</span>):
-        <span style="color: #007020">self</span><span style="color: #333333">.</span>private_method()</p>
+    <span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">__call_private_method_in_class</span>(<span style="color: #007020">self</span>):
+        <span style="color: #007020">self</span><span style="color: #333333">.</span>__private_method()
+        
+my_instance <span style="color: #333333">=</span> my_class()
 
-<p>my_instance <span style="color: #333333">=</span> my_class()
 my_instance<span style="color: #333333">.</span>public_method()
 my_instance<span style="color: #333333">.</span>_my_class__private_method()
-my_instance<span style="color: #333333">.</span>call_private_method_in_class()
-</pre></div></p>
+my_instance<span style="color: #333333">.</span>_my_class__call_private_method_in_class()
+</pre></div>
+</p>
 
 <p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">Hello public world!
 Hello private world!
