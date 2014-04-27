@@ -109,6 +109,8 @@ If you'd like to download the code and try it yourself (you are also very welcom
 <li><a href="#variable_types">Assigning types to variables as values</a></li>
 </ul>
 
+<br>
+last updated 04/27/2014 (<a href="#changelog">Changelog</a>)
 
 
 
@@ -803,7 +805,8 @@ my_tup <span style="color: #333333">=</span> my_tup <span style="color: #333333"
 <p>generator_yield:     10 loops, best of 3: 21.9 ms per loop
 </pre></div></p>
 
-<p><p><br> <br> <a name='private_class'></a></p><h2 id="public-vs.-private-class-methods-and-name-mangling">Public vs. private class methods and name mangling</h2><p>[<a href="#sections">back to top</a>]</p><p>Who has not stumbled across this quote &quot;we are all consenting adults here&quot; in the Python community, yet? Unlike in other languages like C++ (sorry, there are many more, but that's one I am most familiar with), we can't really protect class methods from being used outside the class.<br />All we can do is to indicate methods as private to make clear that they are better not used outside the class, but it is really up to the class user, since &quot;we are all consenting adults here&quot;!<br />So, when we want to &quot;make&quot; class methods private, we just put a double-underscore in front of it (same with other class members), which invokes some name mangling if we want to acess the private class member outside the class!<br />This doesn't prevent the class user to access this class member though, but he has to know the trick and also knows that it his own risk...</p>
+<p><p><br> <br> <a name='private_class'></a></p><h2 id="public-vs.-private-class-methods-and-name-mangling">Public vs. private class methods and name mangling</h2><p>[<a href="#sections">back to top</a>]</p><p>Who has not stumbled across this quote &quot;we are all consenting adults here&quot; in the Python community, yet? Unlike in other languages like C++ (sorry, there are many more, but that's one I am most familiar with), we can't really protect class methods from being used outside the class.<br />All we can do is to indicate methods as private to make clear that they are better not used outside the class, but it is really up to the class user, since &quot;we are all consenting adults here&quot;!<br />So, when we want to mark a class method as private, we can put a single underscore in front of it.
+If we additionally want to avoid name clashes with other classes that might use the same method names, we can prefix the name with a double-underscore to invoke the name mangling.<br />This doesn't prevent the class user to access this class member though, but he has to know the trick and also knows that it his own risk...</p>
 <p>Let the following example illustrate what I mean:</p></p>
 
 <p>
@@ -860,8 +863,7 @@ Hello private world!
         b<span style="color: #333333">.</span>remove(item)
 <span style="color: #007020">print</span>(b)
 </pre></div>
-ass="k">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
-</pre></p>
+    </p>
 
 <p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">0 2
 1 5
@@ -1093,7 +1095,7 @@ line <span style="color: #0000DD; font-weight: bold">1</span> same line
 </pre></div></p>
 
 <p><h4 id="integer-division">Integer division</h4>
-<p>This is a pretty dangerous thing if you are porting code, or executing Python 3 code in Python 2 since the change in integer-division behavior can often go unnoticed.<br />So, I still tend to use a <code>float(3/2)</code> or <code>3/2.0</code> instead of a <code>3/2</code> in my Python 3 scripts to save the Python 2 guys some trouble ... (PS: and vice versa, you can <code>from <strong>future</strong> import division</code> in your Python 2 scripts).</p></p>
+<p>This is a pretty dangerous thing if you are porting code, or executing Python 3 code in Python 2 since the change in integer-division behavior can often go unnoticed.<br />So, I still tend to use a <code>float(3)/2</code> or <code>3/2.0</code> instead of a <code>3/2</code> in my Python 3 scripts to save the Python 2 guys some trouble ... (PS: and vice versa, you can <code>from <strong>future</strong> import division</code> in your Python 2 scripts).</p></p>
 
 <p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #888888"># Python 2</span>
 <span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #0000DD; font-weight: bold">3</span> <span style="color: #333333">/</span> <span style="color: #0000DD; font-weight: bold">2</span>
@@ -1347,6 +1349,25 @@ a_var(<span style="color: #0000DD; font-weight: bold">123</span>)
 4 &lt;class <span style="background-color: #fff0f0">&#39;int&#39;</span>&gt;
 </pre></div></p>					
 	
+<p><a name="changelog"></a>
+<br>
+<br>
+<br>
+<br></p>
+
+<h1>Changelog</h1>
+
+<p>[<a href="#sections">back to top</a>]</p>
+
+<h4>04/27/2014</h4>
+
+<ul>
+<li>minor fixes of typos</li>
+<li>single- vs. double-underscore clarification in the private class section.</li>
+
+</ul>
+
+
 
 		</div> 	<!-- close article -->
 
