@@ -716,7 +716,7 @@ my_tup <span style="color: #333333">=</span> my_tup <span style="color: #333333"
 4357289952
 </pre></div></p>
 
-<p><p><br> <br> <a name='list_generator'></a></p><h2 id="list-comprehensions-are-fast-but-generators-are-faster">List comprehensions are fast, but generators are faster!?</h2><p>[<a href="#sections">back to top</a>]</p><p>&quot;List comprehensions are fast, but generators are faster!?&quot; - No, not really (or significantly, see the benchmarks below). So what's the reason to prefer one over the other? - use lists if you want to use the plethora of list methods<br />- use generators when you are dealing with huge collections to avoid memory issues</p></p>
+<p><p><br> <br> <a name='list_generator'></a></p><h2 id="list-comprehensions-are-fast-but-generators-are-faster">List comprehensions are fast, but generators are faster!?</h2><p>[<a href="#sections">back to top</a>]</p><p>&quot;List comprehensions are fast, but generators are faster!?&quot; - No, not really (or significantly, see the benchmarks below). So what's the reason to prefer one over the other?<br />- use lists if you want to use the plethora of list methods<br />- use generators when you are dealing with huge collections to avoid memory issues</p></p>
 
 <p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">timeit</span></p>
 
@@ -992,10 +992,11 @@ after my_list2<span style="color: #333333">[</span>1<span style="color: #333333"
 id my_list1: 4350764680, id my_list2: 4350766664
 </pre></div></p>
 
-<p><p><br> <br> <a name='python_differences'></a></p><h2 id="key-differences-between-python-2-and-3">Key differences between Python 2 and 3</h2><p>[<a href="#sections">back to top</a>]</p><p>There are some good articles already that are summarizing the differences between Python 2 and 3, e.g.,<br />- <a href="https://wiki.python.org/moin/Python2orPython3">https://wiki.python.org/moin/Python2orPython3</a> - <a href="https://docs.python.org/3.0/whatsnew/3.0.html">https://docs.python.org/3.0/whatsnew/3.0.html</a> - <a href="http://python3porting.com/differences.html">http://python3porting.com/differences.html</a> - <a href="https://docs.python.org/3/howto/pyporting.html">https://docs.python.org/3/howto/pyporting.html</a><br />etc.</p>
+<p><p><br> <br> <a name='python_differences'></a></p><h2 id="key-differences-between-python-2-and-3">Key differences between Python 2 and 3</h2><p>[<a href="#sections">back to top</a>]</p><p>There are some good articles already that are summarizing the differences between Python 2 and 3, e.g.,<br />- <a href="https://wiki.python.org/moin/Python2orPython3">https://wiki.python.org/moin/Python2orPython3</a><br />- <a href="https://docs.python.org/3.0/whatsnew/3.0.html">https://docs.python.org/3.0/whatsnew/3.0.html</a><br />- <a href="http://python3porting.com/differences.html">http://python3porting.com/differences.html</a><br /> - <a href="https://docs.python.org/3/howto/pyporting.html">https://docs.python.org/3/howto/pyporting.html</a><br />etc.</p>
 <p>But it might be still worthwhile, especially for Python newcomers, to take a look at some of those! (Note: the the code was executed in Python 3.4.0 and Python 2.7.5 and copied from interactive shell sessions.)</p><h3 id="unicode...">Unicode...</h3>
 <h4 id="python-2">- Python 2:</h4>
-<p>We have ASCII <code>str()</code> types, separate <code>unicode()</code>, but no <code>byte</code> type ####- Python 3: Now, we finally have Unicode (utf-8) <code>str</code>ings, and 2 byte classes: <code>byte</code> and <code>bytearray</code>s</p></p>
+<p>We have ASCII <code>str()</code> types, separate <code>unicode()</code>, but no <code>byte</code> type.
+<h4 id="python-2">- Python 3:</h4> Now, we finally have Unicode (utf-8) <code>str</code>ings, and 2 byte classes: <code>byte</code> and <code>bytearray</code>s</p></p>
 
 <p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #888888">#############</span>
 <span style="color: #888888"># Python 2</span>
@@ -1086,7 +1087,7 @@ line <span style="color: #0000DD; font-weight: bold">1</span> same line
 <span style="color: #6600EE; font-weight: bold">1.0</span>
 </pre></div></p>
 
-<p><h4 id="xrange"><code>xrange()</code></h4>
+<p><h4>xrange()</h4>
 <p><code>xrange()</code> was pretty popular in Python 2.x if you wanted to create an iterable object. The behavior was quite similar to a generator ('lazy evaluation'), but you could iterate over it infinitely. The advantage was that it was generally faster than <code>range()</code> (e.g., in a for-loop) - not if you had to iterate over the list multiple times, since the generation happens every time from scratch!<br />In Python 3, the <code>range()</code> was implemented like the <code>xrange()</code> function so that a dedicated <code>xrange()</code> function does not exist anymore.</p></p>
 
 
@@ -1189,10 +1190,11 @@ Traceback (most recent call last):
 
 <p><p>And what about the fancy arrow here?</p></p>
 
-<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">foo1</span>(x: <span style="background-color: #fff0f0">&#39;insert x here&#39;</span>, y: <span style="background-color: #fff0f0">&#39;insert x^2 here&#39;</span>):
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">foo2</span>(x, y) <span style="color: #333333">-&gt;</span> <span style="background-color: #fff0f0">&#39;Hi!&#39;</span>:
     <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;Hello, World&#39;</span>)
     <span style="color: #008800; font-weight: bold">return</span>
-</pre></div></p>
+</pre></div>
+<p></p>
 
 <p><p>Q: Is this valid Python syntax?<br />A: Yes!</p>
 <p>Q: So, what happens if I <em>just call</em> the function?<br />A: Nothing!</p>
@@ -1244,7 +1246,7 @@ Traceback (most recent call last):
  <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #333333">{</span><span style="background-color: #fff0f0">&#39;return&#39;</span>: <span style="background-color: #fff0f0">&#39;Hi!&#39;</span><span style="color: #333333">}</span>
 </pre></div></p>
 
-<p><p><strong>When are they useful?</strong></p><p>Function annotations can be useful for a couple of things - Documentation in general - pre-condition testing - <a href="http://legacy.python.org/dev/peps/pep-0362/#annotation-checker">type checking</a></p>
+<p><p><strong>When are they useful?</strong></p><p>Function annotations can be useful for a couple of things <br>- Documentation in general <br>- pre-condition testing <br>- <a href="http://legacy.python.org/dev/peps/pep-0362/#annotation-checker">type checking</a></p>
 <p>...</p><p><br> <br> <a name="finally_blocks"></a></p><h2 id="abortive-statements-in-finally-blocks">Abortive statements in <code>finally</code> blocks</h2><p>Python's <code>try-except-finally</code> blocks are very handy for catching and handling errors. The <code>finally</code> block is always executed whether an <code>exception</code> has been raised or not as illustrated in the following example.</p></p>
 
 <p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">try_finally1</span>():
