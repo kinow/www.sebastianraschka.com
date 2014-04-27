@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html>
+<head>
+		<!--META-->
+		<meta name="description" content="A collection of the not-so-obvious parts of the Python language, tricks, and common pitfalls.">
+		<meta name="Author" content="Sebastian Raschka">
+		<title>Deep into Python</title>
+
+		<!-- jQuery -->
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+		<script type="text/javascript" src="../jQuery/main_app.js"></script>
+		<script type="text/javascript" src=" ../jQuery/index.js"></script>
+
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="../CSS/main.css" media="screen" />
+		<link rel="stylesheet" type="text/css" href="../CSS/content.css" media="screen" />
+</head>
+<body>
+
+	<div id ='container' >
+
+		<div id ='header_new'>
+		             
+				<a href = "../index.html"><img src="../Images/title_text.png" style="border-style:none"/></a>	
+				<hr>
+                <a href="../rss_feed.xml"><img src="../Images/rss_logo_black_1.png" align="left" style="margin-left:430px"></a>
+
+				<div align="right" style="padding-right:20px">
+					<a href = "../articles.html" class ="menubar"><font color="#6495ED">blog</font></a> &#8226;
+					<a href = "../webapps.html" class ="menubar">webapps</a> &#8226;
+					<a href = "../software.html" class ="menubar">software</a> &#8226;
+					<a href = "../publications.html" class ="menubar">books</a> &#8226;
+					<a href = "../contact.html" class ="menubar">about+contact</a> 
+					 
+				</div>
+				<hr>
+		</div> <!--close header -->
+	</div><!--close container -->
+
+
+		<div id ='content'>
+			
+		
+
+
+			<div id ='main'>
+
+                <h2 class="article_top">Diving deep into Python - the not-so-obvious language parts</h2>
+					<p id="article_header"><em>-- written by Sebastian Raschka</em> on April 26, 2014</p>
+
+	<!-- START Twitter API -->
+        		 <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://bit.ly/1ffPPSV" 
+                counturl="http://groups.google.com/group/ZEsjUY"
+        		 data-count="none" data-via="rasbt"
+        		 data-text="Diving deep into Python - the not-so-obvious language parts" data-lang="en">Tweet</a>
+
+        		<script>!function(d,s,id){var
+        		js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	<!-- END Twitter API --> <br> 
+ 
+
+<style type="text/css">
+code {
+   font-size: 13.5px;
+   color: #000099;
+}
+</style>
+
+				<div class="article" style="font-size: 16px;">
+		<div style="padding-right:70px">
+		  <p style="line-height:1.7"><strong>
+Some while ago, I started to collect some of the not-so-obvious things I encountered when I was coding in Python. I thought that it was worthwhile sharing them and 
+encourage you to take a brief look at the section-overview and maybe you'll find something that you do not already know - I can guarantee you that it'll likely save
+you some time at one or the other tricky debugging challenge.</strong>
+</p></div>
+<br>
+
+If you'd like to download the code and try it yourself (you are also very welcome to contribute!), you can find the original 
+<a href='https://github.com/rasbt/python_reference'>IPython Notebook in this GitHub repository</a>.
+<br>
+<p>
+<br>
+<h1 id="sections">Sections</h1>
+
+
+<ul>
+<li><a href="#c3_class_res">The C3 class resolution algorithm for multiple class inheritance</a></li>
+<li><a href="#pm_in_lists">Using <code>+=</code> on lists creates new objects</a></li>
+<li><a href="#datetime_module"><code>True</code> and <code>False</code> in the datetime module</a></li>
+<li><a href="#python_small_int">Python reuses objects for small integers - always use &quot;==&quot; for equality, &quot;is&quot; for identity</a></li>
+<li><a href="#shallow_vs_deep">Shallow vs. deep copies if list contains other structures and objects</a></li>
+<li><a href="#false_true_expressions">Picking <code>True</code> values from logical <code>and</code>s and <code>or</code>s</a></li>
+<li><a href="#def_mutable_func">Don't use mutable objects as default arguments for functions!</a></li>
+<li><a href="#consuming_generator">Be aware of the consuming generator</a></li>
+<li><a href="#bool_int"><code>bool</code> is a subclass of <code>int</code></a></li>
+<li><a href="#lambda_closure">About lambda-in-closures and-a-loop pitfall</a></li>
+<li><a href="#python_legb">Python's LEGB scope resolution and the keywords <code>global</code> and <code>nonlocal</code></a></li>
+<li><a href="#immutable_tuple">When mutable contents of immutable tuples aren't so mutable</a></li>
+<li><a href="#list_generator">List comprehensions are fast, but generators are faster!?</a></li>
+<li><a href="#private_class">Public vs. private class methods and name mangling</a></li>
+<li><a href="#looping_pitfall">The consequences of modifying a list when looping through it</a></li>
+<li><a href="#dynamic_binding">Dynamic binding and typos in variable names</a></li>
+<li><a href="#out_of_range_slicing">List slicing using indexes that are &quot;out of range</a></li>
+<li><a href="#unboundlocalerror">Reusing global variable names and UnboundLocalErrors</a></li>
+<li><a href="#copy_mutable">Creating copies of mutable objects</a></li>
+<li><a href="#python_differences">Key differences between Python 2 and 3</a></li>
+<li><a href="#function_annotation">Function annotations - What are those <code>-&gt;</code>'s in my Python code?</a></li>
+<li><a href="#finally_blocks">Abortive statements in <code>finally</code> blocks</a></li>
+<li><a href="#variable_types">Assigning types to variables as values</a></li>
+</ul>
+
+
+
+
+<p><a name='c3_class_res'></a> <br> <br></p>
+
+
+<h2 id="the-c3-class-resolution-algorithm-for-multiple-class-inheritance">The C3 class resolution algorithm for multiple class inheritance</h2>
+
+
+<p>[<a href="#sections">back to top</a>]</p>
+
+
+
+
+<p>If we are dealing with multiple inheritance, according to the newer C3 class resolution algorithm, the following applies:<br />Assuming that child class C inherits from two parent classes A and B, &quot;class A should be checked before class B&quot;.</p>
+
+
+<p>If you want to learn more, please read the <a href="http://python-history.blogspot.ru/2010/06/method-resolution-order.html">original blog</a> post by Guido van Rossum.</p>
+
+
+<p>(Original source: <a href="http://gistroll.com/rolls/21/horizontal_assessments/new">http://gistroll.com/rolls/21/horizontal_assessments/new</a>)</p>
+
+
+
+
+<!-- HTML generated using hilite.me -->
+
+
+<div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">class</span> <span style="color: #BB0066; font-weight: bold">A</span>(<span style="color: #007020">object</span>):
+    <span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">foo</span>(<span style="color: #007020">self</span>):
+        <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&quot;class A&quot;</span>)
+
+<span style="color: #008800; font-weight: bold">class</span> <span style="color: #BB0066; font-weight: bold">B</span>(<span style="color: #007020">object</span>):
+    <span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">foo</span>(<span style="color: #007020">self</span>):
+        <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&quot;class B&quot;</span>)
+
+<span style="color: #008800; font-weight: bold">class</span> <span style="color: #BB0066; font-weight: bold">C</span>(A, B):
+    <span style="color: #008800; font-weight: bold">pass</span>
+
+C()<span style="color: #333333">.</span>foo()
+</pre></div>
+
+
+
+
+<!-- HTML generated using hilite.me -->
+
+
+<div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">class A
+</pre></div>
+
+
+<p>So what actually happened above was that class <code>C</code> looked in the scope of the parent class <code>A</code> for the method <code>.foo()</code> first (and found it)!</p>
+
+
+
+
+<p>I received an email containing a suggestion which uses a more nested example to illustrate Guido van Rossum's point a little bit better:</p>
+
+
+
+
+<!-- HTML generated using hilite.me -->
+
+
+<div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">class</span> <span style="color: #BB0066; font-weight: bold">A</span>(<span style="color: #007020">object</span>):
+   <span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">foo</span>(<span style="color: #007020">self</span>):
+      <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&quot;class A&quot;</span>)
+
+<span style="color: #008800; font-weight: bold">class</span> <span style="color: #BB0066; font-weight: bold">B</span>(A):
+   <span style="color: #008800; font-weight: bold">pass</span>
+
+<span style="color: #008800; font-weight: bold">class</span> <span style="color: #BB0066; font-weight: bold">C</span>(A):
+   <span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">foo</span>(<span style="color: #007020">self</span>):
+      <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&quot;class C&quot;</span>)
+
+<span style="color: #008800; font-weight: bold">class</span> <span style="color: #BB0066; font-weight: bold">D</span>(B,C):
+   <span style="color: #008800; font-weight: bold">pass</span>
+
+D()<span style="color: #333333">.</span>foo()
+</pre></div>
+
+
+
+
+<!-- HTML generated using hilite.me -->
+
+
+<div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">class C
+</pre></div>
+
+
+
+
+<p>Here, class <code>D</code> searches in <code>B</code> first, which in turn inherits from <code>A</code> (note that class <code>C</code> also inherits from <code>A</code>, but has its own <code>.foo()</code> method) so that we come up with the search order: <code>D, B, C, A</code>.</p>
+
+
+
+
+<p><a name='pm_in_lists'></a> <br> <br></p>
+
+
+<h2 id="using-on-lists-creates-new-objects">Using <code>+=</code> on lists creates new objects</h2>
+
+
+<p>[<a href="#sections">back to top</a>]</p>
+
+
+
+
+<p>Python <code>list</code>s are mutable objects as we all know. So, if we are using the <code>+=</code> operator on <code>list</code>s, we extend the <code>list</code> by directly modifying the object directly.</p>
+
+
+<p>However, if we use the assigment via <code>my_list = my_list + ...</code>, we create a new list object, which can be demonstrated by the following code:</p>
+
+
+
+
+<!-- HTML generated using hilite.me -->
+
+
+<div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">a_list <span style="color: #333333">=</span> []
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;ID:&#39;</span>, <span style="color: #007020">id</span>(a_list))
+
+a_list <span style="color: #333333">+=</span> [<span style="color: #0000DD; font-weight: bold">1</span>]
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;ID (+=):&#39;</span>, <span style="color: #007020">id</span>(a_list))
+
+a_list <span style="color: #333333">=</span> a_list <span style="color: #333333">+</span> [<span style="color: #0000DD; font-weight: bold">2</span>]
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;ID (list = list + ...):&#39;</span>, <span style="color: #007020">id</span>(a_list))
+</pre></div>
+
+
+
+
+<!-- HTML generated using hilite.me -->
+
+
+<div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">ID: 4366496544
+ID <span style="color: #333333">(</span>+<span style="color: #333333">=)</span>: 4366496544
+ID <span style="color: #333333">(</span><span style="color: #996633">list</span> <span style="color: #333333">=</span> list + ...<span style="color: #333333">)</span>: 4366495472
+</pre></div>
+
+
+
+
+<p>Just for reference, the <code>.append()</code> and <code>.extends()</code> methods are modifying the <code>list</code> object in place, just as expected.</p>
+
+
+
+
+<!-- HTML generated using hilite.me -->
+
+
+<div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">a_list <span style="color: #333333">=</span> []
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;ID:&#39;</span>,<span style="color: #007020">id</span>(a_list))
+
+a_list<span style="color: #333333">.</span>append(<span style="color: #0000DD; font-weight: bold">1</span>)
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;ID (append):&#39;</span>,<span style="color: #007020">id</span>(a_list))
+
+a_list<span style="color: #333333">.</span>append(<span style="color: #0000DD; font-weight: bold">2</span>)
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;ID (extend):&#39;</span>,<span style="color: #007020">id</span>(a_list))
+</pre></div>
+
+
+
+
+<!-- HTML generated using hilite.me -->
+
+
+<div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">ID: 4366495544
+ID <span style="color: #333333">(</span>append<span style="color: #333333">)</span>: 4366495544
+ID <span style="color: #333333">(</span>extend<span style="color: #333333">)</span>: 4366495544
+</pre></div>
+
+
+
+
+<p><div class="highlight"><pre>
+</pre>
+<p><br> <br> <a name='datetime_module'></a></p></p>
+
+<p><h2 id="true-and-false-in-the-datetime-module"><code>True</code> and <code>False</code> in the datetime module</h2></p>
+
+<p><p>&quot;It often comes as a big surprise for programmers to find (sometimes by way of a hard-to-reproduce bug) that, unlike any other time value, midnight (i.e. <code>datetime.time(0,0,0)</code>) is False. A long discussion on the python-ideas mailing list shows that, while surprising, that behavior is desirable—at least in some quarters.&quot;</p>
+<p>(Original source: <a href="http://lwn.net/SubscriberLink/590299/bf73fe823974acea/">http://lwn.net/SubscriberLink/590299/bf73fe823974acea/</a>)</p></p>
+
+<p><p>[<a href="#sections">back to top</a>]</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">datetime</span></p>
+
+<p><span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;&quot;datetime.time(0,0,0)&quot; (Midnight) -&gt;&#39;</span>, <span style="color: #007020">bool</span>(datetime<span style="color: #333333">.</span>time(<span style="color: #0000DD; font-weight: bold">0</span>,<span style="color: #0000DD; font-weight: bold">0</span>,<span style="color: #0000DD; font-weight: bold">0</span>)))
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;&quot;datetime.time(1,0,0)&quot; (1 am) -&gt;&#39;</span>, <span style="color: #007020">bool</span>(datetime<span style="color: #333333">.</span>time(<span style="color: #0000DD; font-weight: bold">1</span>,<span style="color: #0000DD; font-weight: bold">0</span>,<span style="color: #0000DD; font-weight: bold">0</span>)))
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="background-color: #fff0f0">&quot;datetime.time(0,0,0)&quot;</span> <span style="color: #333333">(</span>Midnight<span style="color: #333333">)</span> -&gt; False
+<span style="background-color: #fff0f0">&quot;datetime.time(1,0,0)&quot;</span> <span style="color: #333333">(</span>1 am<span style="color: #333333">)</span> -&gt; True
+</pre></div></p>
+
+<p><p><br> <br> <a name='python_small_int'></a></p>
+<h2 id="python-reuses-objects-for-small-integers---use-for-equality-is-for-identity">Python reuses objects for small integers - use &quot;==&quot; for equality, &quot;is&quot; for identity</h2>
+<p>[<a href="#sections">back to top</a>]</p></p>
+
+<p><p>This oddity occurs, because Python keeps an array of small integer objects (i.e., integers between -5 and 256, <a href="https://docs.python.org/2/c-api/int.html#PyInt_FromLong">see the doc</a>).</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">a <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">1</span>
+b <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">1</span>
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;a is b&#39;</span>, <span style="color: #007020">bool</span>(a <span style="color: #000000; font-weight: bold">is</span> b))
+<span style="color: #008800; font-weight: bold">True</span></p>
+
+<p>c <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">999</span>
+d <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">999</span>
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;c is d&#39;</span>, <span style="color: #007020">bool</span>(c <span style="color: #000000; font-weight: bold">is</span> d))
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">a is b True
+c is d False
+</pre></div></p>
+
+<p><p>(<em>I received a comment that this is in fact a CPython artefact and <strong>must not necessarily be true</strong> in all implementations of Python!</em>)</p>
+<p>So the take home message is: always use &quot;==&quot; for equality, &quot;is&quot; for identity!</p>
+<p>Here is a <a href="http://python.net/%7Egoodger/projects/pycon/2007/idiomatic/handout.html#other-languages-have-variables">nice article</a> explaining it by comparing &quot;boxes&quot; (C language) with &quot;name tags&quot; (Python).</p><p>This example demonstrates that this applies indeed for integers in the range in -5 to 256:</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;256 is 257-1&#39;</span>, <span style="color: #0000DD; font-weight: bold">256</span> <span style="color: #000000; font-weight: bold">is</span> <span style="color: #0000DD; font-weight: bold">257</span><span style="color: #333333">-</span><span style="color: #0000DD; font-weight: bold">1</span>)
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;257 is 258-1&#39;</span>, <span style="color: #0000DD; font-weight: bold">257</span> <span style="color: #000000; font-weight: bold">is</span> <span style="color: #0000DD; font-weight: bold">258</span> <span style="color: #333333">-</span> <span style="color: #0000DD; font-weight: bold">1</span>)
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;-5 is -6+1&#39;</span>, <span style="color: #333333">-</span><span style="color: #0000DD; font-weight: bold">5</span> <span style="color: #000000; font-weight: bold">is</span> <span style="color: #333333">-</span><span style="color: #0000DD; font-weight: bold">6</span><span style="color: #333333">+</span><span style="color: #0000DD; font-weight: bold">1</span>)
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;-7 is -6-1&#39;</span>, <span style="color: #333333">-</span><span style="color: #0000DD; font-weight: bold">7</span> <span style="color: #000000; font-weight: bold">is</span> <span style="color: #333333">-</span><span style="color: #0000DD; font-weight: bold">6</span><span style="color: #333333">-</span><span style="color: #0000DD; font-weight: bold">1</span>)
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">256 is 257-1 True
+257 is 258-1 False
+-5 is -6+1 True
+-7 is -6-1 False
+</pre></div>
+<h4 id="and-to-illustrate-the-test-for-equality-vs.-identity-is">And to illustrate the test for equality (<code>==</code>) vs. identity (<code>is</code>):</h4></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">a <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&#39;hello world!&#39;</span>
+b <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&#39;hello world!&#39;</span>
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;a is b,&#39;</span>, a <span style="color: #000000; font-weight: bold">is</span> b)
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;a == b,&#39;</span>, a <span style="color: #333333">==</span> b)
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">a is b, False
+<span style="color: #996633">a</span> <span style="color: #333333">==</span> b, True
+</pre></div></p>
+
+<p><p>We would think that identity would always imply equality, but this is not always true, as we can see in the next example:</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">a <span style="color: #333333">=</span> <span style="color: #007020">float</span>(<span style="background-color: #fff0f0">&#39;nan&#39;</span>)
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;a is a,&#39;</span>, a <span style="color: #000000; font-weight: bold">is</span> a)
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;a == a,&#39;</span>, a <span style="color: #333333">==</span> a)
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">a is a, True
+<span style="color: #996633">a</span> <span style="color: #333333">==</span> a, False
+</pre></div></p>
+
+<p><p><br> <br> <a name='shallow_vs_deep'></a></p>
+<h2 id="shallow-vs.-deep-copies-if-list-contains-other-structures-and-objects">Shallow vs. deep copies if list contains other structures and objects</h2></p>
+
+<p><p>[<a href="#sections">back to top</a>]</p></p>
+
+<p><p><strong>Shallow copy</strong>:<br />If we use the assignment operator to assign one list to another list, we just create a new name reference to the original list. If we want to create a new list object, we have to make a copy of the original list. This can be done via <code>a_list[:]</code> of <code>a_list.copy()</code>.</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">list1 <span style="color: #333333">=</span> [<span style="color: #0000DD; font-weight: bold">1</span>,<span style="color: #0000DD; font-weight: bold">2</span>]
+list2 <span style="color: #333333">=</span> list1        <span style="color: #888888"># reference</span>
+list3 <span style="color: #333333">=</span> list1[:]     <span style="color: #888888"># shallow copy</span>
+list4 <span style="color: #333333">=</span> list1<span style="color: #333333">.</span>copy() <span style="color: #888888"># shallow copy</span></p>
+
+<p><span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;IDs:</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\n</span><span style="background-color: #fff0f0">list1: {}</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\n</span><span style="background-color: #fff0f0">list2: {}</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\n</span><span style="background-color: #fff0f0">list3: {}</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\n</span><span style="background-color: #fff0f0">list4: {}</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\n</span><span style="background-color: #fff0f0">&#39;</span>
+      <span style="color: #333333">.</span>format(<span style="color: #007020">id</span>(list1), <span style="color: #007020">id</span>(list2), <span style="color: #007020">id</span>(list3), <span style="color: #007020">id</span>(list4)))</p>
+
+<p>list2[<span style="color: #0000DD; font-weight: bold">0</span>] <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">3</span>
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;list1:&#39;</span>, list1)</p>
+
+<p>list3[<span style="color: #0000DD; font-weight: bold">0</span>] <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">4</span>
+list4[<span style="color: #0000DD; font-weight: bold">1</span>] <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">4</span>
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;list1:&#39;</span>, list1)
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">IDs:
+list1: 4377955288
+list2: 4377955288
+list3: 4377955432
+list4: 4377954784</p>
+
+<p>list1: <span style="color: #333333">[</span>3, 2<span style="color: #333333">]</span>
+list1: <span style="color: #333333">[</span>3, 2<span style="color: #333333">]</span>
+</pre></div></p>
+
+<p><p><strong>Deep copy</strong><br />As we have seen above, a shallow copy works fine if we want to create a new list with contents of the original list which we want to modify independently.</p>
+<p>However, if we are dealing with compound objects (e.g., lists that contain other lists, <a href="https://docs.python.org/2/library/copy.html">read here</a> for more information) it becomes a little trickier.</p>
+<p>In the case of compound objects, a shallow copy would create a new compound object, but it would just insert the references to the contained objects into the new compound object. In contrast, a deep copy would go &quot;deeper&quot; and create also new objects<br />for the objects found in the original compound object. If you follow the code, the concept should become more clear:</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">from</span> <span style="color: #0e84b5; font-weight: bold">copy</span> <span style="color: #008800; font-weight: bold">import</span> deepcopy</p>
+
+<p>list1 <span style="color: #333333">=</span> [[<span style="color: #0000DD; font-weight: bold">1</span>],[<span style="color: #0000DD; font-weight: bold">2</span>]]
+list2 <span style="color: #333333">=</span> list1<span style="color: #333333">.</span>copy()    <span style="color: #888888"># shallow copy</span>
+list3 <span style="color: #333333">=</span> deepcopy(list1) <span style="color: #888888"># deep copy</span></p>
+
+<p><span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;IDs:</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\n</span><span style="background-color: #fff0f0">list1: {}</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\n</span><span style="background-color: #fff0f0">list2: {}</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\n</span><span style="background-color: #fff0f0">list3: {}</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\n</span><span style="background-color: #fff0f0">&#39;</span>
+      <span style="color: #333333">.</span>format(<span style="color: #007020">id</span>(list1), <span style="color: #007020">id</span>(list2), <span style="color: #007020">id</span>(list3)))</p>
+
+<p>list2[<span style="color: #0000DD; font-weight: bold">0</span>][<span style="color: #0000DD; font-weight: bold">0</span>] <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">3</span>
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;list1:&#39;</span>, list1)</p>
+
+<p>list3[<span style="color: #0000DD; font-weight: bold">0</span>][<span style="color: #0000DD; font-weight: bold">0</span>] <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">5</span>
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;list1:&#39;</span>, list1)
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">IDs:
+list1: 4377956296
+list2: 4377961752
+list3: 4377954928</p>
+
+<p>list1: <span style="color: #333333">[[</span>3<span style="color: #333333">]</span>, <span style="color: #333333">[</span>2<span style="color: #333333">]]</span>
+list1: <span style="color: #333333">[[</span>3<span style="color: #333333">]</span>, <span style="color: #333333">[</span>2<span style="color: #333333">]]</span>
+</pre></div></p>
+
+<p><p><br> <br> <a name='false_true_expressions'></a></p><h2 id="picking-true-values-from-logical-ands-and-ors">Picking <code>True</code> values from logical <code>and</code>s and <code>or</code>s</h2><p>[<a href="#sections">back to top</a>]</p><p><strong> Logical <code>or</code>: </strong></p>
+<p><code>a or b == a if a else b</code><br />- If both values in <code>or</code> expressions are <code>True</code>, Python will select the first value (e.g., select <code>&quot;a&quot;</code> in <code>&quot;a&quot; or &quot;b&quot;</code>), and the second one in <code>and</code> expressions.<br />This is also called <strong>short-circuiting</strong> - we already know that the logical <code>or</code> must be <code>True</code> if the first value is <code>True</code> and therefore can omit the evaluation of the second value.</p>
+<p><strong> Logical <code>and</code>: </strong></p>
+<p><code>a and b == b if a else a</code><br />- If both values in <code>and</code> expressions are <code>True</code>, Python will select the second value, since for a logical <code>and</code>, both values must be true.</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">result <span style="color: #333333">=</span> (<span style="color: #0000DD; font-weight: bold">2</span> <span style="color: #000000; font-weight: bold">or</span> <span style="color: #0000DD; font-weight: bold">3</span>) <span style="color: #333333">*</span> (<span style="color: #0000DD; font-weight: bold">5</span> <span style="color: #000000; font-weight: bold">and</span> <span style="color: #0000DD; font-weight: bold">7</span>)
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;2 * 7 =&#39;</span>, result)
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">2 * <span style="color: #996633">7</span> <span style="color: #333333">=</span> 14
+</pre></div></p>
+
+<p><p><br> <br> <a name='def_mutable_func'></a></p>
+<h2 id="dont-use-mutable-objects-as-default-arguments-for-functions">Don't use mutable objects as default arguments for functions!</h2></p>
+
+<p><p>[<a href="#sections">back to top</a>]</p></p>
+
+<p><p>Don't use mutable objects (e.g., dictionaries, lists, sets, etc.) as default arguments for functions! You might expect that a new list is created every time when we call the function without providing an argument for the default parameter, but this is not the case: <strong>Python will create the mutable object (default parameter) the first time the function is defined - not when it is called</strong>, see the following code:</p>
+<p>(Original source: <a href="http://docs.python-guide.org/en/latest/writing/gotchas/">http://docs.python-guide.org/en/latest/writing/gotchas/</a></p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">append_to_list</span>(value, def_list<span style="color: #333333">=</span>[]):
+    def_list<span style="color: #333333">.</span>append(value)
+    <span style="color: #008800; font-weight: bold">return</span> def_list</p>
+
+<p>my_list <span style="color: #333333">=</span> append_to_list(<span style="color: #0000DD; font-weight: bold">1</span>)
+<span style="color: #007020">print</span>(my_list)</p>
+
+<p>my_other_list <span style="color: #333333">=</span> append_to_list(<span style="color: #0000DD; font-weight: bold">2</span>)
+<span style="color: #007020">print</span>(my_other_list)
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #333333">[</span>1<span style="color: #333333">]</span>
+<span style="color: #333333">[</span>1, 2<span style="color: #333333">]</span>
+</pre></div></p>
+
+<p><p>Another good example showing that demonstrates that default arguments are created when the function is created (<strong>and not when it is called!</strong>):</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">time</span>
+<span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">report_arg</span>(my_default<span style="color: #333333">=</span>time<span style="color: #333333">.</span>time()):
+    <span style="color: #007020">print</span>(my_default)</p>
+
+<p>report_arg()
+time<span style="color: #333333">.</span>sleep(<span style="color: #0000DD; font-weight: bold">5</span>)
+report_arg()
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">1397764090.456688
+1397764090.456688
+</pre></div></p>
+
+<p><p><br> <br> <a name='consuming_generators'></a></p>
+<h2 id="be-aware-of-the-consuming-generator">Be aware of the consuming generator</h2></p>
+
+<p><p>[<a href="#sections">back to top</a>]</p></p>
+
+<p><p>Be aware of what is happening when combining &quot;<code>in</code>&quot; checks with generators, since they won't evaluate from the beginning once a position is &quot;consumed&quot;.</p>
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">gen <span style="color: #333333">=</span> (i <span style="color: #008800; font-weight: bold">for</span> i <span style="color: #000000; font-weight: bold">in</span> <span style="color: #007020">range</span>(<span style="color: #0000DD; font-weight: bold">5</span>))
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;2 in gen,&#39;</span>, <span style="color: #0000DD; font-weight: bold">2</span> <span style="color: #000000; font-weight: bold">in</span> gen)
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;3 in gen,&#39;</span>, <span style="color: #0000DD; font-weight: bold">3</span> <span style="color: #000000; font-weight: bold">in</span> gen)
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;1 in gen,&#39;</span>, <span style="color: #0000DD; font-weight: bold">1</span> <span style="color: #000000; font-weight: bold">in</span> gen)
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">2 in gen, True
+3 in gen, True
+1 in gen, False
+</pre></div></p>
+
+<p><p>Although this defeats the purpose of an generator (in most cases), we can convert a generator into a list to circumvent the problem.</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">gen <span style="color: #333333">=</span> (i <span style="color: #008800; font-weight: bold">for</span> i <span style="color: #000000; font-weight: bold">in</span> <span style="color: #007020">range</span>(<span style="color: #0000DD; font-weight: bold">5</span>))
+a_list <span style="color: #333333">=</span> <span style="color: #007020">list</span>(gen)
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;2 in l,&#39;</span>, <span style="color: #0000DD; font-weight: bold">2</span> <span style="color: #000000; font-weight: bold">in</span> a_list)
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;3 in l,&#39;</span>, <span style="color: #0000DD; font-weight: bold">3</span> <span style="color: #000000; font-weight: bold">in</span> a_list)
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;1 in l,&#39;</span>, <span style="color: #0000DD; font-weight: bold">1</span> <span style="color: #000000; font-weight: bold">in</span> a_list)
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">2 in l, True
+3 in l, True
+1 in l, True
+</pre></div></p>
+
+<p><p><br> <br> <a name='bool_int'></a></p><h2 id="bool-is-a-subclass-of-int"><code>bool</code> is a subclass of <code>int</code></h2><p>[<a href="#sections">back to top</a>]</p><p>Chicken or egg? In the history of Python (Python 2.2 to be specific) truth values were implemented via 1 and 0 (similar to the old C). In order to avoid syntax errors in old (but perfectly working) Python code, <code>bool</code> was added as a subclass of <code>int</code> in Python 2.3.</p>
+<p>Original source: <a href="http://www.peterbe.com/plog/bool-is-int">http://www.peterbe.com/plog/bool-is-int</a></p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;isinstance(True, int):&#39;</span>, <span style="color: #007020">isinstance</span>(<span style="color: #008800; font-weight: bold">True</span>, <span style="color: #007020">int</span>))
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;True + True:&#39;</span>, <span style="color: #008800; font-weight: bold">True</span> <span style="color: #333333">+</span> <span style="color: #008800; font-weight: bold">True</span>)
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;3True + True:&#39;</span>, <span style="color: #0000DD; font-weight: bold">3</span><span style="color: #008800; font-weight: bold">True</span> <span style="color: #333333">+</span> <span style="color: #008800; font-weight: bold">True</span>)
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;3True - False:&#39;</span>, <span style="color: #0000DD; font-weight: bold">3</span><span style="color: #008800; font-weight: bold">True</span> <span style="color: #333333">-</span> <span style="color: #008800; font-weight: bold">False</span>)
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">isinstance<span style="color: #333333">(</span>True, int<span style="color: #333333">)</span>: True
+True + True: 2
+3True + True: 4
+3True - False: 3
+</pre></div></p>
+
+<p><p><br> <br> <a name='lambda_closure'></a></p><h2 id="about-lambda-in-closures-and-a-loop-pitfall">About lambda-in-closures-and-a-loop pitfall</h2><p>[<a href="#sections">back to top</a>]</p><p>Remember the section about the <a href="consuming_generators">&quot;consuming generators&quot;</a>? This example is somewhat related, but the result might still come unexpected.</p>
+<p>(Original source: <a href="http://openhome.cc/eGossip/Blog/UnderstandingLambdaClosure3.html">http://openhome.cc/eGossip/Blog/UnderstandingLambdaClosure3.html</a>)</p>
+<p>In the first example below, we call a <code>lambda</code> function in a list comprehension, and the value <code>i</code> will be dereferenced every time we call <code>lambda</code> within the scope of the list comprehension. Since the list is already constructed when we <code>for-loop</code> through the list, it will be set to the last value 4.</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">my_list <span style="color: #333333">=</span> [<span style="color: #008800; font-weight: bold">lambda</span>: i <span style="color: #008800; font-weight: bold">for</span> i <span style="color: #000000; font-weight: bold">in</span> <span style="color: #007020">range</span>(<span style="color: #0000DD; font-weight: bold">5</span>)]
+<span style="color: #008800; font-weight: bold">for</span> l <span style="color: #000000; font-weight: bold">in</span> my_list:
+    <span style="color: #007020">print</span>(l())
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #0000DD; font-weight: bold">4</span>
+<span style="color: #0000DD; font-weight: bold">4</span>
+<span style="color: #0000DD; font-weight: bold">4</span>
+<span style="color: #0000DD; font-weight: bold">4</span>
+<span style="color: #0000DD; font-weight: bold">4</span>
+</pre></div></p>
+
+<p><p>This, however, does not apply to generators:</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">my_gen <span style="color: #333333">=</span> (<span style="color: #008800; font-weight: bold">lambda</span>: n <span style="color: #008800; font-weight: bold">for</span> n <span style="color: #000000; font-weight: bold">in</span> <span style="color: #007020">range</span>(<span style="color: #0000DD; font-weight: bold">5</span>))
+<span style="color: #008800; font-weight: bold">for</span> l <span style="color: #000000; font-weight: bold">in</span> my_gen:
+    <span style="color: #007020">print</span>(l())
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">0
+1
+2
+3
+4
+</pre></div></p>
+
+<p><p><br> <br> <a name='python_legb'></a></p><h2 id="pythons-legb-scope-resolution-and-the-keywords-global-and-nonlocal">Python's LEGB scope resolution and the keywords <code>global</code> and <code>nonlocal</code></h2><p>[<a href="#sections">back to top</a>]</p><p>There is nothing particularly surprising about Python's LEGB scope resolution (Local -&gt; Enclosed -&gt; Global -&gt; Built-in), but it is still useful to take a look at some examples!</p><h3 id="global-vs.-local"><code>global</code> vs. <code>local</code></h3>
+<p>According to the LEGB rule, Python will first look for a variable in the local scope. So if we set the variable <code>x = 1</code> <code>local</code>ly in the function's scope, it won't have an effect on the <code>global</code> <code>x</code>.</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">x <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>
+<span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">in_func</span>():
+    x <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">1</span>
+    <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;in_func:&#39;</span>, x)</p>
+
+<p>in_func()
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;global:&#39;</span>, x)
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">in_func: 1
+global: 0
+</pre></div></p>
+
+<p><p>If we want to modify the <code>global</code> x via a function, we can simply use the <code>global</code> keyword to import the variable into the function's scope:</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">x <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>
+<span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">in_func</span>():
+    <span style="color: #008800; font-weight: bold">global</span> x
+    x <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">1</span>
+    <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;in_func:&#39;</span>, x)</p>
+
+<p>in_func()
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;global:&#39;</span>, x)
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">in_func: 1
+global: 1
+</pre></div></p>
+
+<p><h3 id="local-vs.-enclosed"><code>local</code> vs. <code>enclosed</code></h3>
+<p>Now, let us take a look at <code>local</code> vs. <code>enclosed</code>. Here, we set the variable <code>x = 1</code> in the <code>outer</code> function and set <code>x = 1</code> in the enclosed function <code>inner</code>. Since <code>inner</code> looks in the local scope first, it won't modify <code>outer</code>'s <code>x</code>.</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">outer</span>():
+       x <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">1</span>
+       <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;outer before:&#39;</span>, x)
+       <span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">inner</span>():
+           x <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">2</span>
+           <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&quot;inner:&quot;</span>, x)
+       inner()
+       <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&quot;outer after:&quot;</span>, x)
+outer()
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">outer before: 1
+inner: 2
+outer after: 1
+</pre></div></p>
+
+<p><p>Here is where the <code>nonlocal</code> keyword comes in handy - it allows us to modify the <code>x</code> variable in the <code>enclosed</code> scope:</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">outer</span>():
+       x <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">1</span>
+       <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;outer before:&#39;</span>, x)
+       <span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">inner</span>():
+           <span style="color: #008800; font-weight: bold">nonlocal</span> x
+           x <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">2</span>
+           <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&quot;inner:&quot;</span>, x)
+       inner()
+       <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&quot;outer after:&quot;</span>, x)
+outer()
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">outer before: 1
+inner: 2
+outer after: 2
+</pre></div></p>
+
+<p><p><br> <br> <a name='immutable_tuple'></a></p><h2 id="when-mutable-contents-of-immutable-tuples-arent-so-mutable">When mutable contents of immutable tuples aren't so mutable</h2><p>[<a href="#sections">back to top</a>]</p><p>As we all know, tuples are immutable objects in Python, right!? But what happens if they contain mutable objects?</p>
+<p>First, let us have a look at the expected behavior: a <code>TypeError</code> is raised if we try to modify immutable types in a tuple:</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">tup <span style="color: #333333">=</span> (<span style="color: #0000DD; font-weight: bold">1</span>,)
+tup[<span style="color: #0000DD; font-weight: bold">0</span>] <span style="color: #333333">+=</span> <span style="color: #0000DD; font-weight: bold">1</span>
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #333333">---------------------------------------------------------------------------</span>
+<span style="color: #FF0000; font-weight: bold">TypeError</span>                                 Traceback (most recent call last)
+<span style="color: #333333">&lt;</span>ipython<span style="color: #333333">-</span><span style="color: #007020">input</span><span style="color: #333333">-</span><span style="color: #0000DD; font-weight: bold">41</span><span style="color: #333333">-</span>c3bec6c3fe6f<span style="color: #333333">&gt;</span> <span style="color: #000000; font-weight: bold">in</span> <span style="color: #333333">&lt;</span>module<span style="color: #333333">&gt;</span>()
+      <span style="color: #0000DD; font-weight: bold">1</span> tup <span style="color: #333333">=</span> (<span style="color: #0000DD; font-weight: bold">1</span>,)
+<span style="color: #333333">----&gt;</span> <span style="color: #0000DD; font-weight: bold">2</span> tup[<span style="color: #0000DD; font-weight: bold">0</span>] <span style="color: #333333">+=</span> <span style="color: #0000DD; font-weight: bold">1</span></p>
+
+<p><span style="color: #FF0000; font-weight: bold">TypeError</span>: <span style="background-color: #fff0f0">&#39;tuple&#39;</span> <span style="color: #007020">object</span> does <span style="color: #000000; font-weight: bold">not</span> support item assignment
+</pre></div></p>
+
+<p>But what if we put a mutable object into the immutable tuple? Well, modification works, but we also get a TypeError at the same time.</p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">tup <span style="color: #333333">=</span> ([],)
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;tup before: &#39;</span>, tup)
+tup[<span style="color: #0000DD; font-weight: bold">0</span>] <span style="color: #333333">+=</span> [<span style="color: #0000DD; font-weight: bold">1</span>]
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">tup before:  <span style="color: #333333">([]</span>,<span style="color: #333333">)</span>
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">tup before:  ([],)
+<span style="color: #333333">---------------------------------------------------------------------------</span>
+<span style="color: #FF0000; font-weight: bold">TypeError</span>                                 Traceback (most recent call last)
+<span style="color: #333333">&lt;</span>ipython<span style="color: #333333">-</span><span style="color: #007020">input</span><span style="color: #333333">-</span><span style="color: #0000DD; font-weight: bold">42</span><span style="color: #333333">-</span>aebe9a31dbeb<span style="color: #333333">&gt;</span> <span style="color: #000000; font-weight: bold">in</span> <span style="color: #333333">&lt;</span>module<span style="color: #333333">&gt;</span>()
+      <span style="color: #0000DD; font-weight: bold">1</span> tup <span style="color: #333333">=</span> ([],)
+      <span style="color: #0000DD; font-weight: bold">2</span> <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;tup before: &#39;</span>, tup)
+<span style="color: #333333">----&gt;</span> <span style="color: #0000DD; font-weight: bold">3</span> tup[<span style="color: #0000DD; font-weight: bold">0</span>] <span style="color: #333333">+=</span> [<span style="color: #0000DD; font-weight: bold">1</span>]</p>
+
+<p><span style="color: #FF0000; font-weight: bold">TypeError</span>: <span style="background-color: #fff0f0">&#39;tuple&#39;</span> <span style="color: #007020">object</span> does <span style="color: #000000; font-weight: bold">not</span> support item assignment
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;tup after: &#39;</span>, tup)
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">tup after:  <span style="color: #333333">([</span>1<span style="color: #333333">]</span>,<span style="color: #333333">)</span>
+</pre></div></p>
+
+<p><p><br> <br> However, <strong>there are ways</strong> to modify the mutable contents of the tuple without raising the <code>TypeError</code>, the solution is the <code>.extend()</code> method, or alternatively <code>.append()</code> (for lists):</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">tup <span style="color: #333333">=</span> ([],)
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;tup before: &#39;</span>, tup)
+tup[<span style="color: #0000DD; font-weight: bold">0</span>]<span style="color: #333333">.</span>extend([<span style="color: #0000DD; font-weight: bold">1</span>])
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;tup after: &#39;</span>, tup)
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">tup before:  <span style="color: #333333">([]</span>,<span style="color: #333333">)</span>
+tup after:  <span style="color: #333333">([</span>1<span style="color: #333333">]</span>,<span style="color: #333333">)</span>
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">tup <span style="color: #333333">=</span> ([],)
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;tup before: &#39;</span>, tup)
+tup[<span style="color: #0000DD; font-weight: bold">0</span>]<span style="color: #333333">.</span>append(<span style="color: #0000DD; font-weight: bold">1</span>)
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;tup after: &#39;</span>, tup)
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">tup before:  <span style="color: #333333">([]</span>,<span style="color: #333333">)</span>
+tup after:  <span style="color: #333333">([</span>1<span style="color: #333333">]</span>,<span style="color: #333333">)</span>
+</pre></div></p>
+
+<p><h3 id="explanation">Explanation</h3>
+<p><strong>A. Jesse Jiryu Davis</strong> has a nice explanation for this phenomenon (Original source: <a href="http://emptysqua.re/blog/python-increment-is-weird-part-ii/">http://emptysqua.re/blog/python-increment-is-weird-part-ii/</a>)</p>
+<p>If we try to extend the list via <code>+=</code> <em>&quot;then the statement executes <code>STORE_SUBSCR</code>, which calls the C function <code>PyObject_SetItem</code>, which checks if the object supports item assignment. In our case the object is a tuple, so <code>PyObject_SetItem</code> throws the <code>TypeError</code>. Mystery solved.&quot;</em></p><h4 id="one-more-note-about-the-immutable-status-of-tuples.-tuples-are-famous-for-being-immutable.-however-how-comes-that-this-code-works">One more note about the <code>immutable</code> status of tuples. Tuples are famous for being immutable. However, how comes that this code works?</h4></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">my_tup <span style="color: #333333">=</span> (<span style="color: #0000DD; font-weight: bold">1</span>,)
+my_tup <span style="color: #333333">+=</span> (<span style="color: #0000DD; font-weight: bold">4</span>,)
+my_tup <span style="color: #333333">=</span> my_tup <span style="color: #333333">+</span> (<span style="color: #0000DD; font-weight: bold">5</span>,)
+<span style="color: #007020">print</span>(my_tup)
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #333333">(</span>1, 4, 5<span style="color: #333333">)</span>
+</pre></div></p>
+
+<p><p>What happens &quot;behind&quot; the curtains is that the tuple is not modified, but every time a new object is generated, which will inherit the old &quot;name tag&quot;:</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">my_tup <span style="color: #333333">=</span> (<span style="color: #0000DD; font-weight: bold">1</span>,)
+<span style="color: #007020">print</span>(<span style="color: #007020">id</span>(my_tup))
+my_tup <span style="color: #333333">+=</span> (<span style="color: #0000DD; font-weight: bold">4</span>,)
+<span style="color: #007020">print</span>(<span style="color: #007020">id</span>(my_tup))
+my_tup <span style="color: #333333">=</span> my_tup <span style="color: #333333">+</span> (<span style="color: #0000DD; font-weight: bold">5</span>,)
+<span style="color: #007020">print</span>(<span style="color: #007020">id</span>(my_tup))
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">4337381840
+4357415496
+4357289952
+</pre></div></p>
+
+<p><p><br> <br> <a name='list_generator'></a></p><h2 id="list-comprehensions-are-fast-but-generators-are-faster">List comprehensions are fast, but generators are faster!?</h2><p>[<a href="#sections">back to top</a>]</p><p>&quot;List comprehensions are fast, but generators are faster!?&quot; - No, not really (or significantly, see the benchmarks below). So what's the reason to prefer one over the other? - use lists if you want to use the plethora of list methods<br />- use generators when you are dealing with huge collections to avoid memory issues</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">import</span> <span style="color: #0e84b5; font-weight: bold">timeit</span></p>
+
+<p><span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">plainlist</span>(n<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">100000</span>):
+    my_list <span style="color: #333333">=</span> []
+    <span style="color: #008800; font-weight: bold">for</span> i <span style="color: #000000; font-weight: bold">in</span> <span style="color: #007020">range</span>(n):
+        <span style="color: #008800; font-weight: bold">if</span> i <span style="color: #333333">%</span> <span style="color: #0000DD; font-weight: bold">5</span> <span style="color: #333333">==</span> <span style="color: #0000DD; font-weight: bold">0</span>:
+            my_list<span style="color: #333333">.</span>append(i)
+    <span style="color: #008800; font-weight: bold">return</span> my_list</p>
+
+<p><span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">listcompr</span>(n<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">100000</span>):
+    my_list <span style="color: #333333">=</span> [i <span style="color: #008800; font-weight: bold">for</span> i <span style="color: #000000; font-weight: bold">in</span> <span style="color: #007020">range</span>(n) <span style="color: #008800; font-weight: bold">if</span> i <span style="color: #333333">%</span> <span style="color: #0000DD; font-weight: bold">5</span> <span style="color: #333333">==</span> <span style="color: #0000DD; font-weight: bold">0</span>]
+    <span style="color: #008800; font-weight: bold">return</span> my_list</p>
+
+<p><span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">generator</span>(n<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">100000</span>):
+    my_gen <span style="color: #333333">=</span> (i <span style="color: #008800; font-weight: bold">for</span> i <span style="color: #000000; font-weight: bold">in</span> <span style="color: #007020">range</span>(n) <span style="color: #008800; font-weight: bold">if</span> i <span style="color: #333333">%</span> <span style="color: #0000DD; font-weight: bold">5</span> <span style="color: #333333">==</span> <span style="color: #0000DD; font-weight: bold">0</span>)
+    <span style="color: #008800; font-weight: bold">return</span> my_gen</p>
+
+<p><span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">generator_yield</span>(n<span style="color: #333333">=</span><span style="color: #0000DD; font-weight: bold">100000</span>):
+    <span style="color: #008800; font-weight: bold">for</span> i <span style="color: #000000; font-weight: bold">in</span> <span style="color: #007020">range</span>(n):
+        <span style="color: #008800; font-weight: bold">if</span> i <span style="color: #333333">%</span> <span style="color: #0000DD; font-weight: bold">5</span> <span style="color: #333333">==</span> <span style="color: #0000DD; font-weight: bold">0</span>:
+            <span style="color: #008800; font-weight: bold">yield</span> i
+</pre></div></p>
+
+<p><h4 id="to-be-fair-to-the-list-let-us-exhaust-the-generators">To be fair to the list, let us exhaust the generators:</h4></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">test_plainlist</span>(plain_list):
+    <span style="color: #008800; font-weight: bold">for</span> i <span style="color: #000000; font-weight: bold">in</span> plain_list():
+        <span style="color: #008800; font-weight: bold">pass</span></p>
+
+<p><span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">test_listcompr</span>(listcompr):
+    <span style="color: #008800; font-weight: bold">for</span> i <span style="color: #000000; font-weight: bold">in</span> listcompr():
+        <span style="color: #008800; font-weight: bold">pass</span></p>
+
+<p><span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">test_generator</span>(generator):
+    <span style="color: #008800; font-weight: bold">for</span> i <span style="color: #000000; font-weight: bold">in</span> generator():
+        <span style="color: #008800; font-weight: bold">pass</span></p>
+
+<p><span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">test_generator_yield</span>(generator_yield):
+    <span style="color: #008800; font-weight: bold">for</span> i <span style="color: #000000; font-weight: bold">in</span> generator_yield():
+        <span style="color: #008800; font-weight: bold">pass</span></p>
+
+<p><span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;plain_list:     &#39;</span>, end <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&#39;&#39;</span>)
+<span style="color: #333333">%</span>timeit test_plainlist(plainlist)
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\n</span><span style="background-color: #fff0f0">listcompr:     &#39;</span>, end <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&#39;&#39;</span>)
+<span style="color: #333333">%</span>timeit test_listcompr(listcompr)
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\n</span><span style="background-color: #fff0f0">generator:     &#39;</span>, end <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&#39;&#39;</span>)
+<span style="color: #333333">%</span>timeit test_generator(generator)
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\n</span><span style="background-color: #fff0f0">generator_yield:     &#39;</span>, end <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&#39;&#39;</span>)
+<span style="color: #333333">%</span>timeit test_generator_yield(generator_yield)
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">plain_list:     10 loops, best of 3: 22.4 ms per loop</p>
+
+<p>listcompr:     10 loops, best of 3: 20.8 ms per loop</p>
+
+<p>generator:     10 loops, best of 3: 22 ms per loop</p>
+
+<p>generator_yield:     10 loops, best of 3: 21.9 ms per loop
+</pre></div></p>
+
+<p><p><br> <br> <a name='private_class'></a></p><h2 id="public-vs.-private-class-methods-and-name-mangling">Public vs. private class methods and name mangling</h2><p>[<a href="#sections">back to top</a>]</p><p>Who has not stumbled across this quote &quot;we are all consenting adults here&quot; in the Python community, yet? Unlike in other languages like C++ (sorry, there are many more, but that's one I am most familiar with), we can't really protect class methods from being used outside the class.<br />All we can do is to indicate methods as private to make clear that they are better not used outside the class, but it is really up to the class user, since &quot;we are all consenting adults here&quot;!<br />So, when we want to &quot;make&quot; class methods private, we just put a double-underscore in front of it (same with other class members), which invokes some name mangling if we want to acess the private class member outside the class!<br />This doesn't prevent the class user to access this class member though, but he has to know the trick and also knows that it his own risk...</p>
+<p>Let the following example illustrate what I mean:</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">class</span> <span style="color: #BB0066; font-weight: bold">my_class</span>():
+    <span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">public_method</span>(<span style="color: #007020">self</span>):
+        <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;Hello public world!&#39;</span>)
+    <span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">private_method</span>(<span style="color: #007020">self</span>):
+        <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;Hello private world!&#39;</span>)
+    <span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">call_private_method_in_class</span>(<span style="color: #007020">self</span>):
+        <span style="color: #007020">self</span><span style="color: #333333">.</span>private_method()</p>
+
+<p>my_instance <span style="color: #333333">=</span> my_class()
+my_instance<span style="color: #333333">.</span>public_method()
+my_instance<span style="color: #333333">.</span>_my_class__private_method()
+my_instance<span style="color: #333333">.</span>call_private_method_in_class()
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">Hello public world!
+Hello private world!
+Hello private world!
+</pre></div></p>
+
+<p><p><br> <br> <a name='looping_pitfall'></a></p><h2 id="the-consequences-of-modifying-a-list-when-looping-through-it">The consequences of modifying a list when looping through it</h2><p>[<a href="#sections">back to top</a>]</p><p>It can be really dangerous to modify a list when iterating through it - this is a very common pitfall that can cause unintended behavior!<br />Look at the following examples, and for a fun exercise: try to figure out what is going on before you skip to the solution!</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">a <span style="color: #333333">=</span> [<span style="color: #0000DD; font-weight: bold">1</span>, <span style="color: #0000DD; font-weight: bold">2</span>, <span style="color: #0000DD; font-weight: bold">3</span>, <span style="color: #0000DD; font-weight: bold">4</span>, <span style="color: #0000DD; font-weight: bold">5</span>]
+<span style="color: #008800; font-weight: bold">for</span> i <span style="color: #000000; font-weight: bold">in</span> a:
+    <span style="color: #008800; font-weight: bold">if</span> <span style="color: #000000; font-weight: bold">not</span> i <span style="color: #333333">%</span> <span style="color: #0000DD; font-weight: bold">2</span>:
+        a<span style="color: #333333">.</span>remove(i)
+<span style="color: #007020">print</span>(a)
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #333333">[</span>1, 3, 5<span style="color: #333333">]</span>
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">b <span style="color: #333333">=</span> [<span style="color: #0000DD; font-weight: bold">2</span>, <span style="color: #0000DD; font-weight: bold">4</span>, <span style="color: #0000DD; font-weight: bold">5</span>, <span style="color: #0000DD; font-weight: bold">6</span>]
+<span style="color: #008800; font-weight: bold">for</span> i <span style="color: #000000; font-weight: bold">in</span> b:
+     <span style="color: #008800; font-weight: bold">if</span> <span style="color: #000000; font-weight: bold">not</span> i <span style="color: #333333">%</span> <span style="color: #0000DD; font-weight: bold">2</span>:
+         b<span style="color: #333333">.</span>remove(i)
+<span style="color: #007020">print</span>(b)
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #333333">[</span>4, 5<span style="color: #333333">]</span>
+</pre></div></p>
+
+<p><p><br> <br> <strong>The solution</strong> is that we are iterating through the list index by index, and if we remove one of the items in-between, we inevitably mess around with the indexing, look at the following example, and it will become clear:</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">b <span style="color: #333333">=</span> [<span style="color: #0000DD; font-weight: bold">2</span>, <span style="color: #0000DD; font-weight: bold">4</span>, <span style="color: #0000DD; font-weight: bold">5</span>, <span style="color: #0000DD; font-weight: bold">6</span>]
+<span style="color: #008800; font-weight: bold">for</span> index, item <span style="color: #000000; font-weight: bold">in</span> <span style="color: #007020">enumerate</span>(b):
+    <span style="color: #007020">print</span>(index, item)
+    <span style="color: #008800; font-weight: bold">if</span> <span style="color: #000000; font-weight: bold">not</span> item <span style="color: #333333">%</span> <span style="color: #0000DD; font-weight: bold">2</span>:
+        b<span style="color: #333333">.</span>remove(item)
+<span style="color: #007020">print</span>(b)
+</pre></div>
+ass="k">print</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+</pre></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">0 2
+1 5
+2 6
+<span style="color: #333333">[</span>4, 5<span style="color: #333333">]</span>
+</pre></div></p>
+
+<p><p><br> <br> <a name='dynamic_binding'></a></p><h2 id="dynamic-binding-and-typos-in-variable-names">Dynamic binding and typos in variable names</h2><p>[<a href="#sections">back to top</a>]</p><p>Be careful, dynamic binding is convenient, but can also quickly become dangerous!</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;first list:&#39;</span>)
+<span style="color: #008800; font-weight: bold">for</span> i <span style="color: #000000; font-weight: bold">in</span> <span style="color: #007020">range</span>(<span style="color: #0000DD; font-weight: bold">3</span>):
+    <span style="color: #007020">print</span>(i)</p>
+
+<p><span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\n</span><span style="background-color: #fff0f0">second list:&#39;</span>)
+<span style="color: #008800; font-weight: bold">for</span> j <span style="color: #000000; font-weight: bold">in</span> <span style="color: #007020">range</span>(<span style="color: #0000DD; font-weight: bold">3</span>):
+    <span style="color: #007020">print</span>(i) <span style="color: #888888"># I (intentionally) made typo here!</span>
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">first list:
+0
+1
+2</p>
+
+<p>second list:
+2
+2
+2
+</pre></div></p>
+
+<p><p><br> <br> <a name='out_of_range_slicing'></a></p><h2 id="list-slicing-using-indexes-that-are-out-of-range">List slicing using indexes that are &quot;out of range&quot;</h2><p>[<a href="#sections">back to top</a>]</p><p>As we have all encountered it 1 (x10000) time(s) in our live, the infamous <code>IndexError</code>:</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">my_list <span style="color: #333333">=</span> [<span style="color: #0000DD; font-weight: bold">1</span>, <span style="color: #0000DD; font-weight: bold">2</span>, <span style="color: #0000DD; font-weight: bold">3</span>, <span style="color: #0000DD; font-weight: bold">4</span>, <span style="color: #0000DD; font-weight: bold">5</span>]
+<span style="color: #007020">print</span>(my_list[<span style="color: #0000DD; font-weight: bold">5</span>])
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #333333">---------------------------------------------------------------------------</span>
+<span style="color: #FF0000; font-weight: bold">IndexError</span>                                Traceback (most recent call last)
+<span style="color: #333333">&lt;</span>ipython<span style="color: #333333">-</span><span style="color: #007020">input</span><span style="color: #333333">-</span><span style="color: #0000DD; font-weight: bold">15</span><span style="color: #333333">-</span>eb273dc36fdc<span style="color: #333333">&gt;</span> <span style="color: #000000; font-weight: bold">in</span> <span style="color: #333333">&lt;</span>module<span style="color: #333333">&gt;</span>()
+      <span style="color: #0000DD; font-weight: bold">1</span> my_list <span style="color: #333333">=</span> [<span style="color: #0000DD; font-weight: bold">1</span>, <span style="color: #0000DD; font-weight: bold">2</span>, <span style="color: #0000DD; font-weight: bold">3</span>, <span style="color: #0000DD; font-weight: bold">4</span>, <span style="color: #0000DD; font-weight: bold">5</span>]
+<span style="color: #333333">----&gt;</span> <span style="color: #0000DD; font-weight: bold">2</span> <span style="color: #007020">print</span>(my_list[<span style="color: #0000DD; font-weight: bold">5</span>])</p>
+
+<p><span style="color: #FF0000; font-weight: bold">IndexError</span>: <span style="color: #007020">list</span> index out of <span style="color: #007020">range</span>
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">my_list <span style="color: #333333">=</span> [<span style="color: #0000DD; font-weight: bold">1</span>, <span style="color: #0000DD; font-weight: bold">2</span>, <span style="color: #0000DD; font-weight: bold">3</span>, <span style="color: #0000DD; font-weight: bold">4</span>, <span style="color: #0000DD; font-weight: bold">5</span>]
+<span style="color: #007020">print</span>(my_list[<span style="color: #0000DD; font-weight: bold">5</span>:])
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #333333">[]</span>
+</pre></div></p>
+
+<p><p><br> <br> <a name='unboundlocalerror'></a></p><h2 id="reusing-global-variable-names-and-unboundlocalerrors">Reusing global variable names and <code>UnboundLocalErrors</code></h2><p>[<a href="#sections">back to top</a>]</p><p>Usually, it is no problem to access global variables in the local scope of a function:</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">my_func</span>():
+    <span style="color: #007020">print</span>(var)</p>
+
+<p>var <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&#39;global&#39;</span>
+my_func()</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">global
+</pre></div></p>
+
+<p><p>And is also no problem to use the same variable name in the local scope without affecting the local counterpart:</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">my_func</span>():
+    var <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&#39;locally changed&#39;</span></p>
+
+<p>var <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&#39;global&#39;</span>
+my_func()
+<span style="color: #007020">print</span>(var)
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">global
+</pre></div></p>
+
+<p><p>But we have to be careful if we use a variable name that occurs in the global scope, and we want to access it in the local function scope if we want to reuse this name:</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">my_func</span>():
+    <span style="color: #007020">print</span>(var) <span style="color: #888888"># want to access global variable</span>
+    var <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&#39;locally changed&#39;</span> <span style="color: #888888"># but Python thinks we forgot to define the local variable!</span></p>
+
+<p>var <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&#39;global&#39;</span>
+my_func()
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #333333">---------------------------------------------------------------------------</span>
+<span style="color: #FF0000; font-weight: bold">UnboundLocalError</span>                         Traceback (most recent call last)
+<span style="color: #333333">&lt;</span>ipython<span style="color: #333333">-</span><span style="color: #007020">input</span><span style="color: #333333">-</span><span style="color: #0000DD; font-weight: bold">40</span><span style="color: #333333">-</span><span style="color: #0000DD; font-weight: bold">3</span>afd870b7c35<span style="color: #333333">&gt;</span> <span style="color: #000000; font-weight: bold">in</span> <span style="color: #333333">&lt;</span>module<span style="color: #333333">&gt;</span>()
+      <span style="color: #0000DD; font-weight: bold">4</span>
+      <span style="color: #0000DD; font-weight: bold">5</span> var <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&#39;global&#39;</span>
+<span style="color: #333333">----&gt;</span> <span style="color: #0000DD; font-weight: bold">6</span> my_func()</p>
+
+<p><span style="color: #333333">&lt;</span>ipython<span style="color: #333333">-</span><span style="color: #007020">input</span><span style="color: #333333">-</span><span style="color: #0000DD; font-weight: bold">40</span><span style="color: #333333">-</span><span style="color: #0000DD; font-weight: bold">3</span>afd870b7c35<span style="color: #333333">&gt;</span> <span style="color: #000000; font-weight: bold">in</span> my_func()
+      <span style="color: #0000DD; font-weight: bold">1</span> <span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">my_func</span>():
+<span style="color: #333333">----&gt;</span> <span style="color: #0000DD; font-weight: bold">2</span>     <span style="color: #007020">print</span>(var) <span style="color: #888888"># want to access global variable</span>
+      <span style="color: #0000DD; font-weight: bold">3</span>     var <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&#39;locally changed&#39;</span>
+      <span style="color: #0000DD; font-weight: bold">4</span>
+      <span style="color: #0000DD; font-weight: bold">5</span> var <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&#39;global&#39;</span></p>
+
+<p><span style="color: #FF0000; font-weight: bold">UnboundLocalError</span>: local variable <span style="background-color: #fff0f0">&#39;var&#39;</span> referenced before assignment
+</pre></div></p>
+
+<p><p>In this case, we have to use the <code>global</code> keyword!</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">my_func</span>():
+    <span style="color: #008800; font-weight: bold">global</span> var
+    <span style="color: #007020">print</span>(var) <span style="color: #888888"># want to access global variable</span>
+    var <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&#39;locally changed&#39;</span> <span style="color: #888888"># changes the gobal variable</span></p>
+
+<p>var <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&#39;global&#39;</span></p>
+
+<p>my_func()
+<span style="color: #007020">print</span>(var)
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">global
+locally changed
+</pre></div></p>
+
+<p><p><br> <br> <a name='copy_mutable'></a></p><h2 id="creating-copies-of-mutable-objects">Creating copies of mutable objects</h2><p>[<a href="#sections">back to top</a>]</p><p>Let's assume a scenario where we want to duplicate sub<code>list</code>s of values stored in another list. If we want to create independent sub<code>list</code> object, using the arithmetic multiplication operator could lead to rather unexpected (or undesired) results:</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">my_list1 <span style="color: #333333">=</span> [[<span style="color: #0000DD; font-weight: bold">1</span>, <span style="color: #0000DD; font-weight: bold">2</span>, <span style="color: #0000DD; font-weight: bold">3</span>]] <span style="color: #333333">*</span> <span style="color: #0000DD; font-weight: bold">2</span></p>
+
+<p><span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;initially ---&gt; &#39;</span>, my_list1)</p>
+
+<p><span style="color: #888888"># modify the 1st element of the 2nd sublist</span>
+my_list1[<span style="color: #0000DD; font-weight: bold">1</span>][<span style="color: #0000DD; font-weight: bold">0</span>] <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&#39;a&#39;</span>
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&quot;after my_list1[1][0] = &#39;a&#39; ---&gt; &quot;</span>, my_list1)
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">initially ---&gt;  <span style="color: #333333">[[</span>1, 2, 3<span style="color: #333333">]</span>, <span style="color: #333333">[</span>1, 2, 3<span style="color: #333333">]]</span>
+after my_list1<span style="color: #333333">[</span>1<span style="color: #333333">][</span>0<span style="color: #333333">]</span> <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&#39;a&#39;</span> ---&gt;  <span style="color: #333333">[[</span><span style="background-color: #fff0f0">&#39;a&#39;</span>, 2, 3<span style="color: #333333">]</span>, <span style="color: #333333">[</span><span style="background-color: #fff0f0">&#39;a&#39;</span>, 2, 3<span style="color: #333333">]]</span>
+</pre></div></p>
+
+<p><p><br> <br> In this case, we should better create &quot;new&quot; objects:</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">my_list2 <span style="color: #333333">=</span> [[<span style="color: #0000DD; font-weight: bold">1</span>, <span style="color: #0000DD; font-weight: bold">2</span>, <span style="color: #0000DD; font-weight: bold">3</span>] <span style="color: #008800; font-weight: bold">for</span> i <span style="color: #000000; font-weight: bold">in</span> <span style="color: #007020">range</span>(<span style="color: #0000DD; font-weight: bold">2</span>)]</p>
+
+<p><span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;initially:  ---&gt; &#39;</span>, my_list2)</p>
+
+<p><span style="color: #888888"># modify the 1st element of the 2nd sublist</span>
+my_list2[<span style="color: #0000DD; font-weight: bold">1</span>][<span style="color: #0000DD; font-weight: bold">0</span>] <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&#39;a&#39;</span>
+<span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&quot;after my_list2[1][0] = &#39;a&#39;:  ---&gt; &quot;</span>, my_list2)
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">initially:  ---&gt;  <span style="color: #333333">[[</span>1, 2, 3<span style="color: #333333">]</span>, <span style="color: #333333">[</span>1, 2, 3<span style="color: #333333">]]</span>
+after my_list2<span style="color: #333333">[</span>1<span style="color: #333333">][</span>0<span style="color: #333333">]</span> <span style="color: #333333">=</span> <span style="background-color: #fff0f0">&#39;a&#39;</span>:  ---&gt;  <span style="color: #333333">[[</span>1, 2, 3<span style="color: #333333">]</span>, <span style="color: #333333">[</span><span style="background-color: #fff0f0">&#39;a&#39;</span>, 2, 3<span style="color: #333333">]]</span>
+</pre></div></p>
+
+<p><p><br> And here is the proof:</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">for</span> a,b <span style="color: #000000; font-weight: bold">in</span> <span style="color: #007020">zip</span>(my_list1, my_list2):
+    <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;id my_list1: {}, id my_list2: {}&#39;</span><span style="color: #333333">.</span>format(<span style="color: #007020">id</span>(a), <span style="color: #007020">id</span>(b)))
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">id my_list1: 4350764680, id my_list2: 4350766472
+id my_list1: 4350764680, id my_list2: 4350766664
+</pre></div></p>
+
+<p><p><br> <br> <a name='python_differences'></a></p><h2 id="key-differences-between-python-2-and-3">Key differences between Python 2 and 3</h2><p>[<a href="#sections">back to top</a>]</p><p>There are some good articles already that are summarizing the differences between Python 2 and 3, e.g.,<br />- <a href="https://wiki.python.org/moin/Python2orPython3">https://wiki.python.org/moin/Python2orPython3</a> - <a href="https://docs.python.org/3.0/whatsnew/3.0.html">https://docs.python.org/3.0/whatsnew/3.0.html</a> - <a href="http://python3porting.com/differences.html">http://python3porting.com/differences.html</a> - <a href="https://docs.python.org/3/howto/pyporting.html">https://docs.python.org/3/howto/pyporting.html</a><br />etc.</p>
+<p>But it might be still worthwhile, especially for Python newcomers, to take a look at some of those! (Note: the the code was executed in Python 3.4.0 and Python 2.7.5 and copied from interactive shell sessions.)</p><h3 id="unicode...">Unicode...</h3>
+<h4 id="python-2">- Python 2:</h4>
+<p>We have ASCII <code>str()</code> types, separate <code>unicode()</code>, but no <code>byte</code> type ####- Python 3: Now, we finally have Unicode (utf-8) <code>str</code>ings, and 2 byte classes: <code>byte</code> and <code>bytearray</code>s</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #888888">#############</span>
+<span style="color: #888888"># Python 2</span>
+<span style="color: #888888">#############</span></p>
+
+<p><span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #007020">type</span>(unicode(<span style="background-color: #fff0f0">&#39;is like a python3 str()&#39;</span>))
+<span style="color: #333333">&lt;</span><span style="color: #007020">type</span> <span style="background-color: #fff0f0">&#39;unicode&#39;</span><span style="color: #333333">&gt;</span></p>
+
+<p><span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #007020">type</span>(b<span style="background-color: #fff0f0">&#39;byte type does not exist&#39;</span>)
+<span style="color: #333333">&lt;</span><span style="color: #007020">type</span> <span style="background-color: #fff0f0">&#39;str&#39;</span><span style="color: #333333">&gt;</span></p>
+
+<p><span style="color: #333333">&gt;&gt;&gt;</span> <span style="background-color: #fff0f0">&#39;they are really&#39;</span> <span style="color: #333333">+</span> b<span style="background-color: #fff0f0">&#39; the same&#39;</span>
+<span style="background-color: #fff0f0">&#39;they are really the same&#39;</span></p>
+
+<p><span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #007020">type</span>(<span style="color: #007020">bytearray</span>(b<span style="background-color: #fff0f0">&#39;bytearray oddly does exist though&#39;</span>))
+<span style="color: #333333">&lt;</span><span style="color: #007020">type</span> <span style="background-color: #fff0f0">&#39;bytearray&#39;</span><span style="color: #333333">&gt;</span></p>
+
+<p><span style="color: #888888">#############</span>
+<span style="color: #888888"># Python 3</span>
+<span style="color: #888888">#############</span></p>
+
+<p><span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;strings are now utf-8 </span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\u03BC</span><span style="background-color: #fff0f0">nico</span><span style="color: #666666; font-weight: bold; background-color: #fff0f0">\u0394</span><span style="background-color: #fff0f0">é!&#39;</span>)
+strings are now utf<span style="color: #333333">-</span><span style="color: #0000DD; font-weight: bold">8</span> μnicoΔé<span style="color: #FF0000; background-color: #FFAAAA">!</span></p>
+
+<p><span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #007020">type</span>(b<span style="background-color: #fff0f0">&#39; and we have byte types for storing data&#39;</span>)
+<span style="color: #333333">&lt;</span><span style="color: #008800; font-weight: bold">class</span> <span style="color: #FF0000; background-color: #FFAAAA">&#39;</span><span style="color: #BB0066; font-weight: bold">bytes</span><span style="background-color: #fff0f0">&#39;&gt;</span></p>
+
+<p><span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #007020">type</span>(<span style="color: #007020">bytearray</span>(b<span style="background-color: #fff0f0">&#39;but also bytearrays for those who prefer them over strings&#39;</span>))
+<span style="color: #333333">&lt;</span><span style="color: #008800; font-weight: bold">class</span> <span style="color: #FF0000; background-color: #FFAAAA">&#39;</span><span style="color: #BB0066; font-weight: bold">bytearray</span><span style="background-color: #fff0f0">&#39;&gt;</span></p>
+
+<p><span style="color: #333333">&gt;&gt;&gt;</span> <span style="background-color: #fff0f0">&#39;string&#39;</span> <span style="color: #333333">+</span> b<span style="background-color: #fff0f0">&#39;bytes for data&#39;</span>
+Traceback (most recent call last):s
+  File <span style="background-color: #fff0f0">&quot;&lt;stdin&gt;&quot;</span>, line <span style="color: #0000DD; font-weight: bold">1</span>, <span style="color: #000000; font-weight: bold">in</span> <span style="color: #333333">&lt;</span>module<span style="color: #333333">&gt;</span>
+<span style="color: #FF0000; font-weight: bold">TypeError</span>: Can<span style="background-color: #fff0f0">&#39;t convert &#39;</span><span style="color: #007020">bytes</span><span style="background-color: #fff0f0">&#39; object to str implicitly</span>
+</pre></div></p>
+
+<p><h4 id="the-print-statement">The print statement</h4>
+<p>Very trivial, but this change makes sense, Python 3 now only accepts <code>print</code>s with proper parentheses - just like the other function calls ...</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #888888"># Python 2</span>
+<span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #007020">print</span> <span style="background-color: #fff0f0">&#39;Hello, World!&#39;</span>
+Hello, World<span style="color: #FF0000; background-color: #FFAAAA">!</span>
+<span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;Hello, World!&#39;</span>)
+Hello, World<span style="color: #FF0000; background-color: #FFAAAA">!</span></p>
+
+<p><span style="color: #888888"># Python 3</span>
+<span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;Hello, World!&#39;</span>)
+Hello, World<span style="color: #FF0000; background-color: #FFAAAA">!</span>
+<span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #007020">print</span> <span style="background-color: #fff0f0">&#39;Hello, World!&#39;</span>
+  File <span style="background-color: #fff0f0">&quot;&lt;stdin&gt;&quot;</span>, line <span style="color: #0000DD; font-weight: bold">1</span>
+    <span style="color: #007020">print</span> <span style="background-color: #fff0f0">&#39;Hello, World!&#39;</span>
+                        <span style="color: #333333">^</span>
+<span style="color: #FF0000; font-weight: bold">SyntaxError</span>: invalid syntax
+</pre></div></p>
+
+<p><p>And if we want to print the output of 2 consecutive print functions on the same line, you would use a comma in Python 2, and a <code>end=&quot;&quot;</code> in Python 3:</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #888888"># Python 2</span>
+<span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #007020">print</span> <span style="background-color: #fff0f0">&quot;line 1&quot;</span>, ; <span style="color: #007020">print</span> <span style="background-color: #fff0f0">&#39;same line&#39;</span>
+line <span style="color: #0000DD; font-weight: bold">1</span> same line</p>
+
+<p><span style="color: #888888"># Python 3</span>
+<span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&quot;line 1&quot;</span>, end<span style="color: #333333">=</span><span style="background-color: #fff0f0">&quot;&quot;</span>) ; <span style="color: #007020">print</span> (<span style="background-color: #fff0f0">&quot; same line&quot;</span>)
+line <span style="color: #0000DD; font-weight: bold">1</span> same line
+</pre></div></p>
+
+<p><h4 id="integer-division">Integer division</h4>
+<p>This is a pretty dangerous thing if you are porting code, or executing Python 3 code in Python 2 since the change in integer-division behavior can often go unnoticed.<br />So, I still tend to use a <code>float(3/2)</code> or <code>3/2.0</code> instead of a <code>3/2</code> in my Python 3 scripts to save the Python 2 guys some trouble ... (PS: and vice versa, you can <code>from <strong>future</strong> import division</code> in your Python 2 scripts).</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #888888"># Python 2</span>
+<span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #0000DD; font-weight: bold">3</span> <span style="color: #333333">/</span> <span style="color: #0000DD; font-weight: bold">2</span>
+<span style="color: #0000DD; font-weight: bold">1</span>
+<span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #0000DD; font-weight: bold">3</span> <span style="color: #333333">//</span> <span style="color: #0000DD; font-weight: bold">2</span>
+<span style="color: #0000DD; font-weight: bold">1</span>
+<span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #0000DD; font-weight: bold">3</span> <span style="color: #333333">/</span> <span style="color: #6600EE; font-weight: bold">2.0</span>
+<span style="color: #6600EE; font-weight: bold">1.5</span>
+<span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #0000DD; font-weight: bold">3</span> <span style="color: #333333">//</span> <span style="color: #6600EE; font-weight: bold">2.0</span>
+<span style="color: #6600EE; font-weight: bold">1.0</span></p>
+
+<p><span style="color: #888888"># Python 3</span>
+<span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #0000DD; font-weight: bold">3</span> <span style="color: #333333">/</span> <span style="color: #0000DD; font-weight: bold">2</span>
+<span style="color: #6600EE; font-weight: bold">1.5</span>
+<span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #0000DD; font-weight: bold">3</span> <span style="color: #333333">//</span> <span style="color: #0000DD; font-weight: bold">2</span>
+<span style="color: #0000DD; font-weight: bold">1</span>
+<span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #0000DD; font-weight: bold">3</span> <span style="color: #333333">/</span> <span style="color: #6600EE; font-weight: bold">2.0</span>
+<span style="color: #6600EE; font-weight: bold">1.5</span>
+<span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #0000DD; font-weight: bold">3</span> <span style="color: #333333">//</span> <span style="color: #6600EE; font-weight: bold">2.0</span>
+<span style="color: #6600EE; font-weight: bold">1.0</span>
+</pre></div></p>
+
+<p><h4 id="xrange"><code>xrange()</code></h4>
+<p><code>xrange()</code> was pretty popular in Python 2.x if you wanted to create an iterable object. The behavior was quite similar to a generator ('lazy evaluation'), but you could iterate over it infinitely. The advantage was that it was generally faster than <code>range()</code> (e.g., in a for-loop) - not if you had to iterate over the list multiple times, since the generation happens every time from scratch!<br />In Python 3, the <code>range()</code> was implemented like the <code>xrange()</code> function so that a dedicated <code>xrange()</code> function does not exist anymore.</p></p>
+
+
+<p>
+<!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #888888"># Python 2</span>
+python <span style="color: #333333">-</span>m timeit <span style="background-color: #fff0f0">&#39;for i in range(1000000):&#39;</span> <span style="background-color: #fff0f0">&#39; pass&#39;</span>
+<span style="color: #0000DD; font-weight: bold">10</span> loops, best of <span style="color: #0000DD; font-weight: bold">3</span>: <span style="color: #0000DD; font-weight: bold">66</span> msec per loop
+
+python <span style="color: #333333">-</span>m timeit <span style="background-color: #fff0f0">&#39;for i in xrange(1000000):&#39;</span> <span style="background-color: #fff0f0">&#39; pass&#39;</span>
+<span style="color: #0000DD; font-weight: bold">10</span> loops, best of <span style="color: #0000DD; font-weight: bold">3</span>: <span style="color: #6600EE; font-weight: bold">27.8</span> msec per loop
+
+<span style="color: #888888"># Python 3</span>
+python3 <span style="color: #333333">-</span>m timeit <span style="background-color: #fff0f0">&#39;for i in range(1000000):&#39;</span> <span style="background-color: #fff0f0">&#39; pass&#39;</span>
+<span style="color: #0000DD; font-weight: bold">10</span> loops, best of <span style="color: #0000DD; font-weight: bold">3</span>: <span style="color: #6600EE; font-weight: bold">51.1</span> msec per loop
+
+python3 <span style="color: #333333">-</span>m timeit <span style="background-color: #fff0f0">&#39;for i in xrange(1000000):&#39;</span> <span style="background-color: #fff0f0">&#39; pass&#39;</span>
+Traceback (most recent call last):
+  File <span style="background-color: #fff0f0">&quot;/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/timeit.py&quot;</span>, line <span style="color: #0000DD; font-weight: bold">292</span>, <span style="color: #000000; font-weight: bold">in</span> main
+    x <span style="color: #333333">=</span> t<span style="color: #333333">.</span>timeit(number)
+  File <span style="background-color: #fff0f0">&quot;/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/timeit.py&quot;</span>, line <span style="color: #0000DD; font-weight: bold">178</span>, <span style="color: #000000; font-weight: bold">in</span> timeit
+    timing <span style="color: #333333">=</span> <span style="color: #007020">self</span><span style="color: #333333">.</span>inner(it, <span style="color: #007020">self</span><span style="color: #333333">.</span>timer)
+  File <span style="background-color: #fff0f0">&quot;&lt;timeit-src&gt;&quot;</span>, line <span style="color: #0000DD; font-weight: bold">6</span>, <span style="color: #000000; font-weight: bold">in</span> inner
+    <span style="color: #008800; font-weight: bold">for</span> i <span style="color: #000000; font-weight: bold">in</span> xrange(<span style="color: #0000DD; font-weight: bold">1000000</span>):
+<span style="color: #FF0000; font-weight: bold">NameError</span>: name <span style="background-color: #fff0f0">&#39;xrange&#39;</span> <span style="color: #000000; font-weight: bold">is</span> <span style="color: #000000; font-weight: bold">not</span> defined
+</pre></div>
+</p>
+
+
+<p><h4 id="raising-exceptions">Raising exceptions</h4>
+<p>Where Python 2 accepts both notations, the 'old' and the 'new' way, Python 3 chokes (and raises a <code>SyntaxError</code> in turn) if we don't enclose the exception argument in parentheses:</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #888888"># Python 2</span>
+<span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #008800; font-weight: bold">raise</span> <span style="color: #FF0000; font-weight: bold">IOError</span>, <span style="background-color: #fff0f0">&quot;file error&quot;</span>
+Traceback (most recent call last):
+  File <span style="background-color: #fff0f0">&quot;&lt;stdin&gt;&quot;</span>, line <span style="color: #0000DD; font-weight: bold">1</span>, <span style="color: #000000; font-weight: bold">in</span> <span style="color: #333333">&lt;</span>module<span style="color: #333333">&gt;</span>
+<span style="color: #FF0000; font-weight: bold">IOError</span>: file error
+<span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #008800; font-weight: bold">raise</span> <span style="color: #FF0000; font-weight: bold">IOError</span>(<span style="background-color: #fff0f0">&quot;file error&quot;</span>)
+Traceback (most recent call last):
+  File <span style="background-color: #fff0f0">&quot;&lt;stdin&gt;&quot;</span>, line <span style="color: #0000DD; font-weight: bold">1</span>, <span style="color: #000000; font-weight: bold">in</span> <span style="color: #333333">&lt;</span>module<span style="color: #333333">&gt;</span>
+<span style="color: #FF0000; font-weight: bold">IOError</span>: file error</p>
+
+<p><span style="color: #888888"># Python 3    </span>
+<span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #008800; font-weight: bold">raise</span> <span style="color: #FF0000; font-weight: bold">IOError</span>, <span style="background-color: #fff0f0">&quot;file error&quot;</span>
+  File <span style="background-color: #fff0f0">&quot;&lt;stdin&gt;&quot;</span>, line <span style="color: #0000DD; font-weight: bold">1</span>
+    <span style="color: #008800; font-weight: bold">raise</span> <span style="color: #FF0000; font-weight: bold">IOError</span>, <span style="background-color: #fff0f0">&quot;file error&quot;</span>
+                 <span style="color: #333333">^</span>
+<span style="color: #FF0000; font-weight: bold">SyntaxError</span>: invalid syntax
+<span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #008800; font-weight: bold">raise</span> <span style="color: #FF0000; font-weight: bold">IOError</span>(<span style="background-color: #fff0f0">&quot;file error&quot;</span>)
+Traceback (most recent call last):
+  File <span style="background-color: #fff0f0">&quot;&lt;stdin&gt;&quot;</span>, line <span style="color: #0000DD; font-weight: bold">1</span>, <span style="color: #000000; font-weight: bold">in</span> <span style="color: #333333">&lt;</span>module<span style="color: #333333">&gt;</span>
+<span style="color: #FF0000; font-weight: bold">OSError</span>: file error
+</pre></div></p>
+
+<p><h4 id="handling-exceptions">Handling exceptions</h4>
+<p>Also the handling of excecptions has slightly changed in Python 3. Now, we have to use the <code>as</code> keyword!</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #888888"># Python 2</span>
+<span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #008800; font-weight: bold">try</span>:
+<span style="color: #333333">...</span>     blabla
+<span style="color: #333333">...</span> <span style="color: #008800; font-weight: bold">except</span> <span style="color: #FF0000; font-weight: bold">NameError</span>, err:
+<span style="color: #333333">...</span>     <span style="color: #007020">print</span> err, <span style="background-color: #fff0f0">&#39;--&gt; our error msg&#39;</span>
+<span style="color: #333333">...</span>
+name <span style="background-color: #fff0f0">&#39;blabla&#39;</span> <span style="color: #000000; font-weight: bold">is</span> <span style="color: #000000; font-weight: bold">not</span> defined <span style="color: #333333">--&gt;</span> our error msg</p>
+
+<p><span style="color: #888888"># Python 3</span>
+<span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #008800; font-weight: bold">try</span>:
+<span style="color: #333333">...</span>     blabla
+<span style="color: #333333">...</span> <span style="color: #008800; font-weight: bold">except</span> <span style="color: #FF0000; font-weight: bold">NameError</span> <span style="color: #008800; font-weight: bold">as</span> err:
+<span style="color: #333333">...</span>     <span style="color: #007020">print</span>(err, <span style="background-color: #fff0f0">&#39;--&gt; our error msg&#39;</span>)
+<span style="color: #333333">...</span>
+name <span style="background-color: #fff0f0">&#39;blabla&#39;</span> <span style="color: #000000; font-weight: bold">is</span> <span style="color: #000000; font-weight: bold">not</span> defined <span style="color: #333333">--&gt;</span> our error msg
+</pre></div></p>
+
+<p><h4 id="the-next-function-and-.next-method">The <code>next()</code> function and <code>.next()</code> method</h4>
+<p>Where you can use both function and method in Python 2.7.5, the <code>next()</code> function is all that remain in Python 3!</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #888888"># Python 2</span>
+<span style="color: #333333">&gt;&gt;&gt;</span> my_generator <span style="color: #333333">=</span> (letter <span style="color: #008800; font-weight: bold">for</span> letter <span style="color: #000000; font-weight: bold">in</span> <span style="background-color: #fff0f0">&#39;abcdefg&#39;</span>)
+<span style="color: #333333">&gt;&gt;&gt;</span> my_generator<span style="color: #333333">.</span>next()
+<span style="background-color: #fff0f0">&#39;a&#39;</span>
+<span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #007020">next</span>(my_generator)
+<span style="background-color: #fff0f0">&#39;b&#39;</span></p>
+
+<p><span style="color: #888888"># Python 3</span>
+<span style="color: #333333">&gt;&gt;&gt;</span> my_generator <span style="color: #333333">=</span> (letter <span style="color: #008800; font-weight: bold">for</span> letter <span style="color: #000000; font-weight: bold">in</span> <span style="background-color: #fff0f0">&#39;abcdefg&#39;</span>)
+<span style="color: #333333">&gt;&gt;&gt;</span> <span style="color: #007020">next</span>(my_generator)
+<span style="background-color: #fff0f0">&#39;a&#39;</span>
+<span style="color: #333333">&gt;&gt;&gt;</span> my_generator<span style="color: #333333">.</span>next()
+Traceback (most recent call last):
+  File <span style="background-color: #fff0f0">&quot;&lt;stdin&gt;&quot;</span>, line <span style="color: #0000DD; font-weight: bold">1</span>, <span style="color: #000000; font-weight: bold">in</span> <span style="color: #333333">&lt;</span>module<span style="color: #333333">&gt;</span>
+<span style="color: #FF0000; font-weight: bold">AttributeError</span>: <span style="background-color: #fff0f0">&#39;generator&#39;</span> <span style="color: #007020">object</span> has no attribute <span style="background-color: #fff0f0">&#39;next&#39;</span>
+</pre></div></p>
+
+<p><p><br> <br> <a name='function_annotation'></a></p><h2 id="function-annotations---what-are-those--s-in-my-python-code">Function annotations - What are those <code>-&gt;</code>'s in my Python code?</h2><p>[<a href="#sections">back to top</a>]</p><p>Have you ever seen any Python code that used colons inside the parantheses of a function definition?</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">foo1</span>(x: <span style="background-color: #fff0f0">&#39;insert x here&#39;</span>, y: <span style="background-color: #fff0f0">&#39;insert x^2 here&#39;</span>):
+    <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;Hello, World&#39;</span>)
+    <span style="color: #008800; font-weight: bold">return</span>
+</pre></div></p>
+
+<p><p>And what about the fancy arrow here?</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">foo1</span>(x: <span style="background-color: #fff0f0">&#39;insert x here&#39;</span>, y: <span style="background-color: #fff0f0">&#39;insert x^2 here&#39;</span>):
+    <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;Hello, World&#39;</span>)
+    <span style="color: #008800; font-weight: bold">return</span>
+</pre></div></p>
+
+<p><p>Q: Is this valid Python syntax?<br />A: Yes!</p>
+<p>Q: So, what happens if I <em>just call</em> the function?<br />A: Nothing!</p>
+<p>Here is the proof!</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">foo1(<span style="color: #0000DD; font-weight: bold">1</span>,<span style="color: #0000DD; font-weight: bold">2</span>)
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">Hello, World
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">foo2(<span style="color: #0000DD; font-weight: bold">1</span>,<span style="color: #0000DD; font-weight: bold">2</span>)<br/>
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">Hello, World
+</pre></div>
+<p><strong>So, those are function annotations ... </strong><br />- the colon for the function parameters<br />- the arrow for the return value</p>
+<p>You probably will never make use of them (or at least very rarely). Usually, we write good function documentations below the function as a docstring - or at least this is how I would do it (okay this case is a little bit extreme, I have to admit):</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">is_palindrome</span>(a):
+    <span style="color: #DD4422">&quot;&quot;&quot;</span>
+<span style="color: #DD4422">    Case-and punctuation insensitive check if a string is a palindrom.</span>
+<span style="color: #DD4422">    </span>
+<span style="color: #DD4422">    Keyword arguments:</span>
+<span style="color: #DD4422">        a (str): The string to be checked if it is a palindrome.</span>
+<span style="color: #DD4422">        </span>
+<span style="color: #DD4422">    Returns True if input string is a palindrome, else False.</span>
+<span style="color: #DD4422">    </span>
+<span style="color: #DD4422">    &quot;&quot;&quot;</span>
+    stripped_str <span style="color: #333333">=</span> [l <span style="color: #008800; font-weight: bold">for</span> l <span style="color: #000000; font-weight: bold">in</span> my_str<span style="color: #333333">.</span>lower() <span style="color: #008800; font-weight: bold">if</span> l<span style="color: #333333">.</span>isalpha()]
+    <span style="color: #008800; font-weight: bold">return</span> stripped_str <span style="color: #333333">==</span> stripped_str[::<span style="color: #333333">-</span><span style="color: #0000DD; font-weight: bold">1</span>]
+</pre></div></p>
+
+<p><p>However, function annotations can be useful to indicate that work is still in progress in some cases. But they are optional and I see them very very rarely.</p>
+<p>As it is stated in <a href="http://legacy.python.org/dev/peps/pep-3107/#fundamentals-of-function-annotations">PEP3107</a>:</p>
+<ol style="list-style-type: decimal">
+<li><p>Function annotations, both for parameters and return values, are completely optional.</p></li>
+<li><p>Function annotations are nothing more than a way of associating arbitrary Python expressions with various parts of a function at compile-time.</p></li>
+</ol><p>The nice thing about function annotations is their <code><strong>annotations</strong></code> attribute, which is dictionary of all the parameters and/or the <code>return</code> value you annotated.</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">foo1<span style="color: #333333">.</span>annotations
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #333333">{</span><span style="background-color: #fff0f0">&#39;y&#39;</span>: <span style="background-color: #fff0f0">&#39;insert x^2 here&#39;</span>, <span style="background-color: #fff0f0">&#39;x&#39;</span>: <span style="background-color: #fff0f0">&#39;insert x here&#39;</span><span style="color: #333333">}</span>
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">foo2<span style="color: #333333">.</span>annotations
+</pre></div>
+ <!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #333333">{</span><span style="background-color: #fff0f0">&#39;return&#39;</span>: <span style="background-color: #fff0f0">&#39;Hi!&#39;</span><span style="color: #333333">}</span>
+</pre></div></p>
+
+<p><p><strong>When are they useful?</strong></p><p>Function annotations can be useful for a couple of things - Documentation in general - pre-condition testing - <a href="http://legacy.python.org/dev/peps/pep-0362/#annotation-checker">type checking</a></p>
+<p>...</p><p><br> <br> <a name="finally_blocks"></a></p><h2 id="abortive-statements-in-finally-blocks">Abortive statements in <code>finally</code> blocks</h2><p>Python's <code>try-except-finally</code> blocks are very handy for catching and handling errors. The <code>finally</code> block is always executed whether an <code>exception</code> has been raised or not as illustrated in the following example.</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">try_finally1</span>():
+    <span style="color: #008800; font-weight: bold">try</span>:
+        <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;in try:&#39;</span>)
+        <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;do some stuff&#39;</span>)
+        <span style="color: #007020">float</span>(<span style="background-color: #fff0f0">&#39;abc&#39;</span>)
+    <span style="color: #008800; font-weight: bold">except</span> <span style="color: #FF0000; font-weight: bold">ValueError</span>:
+        <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;an error occurred&#39;</span>)
+    <span style="color: #008800; font-weight: bold">else</span>:
+        <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;no error occurred&#39;</span>)
+    <span style="color: #008800; font-weight: bold">finally</span>:
+        <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;always execute finally&#39;</span>)</p>
+
+<p>try_finally1()
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">in try:
+<span style="color: #008800; font-weight: bold">do </span>some stuff
+an error occurred
+always execute finally
+</pre></div></p>
+
+<p><p><br> <br> But can you also guess what will be printed in the next code cell?</p></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">try_finally2</span>():
+    <span style="color: #008800; font-weight: bold">try</span>:
+        <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&quot;do some stuff in try block&quot;</span>)
+        <span style="color: #008800; font-weight: bold">return</span> <span style="background-color: #fff0f0">&quot;return from try block&quot;</span>
+    <span style="color: #008800; font-weight: bold">finally</span>:
+        <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&quot;do some stuff in finally block&quot;</span>)
+        <span style="color: #008800; font-weight: bold">return</span> <span style="background-color: #fff0f0">&quot;always execute finally&quot;</span></p>
+
+<p><span style="color: #007020">print</span>(try_finally2())
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">do </span>some stuff in try block
+<span style="color: #008800; font-weight: bold">do </span>some stuff in finally block
+always execute finally
+</pre></div></p>
+
+<p><p><br> Here, the abortive <code>return</code> statement in the <code>finally</code> block simply overrules the <code>return</code> in the <code>try</code> block, since <strong><code>finally</code> is guaranteed to always be executed.</strong> So, be careful using abortive statements in <code>finally</code> blocks!</p></p>
+
+<p><p><br> <br> <a name="variable_types"></p></p>
+
+<p><h2 id="attvav">Assigning types to variables as values</h2></p>
+
+<p>I am not yet sure in which context this can be useful, but it is a nice fun fact to know that we can assign types as values to variables.</p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">a_var <span style="color: #333333">=</span> <span style="color: #007020">str</span>
+a_var(<span style="color: #0000DD; font-weight: bold">123</span>)
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="background-color: #fff0f0">&#39;123&#39;</span>
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%"><span style="color: #008800; font-weight: bold">from</span> <span style="color: #0e84b5; font-weight: bold">random</span> <span style="color: #008800; font-weight: bold">import</span> choice</p>
+
+<p>a, b, c <span style="color: #333333">=</span> <span style="color: #007020">float</span>, <span style="color: #007020">int</span>, <span style="color: #007020">str</span>
+<span style="color: #008800; font-weight: bold">for</span> i <span style="color: #000000; font-weight: bold">in</span> <span style="color: #007020">range</span>(<span style="color: #0000DD; font-weight: bold">5</span>):
+    j <span style="color: #333333">=</span> choice([a,b,c])(i)
+    <span style="color: #007020">print</span>(j, <span style="color: #007020">type</span>(j))
+</pre></div></p>
+
+<p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">0 &lt;class <span style="background-color: #fff0f0">&#39;int&#39;</span>&gt;
+1 &lt;class <span style="background-color: #fff0f0">&#39;int&#39;</span>&gt;
+2.0 &lt;class <span style="background-color: #fff0f0">&#39;float&#39;</span>&gt;
+3 &lt;class <span style="background-color: #fff0f0">&#39;str&#39;</span>&gt;
+4 &lt;class <span style="background-color: #fff0f0">&#39;int&#39;</span>&gt;
+</pre></div></p>					
+	
+
+		</div> 	<!-- close article -->
+
+
+
+			</div><!--close main -->
+		
+	</div><!--close content -->
+	
+
+
+
+
+<!-- START Footer -->
+
+	<div id ='footer'>	
+        <center>
+	<hr>
+        <div style="height:20px;"></div>
+        <p>HTML and JavaScripts were written by Sebastian Raschka <br>
+        Copyright (C) 2013-2014 Sebastian Raschka</p>
+
+
+	<!-- START Twitter API -->
+
+ <a href="https://twitter.com/rasbt" class="twitter-follow-button" data-show-count="false" data-show-screen-name="false">Follow @rasbt</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+	<!-- END Twitter API -->
+<div style="height:20px;"></div>
+
+	<hr>
+
+     
+        
+		 <div style="height:10px;"></div>
+		</center>
+	</div>
+<!-- END Footer -->
+
+
+<!-- Start DISQUS -->
+
+ <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'sebastianraschka'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+<!-- Start Google Analytics -->
+		<script type="text/javascript">
+
+  		var _gaq = _gaq || [];
+  		_gaq.push(['_setAccount', 'UA-38457794-1']);
+  		_gaq.push(['_trackPageview']);
+
+  		(function() {
+    	var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    	ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  		})();
+		</script>
+<!-- End  Google Analytics -->
+
+</body>
+</html>
