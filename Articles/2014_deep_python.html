@@ -812,15 +812,16 @@ my_tup <span style="color: #333333">=</span> my_tup <span style="color: #333333"
         <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;Hello public world!&#39;</span>)
     <span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">__private_method</span>(<span style="color: #007020">self</span>):
         <span style="color: #007020">print</span>(<span style="background-color: #fff0f0">&#39;Hello private world!&#39;</span>)
-    <span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">__call_private_method_in_class</span>(<span style="color: #007020">self</span>):
+    <span style="color: #008800; font-weight: bold">def</span> <span style="color: #0066BB; font-weight: bold">call_private_method_in_class</span>(<span style="color: #007020">self</span>):
         <span style="color: #007020">self</span><span style="color: #333333">.</span>__private_method()
         
 my_instance <span style="color: #333333">=</span> my_class()
 
 my_instance<span style="color: #333333">.</span>public_method()
 my_instance<span style="color: #333333">.</span>_my_class__private_method()
-my_instance<span style="color: #333333">.</span>_my_class__call_private_method_in_class()
+my_instance<span style="color: #333333">.</span>call_private_method_in_class()
 </pre></div>
+
 </p>
 
 <p><!-- HTML generated using hilite.me --><div style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;"><pre style="margin: 0; line-height: 125%">Hello public world!
