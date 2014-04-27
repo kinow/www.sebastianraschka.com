@@ -13,12 +13,21 @@
 
 
 <item>
+<title>Diving deep into Python - the not-so-obvious language parts</title>
+<link>http://sebastianraschka.com/Articles/2014_deep_python.html</link>
+<guid>http://sebastianraschka.com/Articles/2014_deep_python.html</guid>
+<pubDate>21 Apr 2014</pubDate>
+<description>
+Some while ago, I started to collect some of the not-so-obvious things I encountered when I was coding in Python. I thought that it was worthwhile sharing them and encourage you to take a brief look at the section-overview and maybe you'll find something that you do not already know - I can guarantee you that it'll likely save you some time at one or the other tricky debugging challenge.</description>
+</item>
+
+<item>
 <title>Implementing a Principal Component Analysis (PCA) in Python step by step</title>
 <link>http://sebastianraschka.com/Articles/2014_pca_step_by_step.html</link>
 <guid>http://sebastianraschka.com/Articles/2014_pca_step_by_step.html</guid>
 <pubDate>13 Apr 2014</pubDate>
 <description>
-n this article I want to explain how a Principal Component Analysis (PCA) works by implementing it in Python step by step. At the end we will compare 
+In this article I want to explain how a Principal Component Analysis (PCA) works by implementing it in Python step by step. At the end we will compare 
 the results to the more convenient Python PCA() classes that are available through the popular matplotlib and scipy 
 libraries and discuss how they differ.</description>
 </item>
